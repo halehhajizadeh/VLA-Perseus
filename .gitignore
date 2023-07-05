@@ -2,3 +2,9 @@ data/
 scripts_presh/
 info/
 .DS_Store
+*.log
+*.last
+TempLattice*/
+*.pyc
+__pycache__/
+*.dat
