@@ -1,3 +1,4 @@
-./data
-./scripts_presh
-./info
+data/
+scripts_presh/
+info/
+.DS_Store
