@@ -1,40 +1,43 @@
+import shutil
+import os
+from glob import glob
+
 # path = '../data/19B-053_2020_01_03_T03_00_57.672/products/'
 path = '../data/19B-053_2019_12_15_T07_36_56.546/products'
 filename = path+'/targets.ms'
 
+imagename= '546-mosaic-fieldAll-5arc-10000-spw16'
+
+if os.path.exists(path+"/Images_new/"+imagename+".image.fits"):
+    os.remove(path+"/Images_new/"+imagename+".image.fits")
+
+flist = glob(path+'/Images_new/'+imagename)
+for images in flist:
+    shutil.rmtree(images)
+
 
 tclean(vis=filename,
        field="",
-       spw="15:0~7",
+       spw="16:5~55",
        timerange="",
        uvrange="",
        antenna="",
        observation="",
        intent="",
-       datacolumn="data",
-       imagename=path+"/Images_new/mosaic1",
-       imsize=4320,
-       cell="2.5arcsec",
+       datacolumn="corrected",
+       imagename=path+"/Images_new/"+imagename,
+       imsize=[4096],
+       cell="5arcsec",
        phasecenter="J2000 03:32:54.609000 +31.11.15.01999",
-       stokes="Q",
+       stokes="I",
        projection="SIN",
        specmode="mfs",
-       nchan=-1,
-       outframe="LSRK",
-       veltype="radio",
-       restfreq=[],
-       interpolation="linear",
        gridder="mosaic",
        mosweight=True,
        cfcache="",
-       computepastep=360.0,
-       rotatepastep=360.0,
-       pblimit=0.0001,
+       pblimit=0.1,
        normtype="flatnoise",
        deconvolver="hogbom",
-       # scales=[0,6,10,30],
-       nterms=2,
-       smallscalebias=0.6,
        restoration=True,
        restoringbeam=[],
        pbcor=True,
@@ -43,16 +46,18 @@ tclean(vis=filename,
        robust=0.5,
        npixels=0,
        uvtaper=[],
-       niter=20000,
+       niter=10000,
        gain=0.1,
-       threshold=9e-5,
+       threshold=1e-4,
        nsigma=0.0,
-       cycleniter=1000,
+       cycleniter=-1,
        cyclefactor=1.0,
        restart=True,
-       savemodel="modelcolumn",
        calcres=True,
        calcpsf=True,
        parallel=False,
        interactive=False)
-exportfits(path+"/Images_new/mosaic1.image", path+"/Images_new/mosaic1.image.fits")
+
+
+
+exportfits(path+"/Images_new/"+imagename+".image", path+"/Images_new/"+imagename+".image.fits")
