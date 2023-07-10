@@ -27,7 +27,7 @@ for i in range(55):
         intent="",
         datacolumn="corrected",
         imagename=path+"/Images_new/"+imagename,
-        imsize=[4096],
+        imsize=[2014],
         cell="5arcsec",
         phasecenter="J2000 03:32:54.609000 +31.11.15.01999",
         stokes="I",

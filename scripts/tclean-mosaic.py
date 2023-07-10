@@ -6,7 +6,7 @@ from glob import glob
 path = '../data/19B-053_2019_12_15_T07_36_56.546/products'
 filename = path+'/targets.ms'
 
-imagename= '546-mosaic-fieldAll-5arc-10000-spw16'
+imagename= '546-mosaic-field0-5arc-10000-spw16'
 
 if os.path.exists(path+"/Images_new/"+imagename+".image.fits"):
     os.remove(path+"/Images_new/"+imagename+".image.fits")
@@ -17,7 +17,7 @@ for images in flist:
 
 
 tclean(vis=filename,
-       field="",
+       field="0",
        spw="16:5~55",
        timerange="",
        uvrange="",
@@ -26,7 +26,7 @@ tclean(vis=filename,
        intent="",
        datacolumn="corrected",
        imagename=path+"/Images_new/"+imagename,
-       imsize=[4096],
+       imsize=[1024],
        cell="5arcsec",
        phasecenter="J2000 03:32:54.609000 +31.11.15.01999",
        stokes="I",
