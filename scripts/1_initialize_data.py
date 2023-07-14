@@ -102,33 +102,26 @@ print('List of the folders:')
 print(folders_list)
 
 #-----------------------------------------------------------------------------------------
-choosen_folder = input('Which file do you want to continue with?\n')
-
-ms_file_name = []
-if choosen_folder == 'all':
-    ms_file_name = folders_list
-else:
-    ms_file_name.append(choosen_folder)
+ms_file_name = input('Which file do you want to continue with?\n')
 
 #------------------------------------------------------------------------------------------
-for each_file in ms_file_name:
-    #unzipping the products folder
-    unzip(path=each_file, endswith=".tar")
-    print('Unzipping the tar file is done!')   
+#unzipping the products folder
+unzip(path=ms_file_name, endswith=".tar")
+print('Unzipping the tar file is done!')   
 
-    #unzippng the tables 
-    unzip(each_file + '/products', ".caltables.tgz")
-    print('Unzipping tables is done!')
+#unzippng the tables 
+unzip(ms_file_name + '/products', ".caltables.tgz")
+print('Unzipping tables is done!')
 
-    #copy the ms file and its flagversion to products folder    
-    copy(directory=each_file,startswith='19B-053',endswith='.ms')
-    print('ms file copied to products')
-    copy(directory=each_file,startswith='19B-053',endswith='.ms.flagversions')
-    print('flagversions copied to products')
+#copy the ms file and its flagversion to products folder    
+copy(directory=ms_file_name,startswith='19B-053',endswith='.ms')
+print('ms file copied to products')
+copy(directory=ms_file_name,startswith='19B-053',endswith='.ms.flagversions')
+print('flagversions copied to products')
 
 #------------------------------------------------------------------------------------------
 #Change working directory to products
-os.chdir(ms_file_name[0]+ '/products/')
+os.chdir(ms_file_name+ '/products/')
 print(os.getcwd())
 os.makedirs('plots')
 
