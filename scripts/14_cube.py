@@ -2,13 +2,14 @@
 # Second index is frequency
 # Third index is DEC
 # Fourth index is RA
+import sys
+sys.path.append('.')
+from configs import path, nit
 
-import os
 import numpy as np
 from astropy.io import fits
 
-path = '../data/19B-053_2019_12_15_T07_36_56.546/products/'
-nit = 20000
+
 stokes_list = [
         'I',
         'Q',
@@ -37,11 +38,11 @@ def remove_empty_channel_form_start(filelist):
         return remove_empty_channel_form_start(filelist[1:])
     
 for stokes in stokes_list:    
-    cubename=path+'Images/img'+str(nit)+'/546_Stokes'+stokes+'.fits'
+    cubename=path+'Images/img'+str(nit)+'/Stokes'+stokes+'.fits'
 
     syscommand='rm -rf '+cubename
     os.system(syscommand)
-    with open(path+'Images/img'+str(nit)+'/546_stokes'+stokes+'.txt', 'r') as f:
+    with open(path+'Images/img'+str(nit)+'/stokes'+stokes+'.txt', 'r') as f:
         file_list = f.read().splitlines()
 
     file_list = remove_empty_channel_form_start(filelist=file_list)

@@ -1,6 +1,8 @@
+import sys
+sys.path.append('.')
+from configs import path, thresh, nit, threedigits
 import time
 
-path = '../data/19B-053_2019_12_15_T07_36_56.546/products/'
 spw = [0, 2, 3 , 4, 5, 6, 8, 15, 16, 17]
 stokes = [
         'I',
@@ -16,16 +18,14 @@ channels = [
     '40~47', 
     '48~55', 
     '56~63']
-thresh = '1e-4'
-nit = 20000
 
 tic = time.time()
 for stok in stokes:
     for s in spw:
         for channel in channels:
             exportfits(
-                imagename = path+"Images/img"+str(nit)+"/smo/546-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image.smo',
-                fitsimage = path+"Images/img"+str(nit)+"/fits/546-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image.smo.fits'
+                imagename = path+"Images/img"+str(nit)+"/smo/"+threedigits+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image.smo',
+                fitsimage = path+"Images/img"+str(nit)+"/fits/"+threedigits+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image.smo.fits'
             )
 
 toc = time.time()

@@ -1,9 +1,11 @@
+import sys
+sys.path.append('.')
+from configs import path, nit
 import numpy as np
 from astropy.io import fits
 from astropy.wcs import WCS
 import math
 
-nit = 20000
 dx=4
 dy=4
 manual_setting=1
@@ -13,7 +15,6 @@ Stokes = [
         'U'
         ]
 
-path = '../data/19B-053_2019_12_15_T07_36_56.546/products/'
 
 def ra_dec_to_degrees(ra, dec):
     ra = ra.split(':')
@@ -60,7 +61,7 @@ else:
         DEC0=np.double(SOURCES[2])
 
 for stokes in Stokes:
-    fits_file =path+'Images/img'+str(nit)+'/546_Stokes'+stokes+'.fits'
+    fits_file =path+'Images/img'+str(nit)+'/Stokes'+stokes+'.fits'
     hdulist=fits.open(fits_file)
     img=hdulist[0].data
     wcs=WCS(hdulist[0].header)

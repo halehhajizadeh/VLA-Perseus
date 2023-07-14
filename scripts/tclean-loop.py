@@ -7,7 +7,7 @@ path = '../data/19B-053_2019_12_15_T07_36_56.546/products'
 filename = path+'/targets.ms'
 
 for i in range(55):
-    imagename= '546-standard-field'+str(i)+'-5arc-10000-spw16'
+    imagename= '546-mosaic-field'+str(i)+'-5arc-10000-spw16'
 
     if os.path.exists(path+"/Images_new/"+imagename+".image.fits"):
         os.remove(path+"/Images_new/"+imagename+".image.fits")
@@ -33,7 +33,7 @@ for i in range(55):
         stokes="I",
         projection="SIN",
         specmode="mfs",
-        gridder="standard",
+        gridder="mosaic",
         mosweight=True,
         cfcache="",
         pblimit=0.1,

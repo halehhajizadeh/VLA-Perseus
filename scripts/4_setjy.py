@@ -1,3 +1,7 @@
+import sys
+sys.path.append('.')
+from configs import msfilename
+
 # Reference Frequency for fit values
 reffreq = '1.5166184156GHz'
 # Stokes I flux density
@@ -12,7 +16,7 @@ polangle = [-0.01928821,  0.18393654,  0.3659257,  -1.19863784,  0.44004379]
 filename = '../data/19B-053_2019_12_15_T07_36_56.546/products/19B-053.sb37264871.eb37595549.58832.22860825231_calibrated.ms'
 
 
-setjy(vis=filename,
+setjy(vis=msfilename,
       field='0',
       scan = '2,3',
       spw='',
@@ -26,7 +30,7 @@ setjy(vis=filename,
 
 
 
-setjy(vis=filename,
+setjy(vis=msfilename,
       field='1',
       spw='',
       selectdata=False, 

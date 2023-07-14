@@ -1,17 +1,16 @@
 import sys
+sys.path.append('.')
+from configs import path, thresh, nit
+import sys
 import numpy as np
 
 
 # Bad frequency array needs to be verified!
 # bad_freq=[1.33488986e+09,1.367053824000e+09,1.495142528000e+09,1.63113075e+09,1.679270016000e+09,1.68717376e+09,1.69517990e+09,1.751319808000e+09,1.759325440000e+09,1.879408512000e+09,1.887414016000e+09,1.93536435e+09,1.98340122e+09]
 
-path = '../data/19B-053_2019_12_15_T07_36_56.546/products/'
-
 I_pro_file=str(sys.argv[1])
 Q_pro_file=str(sys.argv[2])
 U_pro_file=str(sys.argv[3])
-
-nit = 20000
 
 def setup_columns(pro_file, noise_value, lines_to_skip=5):
     with open (pro_file, 'r') as file:
