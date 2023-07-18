@@ -56,7 +56,7 @@ for i in range(55):
         restart=True,
         calcres=True,
         calcpsf=True,
-        parallel=False,
+        parallel=True,
         interactive=False)
 
 
