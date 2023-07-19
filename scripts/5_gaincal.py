@@ -1,6 +1,6 @@
 import sys
 sys.path.append('.')
-from configs import msfilename
+from configs import msfilename, refant_name
 
 kcross_sbd = msfilename+".Kcross_sbd" 
 
@@ -9,7 +9,7 @@ gaincal(vis=msfilename,
     field='0',
     scan = '2,3',
     spw='',
-    refant='ea08',
+    refant=refant_name,
     gaintype="KCROSS",
     solint="inf",
     combine="scan",
