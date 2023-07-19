@@ -5,4 +5,4 @@ refant_name = 'ea08'
 phase_center = 'J2000 03:32:54.609000 +31.11.15.01999'
 thresh = '1e-4'
 nit = 10000
-threedigits ='546'
+threedigits ='755'
