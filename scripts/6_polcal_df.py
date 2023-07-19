@@ -1,13 +1,13 @@
 import sys
 sys.path.append('.')
-from configs import msfilename
+from configs import msfilename, refant_name
 
 polcal(vis=msfilename,
        caltable=msfilename+'.Df_sbd',
        field='0',
        scan = '2,3',
        spw='',
-       refant='ea08',
+       refant=refant_name,
        poltype='Df',
        solint='inf,2MHz',
        combine='scan',
