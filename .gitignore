@@ -8,3 +8,4 @@ TempLattice*/
 *.pyc
 __pycache__/
 *.dat
+Images/
