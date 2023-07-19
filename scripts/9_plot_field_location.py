@@ -1,3 +1,6 @@
+import sys
+sys.path.append('.')
+from configs import  threedigits
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -10,7 +13,7 @@ rc('text', usetex=True)
 
 
 #This file is a text file with each line being the name of your field, the RA as 'hh:mm:ss.sss' and Dec as 'dd.mm.ss.ssss' of the center of the source separated by tabs, I have an example if you need it. The data is from listobs
-f='field_RADec.txt'
+f='field_RADec_'+str(threedigits)+'.txt'
 l=open(f)
 data=l.readlines()
 
