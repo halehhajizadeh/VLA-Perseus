@@ -35,4 +35,11 @@ if threedigits=='546':
 #----------------------------------------------------------------
 if threedigits=='755':
 
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='1,12,13,14'
+    )
+
+  
 
