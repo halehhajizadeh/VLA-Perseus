@@ -23,8 +23,19 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
     return(folders_list)
 
 
+def delete_tar_files(file_list):
+    for file_name in file_list:
+        if file_name.endswith(".tar"):
+            try:
+                os.remove(file_name)
+                print(f"Deleted {file_name} successfully.")
+            except OSError as e:
+                print(f"Error deleting {file_name}: {e}")
+
 mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
-print(mslist.shape)
+mslist = delete_tar_files(mslist)
+print(mslist)
+
 
 
 # tclean(vis=msfilename,
