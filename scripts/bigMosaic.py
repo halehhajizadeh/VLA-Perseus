@@ -20,8 +20,55 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
         if file.startswith(startswith):
             if file.endswith(endswith):
                 folders_list.append(os.path.join(directory, file))                
-    return(folders_list)
+    return(folders_list)s
 
 
 mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
-print(mslist)
+print(mslist.shape)
+
+
+# tclean(vis=msfilename,
+#        field="",
+#        spw="16:5~55",
+#        timerange="",
+#        uvrange="",
+#        antenna="",
+#        observation="",
+#        intent="",
+#        datacolumn="corrected",
+#        imagename=path+"/Images_new/"+imagename,
+#        imsize=[4096],
+#        cell="2.5arcsec",
+#        phasecenter=phase_center,
+#        stokes="I",
+#        projection="SIN",
+#        specmode="mfs",
+#        gridder="awproject",
+#        mosweight=True,
+#        cfcache="",
+#        pblimit=0.06,
+#        normtype="flatnoise",
+#        deconvolver="hogbom",
+#        restoration=True,
+#        restoringbeam=[],
+#        pbcor=True,
+#        outlierfile="",
+#        weighting="briggs",
+#        robust=0.5,
+#        npixels=2,
+#        uvtaper=[],
+#        niter=nit,
+#        gain=0.1,
+#        threshold=thresh,
+#        nsigma=0.0,
+#        cycleniter=-1,
+#        cyclefactor=1.0,
+#        restart=True,
+#        calcres=True,
+#        calcpsf=True,
+#        parallel=True,
+#        interactive=False)
+
+
+
+# exportfits(path+"/Images_new/"+imagename+".image", path+"/Images_new/"+imagename+".image.fits")
