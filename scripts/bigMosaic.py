@@ -26,8 +26,7 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
 def delete_tar_files(file_list):
     for file_name in file_list:
         if file_name.endswith(".tar"):
-            try:
-                os.remove(file_name)
+            os.remove(file_name)
 
 mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
 mslist = delete_tar_files(mslist)
