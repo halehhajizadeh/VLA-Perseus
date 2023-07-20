@@ -23,5 +23,5 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
     return(folders_list)
 
 
-mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='/')
+mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
 print(mslist)
