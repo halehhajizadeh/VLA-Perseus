@@ -23,13 +23,10 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
     return(folders_list)
 
 
-def delete_tar_files(file_list):
-    for file_name in file_list:
-        if file_name.endswith(".tar"):
-            os.remove(file_name)
 
-mslistAll = find_ms_folder (working_directory, startswith='19B-053', endswith='')
-mslist = delete_tar_files(mslistAll)
+
+mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
+mslist = mslist - ['/stash/users/pjaganna/evla/19B-053/19B-053_2019_11_22_T05_49_03.679.tar']
 print(mslist)
 
 
