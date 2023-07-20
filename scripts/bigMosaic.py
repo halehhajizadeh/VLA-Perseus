@@ -20,7 +20,7 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
         if file.startswith(startswith):
             if file.endswith(endswith):
                 folders_list.append(os.path.join(directory, file))                
-    return(folders_list)s
+    return(folders_list)
 
 
 mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
