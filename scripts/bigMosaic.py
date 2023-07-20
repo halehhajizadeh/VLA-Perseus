@@ -25,8 +25,8 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
 
 
 
-mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
-mslist = mslist.remove('/stash/users/pjaganna/evla/19B-053/19B-053_2019_11_22_T05_49_03.679.tar')
+mslistAll = find_ms_folder (working_directory, startswith='19B-053', endswith='')
+mslist = mslistAll.remove('/stash/users/pjaganna/evla/19B-053/19B-053_2019_11_22_T05_49_03.679.tar')
 print(mslist)
 
 
