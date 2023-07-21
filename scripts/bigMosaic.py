@@ -2,7 +2,7 @@ import os
 import tarfile
 import shutil
 
-working_directory = '../data_new'
+working_directory = '../data_new/'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
@@ -72,7 +72,7 @@ for msfolder in mslist:
         restart=True,
         calcres=True,
         calcpsf=True,
-        parallel=True,
+        parallel=False,
         interactive=False)
 
 
