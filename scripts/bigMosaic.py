@@ -2,7 +2,7 @@ import os
 import tarfile
 import shutil
 
-working_directory = '/stash/users/pjaganna/evla/19B-053/'
+working_directory = '../data_new'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
@@ -23,57 +23,54 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
     return(folders_list)
 
 
-
-
 mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
 print(mslist)
-mslist = mslist.remove('/stash/users/pjaganna/evla/19B-053/19B-053_2019_11_22_T05_49_03.679.tar')
-print(mslist)
 
 
 
-# tclean(vis=msfilename,
-#        field="",
-#        spw="16:5~55",
-#        timerange="",
-#        uvrange="",
-#        antenna="",
-#        observation="",
-#        intent="",
-#        datacolumn="corrected",
-#        imagename=path+"/Images_new/"+imagename,
-#        imsize=[4096],
-#        cell="2.5arcsec",
-#        phasecenter=phase_center,
-#        stokes="I",
-#        projection="SIN",
-#        specmode="mfs",
-#        gridder="awproject",
-#        mosweight=True,
-#        cfcache="",
-#        pblimit=0.06,
-#        normtype="flatnoise",
-#        deconvolver="hogbom",
-#        restoration=True,
-#        restoringbeam=[],
-#        pbcor=True,
-#        outlierfile="",
-#        weighting="briggs",
-#        robust=0.5,
-#        npixels=2,
-#        uvtaper=[],
-#        niter=nit,
-#        gain=0.1,
-#        threshold=thresh,
-#        nsigma=0.0,
-#        cycleniter=-1,
-#        cyclefactor=1.0,
-#        restart=True,
-#        calcres=True,
-#        calcpsf=True,
-#        parallel=True,
-#        interactive=False)
+for msfilename in mslist:
+    tclean(vis=msfilename,
+        field="3~58",
+        spw="16:5~55",
+        timerange="",
+        uvrange="",
+        antenna="",
+        observation="",
+        intent="",
+        datacolumn="corrected",
+        imagename=working_directory+"/Images/"+str(msfilename),
+        imsize=[4096],
+        cell="2.5arcsec",
+        # phasecenter=phase_center,
+        stokes="I",
+        projection="SIN",
+        specmode="mfs",
+        gridder="mosaic",
+        mosweight=True,
+        cfcache="",
+        pblimit=0.06,
+        normtype="flatnoise",
+        deconvolver="hogbom",
+        restoration=True,
+        restoringbeam=[],
+        pbcor=True,
+        outlierfile="",
+        weighting="briggs",
+        robust=0.5,
+        npixels=2,
+        uvtaper=[],
+        niter=10,
+        gain=0.1,
+        threshold=1e-4,
+        nsigma=0.0,
+        cycleniter=-1,
+        cyclefactor=1.0,
+        restart=True,
+        calcres=True,
+        calcpsf=True,
+        parallel=True,
+        interactive=False)
 
 
 
-# exportfits(path+"/Images_new/"+imagename+".image", path+"/Images_new/"+imagename+".image.fits")
+    exportfits(working_directory+"/Images/"+str(msfilename)+".image", working_directory+"/Images/"+str(msfilename)+".image.fits")
