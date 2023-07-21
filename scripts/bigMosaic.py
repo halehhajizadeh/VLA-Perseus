@@ -23,12 +23,18 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
     return(folders_list)
 
 
+
+
 mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
 print(mslist)
 
 
 
-for msfilename in mslist:
+for msfolder in mslist:
+    msfilename = find_ms_folder(msfolder, '19', '.ms')
+    msfilename = msfilename[0]
+    print(msfilename)
+
     tclean(vis=msfilename,
         field="3~58",
         spw="16:5~55",
