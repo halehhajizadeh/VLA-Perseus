@@ -22,20 +22,18 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
                 folders_list.append(os.path.join(directory, file))                
     return(folders_list)
 
-
-
-
 mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
 print(mslist)
 
 
 
 for msfolder in mslist:
-    msfilename = find_ms_folder(msfolder, '19', '.ms')
-    msfilename = msfilename[0]
-    print(msfilename)
+    msfile = find_ms_folder(msfolder, '19', '.ms')
+    msfile = msfile[0]
+    print(msfile)
+    msfilename = msfile.split('/')
 
-    tclean(vis=msfilename,
+    tclean(vis=msfile,
         field="3~58",
         spw="16:5~55",
         timerange="",
@@ -44,7 +42,7 @@ for msfolder in mslist:
         observation="",
         intent="",
         datacolumn="corrected",
-        imagename=working_directory+"/Images/"+str(msfilename),
+        imagename=working_directory+"/Images/"+str(msfilename[-2]),
         imsize=[4096],
         cell="2.5arcsec",
         # phasecenter=phase_center,
@@ -79,4 +77,4 @@ for msfolder in mslist:
 
 
 
-    exportfits(working_directory+"/Images/"+str(msfilename)+".image", working_directory+"/Images/"+str(msfilename)+".image.fits")
+    exportfits(working_directory+"/Images/"+str(msfilename[-2])+".image", working_directory+"/Images/"+str(msfilename[-2])+".image.fits")
