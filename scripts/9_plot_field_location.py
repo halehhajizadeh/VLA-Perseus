@@ -92,4 +92,4 @@ for ms_folder in mslist:
     for i, txt in enumerate(ID):
         plt.annotate(txt, (ra_deg[i], dec_deg[i]))
 
-    plt.savefig('./phasecenter/'+str(ms_folder.split('/')[-1])+'Fields.png')
+    plt.savefig('./phasecenter/'+str(ms_folder.split('/')[-1])+'.png')

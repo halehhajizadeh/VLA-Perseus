@@ -56,7 +56,7 @@ for msfolder in mslist:
     print('phase center is = ' + phase_center_value)
 
     tclean(vis=msfile,
-        field="3~58",
+        field="3~57",
         spw="16:5~55",
         timerange="",
         uvrange="",
