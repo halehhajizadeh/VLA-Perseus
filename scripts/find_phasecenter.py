@@ -1,5 +1,6 @@
 import os
 import time
+import numpy as np
 
 working_directory = '../data/'
 
@@ -35,40 +36,60 @@ def get_most_recent_log(directory):
 
 #############################################################
 
-def append_to_text_file(output_file, nfield, ra, dec):
-    with open(output_file, 'a') as file:
-        file.write(f"{nfield}\t{ra}\t{dec}\n")
+def append_to_text_file(output_file, ra_dec_array):
+    np.savetxt(output_file, np.array(ra_dec_array).T, delimiter='\t', fmt="%s")
 
 ############################################################
 
-def read_log_file(file_path):
+def most_recent_listobs(file_path):
     with open(file_path, 'r') as log_file:
         lines = log_file.readlines()
 
-    results = []
-    for line in lines:
-        if "FieldName" in line and "RA" in line and "DEC" in line:
-            items = line.split()
-            field_name = items[4]
-            ra = items[22]
-            dec = items[23]
-            results.append((field_name, ra, dec))
+    line_index_list = []
+    for idx, line in enumerate(lines):
+        if "ID" in line and "RA" in line and "Decl" in line:
+            line_index_list.append((idx))
     
-    return results        
+    line_index = max(line_index_list)
+
+    return line_index
 
 ############################################################
 
-log_file_name = get_most_recent_log('./')
-print(log_file_name)
+def read_log_file(file_path, line_index):
+    with open(file_path, 'r') as log_file:
+        lines = log_file.readlines()
+        target_lines= lines[line_index+4:line_index+57]
 
+    results = []
+    ID = []
+    ra = []
+    dec = []
+    for line in target_lines:
+        items = line.split()
+        ID.append(items[4])
+        ra.append(items[7])
+        dec.append(items[8])
+        results.append((ID, ra, dec))
+    
+    return results[-1]        
+############################################################
+line_index = most_recent_listobs('./casa-20230721-224817.log')
+ra_dec_results = read_log_file('./casa-20230721-224817.log', line_index)
+print(np.array(ra_dec_results).T)
 ############################################################
 
-############################################################        
-mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
-print(mslist)
+# log_file_name = get_most_recent_log('./')
+# print(log_file_name)
 
-for msfolder in mslist:
-    msfile = find_ms_folder(msfolder, '19', '.ms')
-    msfile = msfile[0]
-    print(msfile)
-    listobs(msfile)
+# ############################################################
+
+# ############################################################        
+# mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
+# print(mslist)
+
+# for msfolder in mslist:
+#     msfile = find_ms_folder(msfolder, '19', '.ms')
+#     msfile = msfile[0]
+#     print(msfile)
+#     listobs(msfile)
