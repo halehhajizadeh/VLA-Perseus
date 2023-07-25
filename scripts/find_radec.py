@@ -2,7 +2,7 @@ import os
 import time
 import numpy as np
 
-working_directory = '../data/'
+working_directory = '../data_new/'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """

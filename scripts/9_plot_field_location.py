@@ -10,7 +10,7 @@ rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 #rc('font',**{'family':'serif','serif':['Palatino']})
 rc('text', usetex=True)
 
-working_directory = '../data'
+working_directory = '../data/_new'
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
     Finds names of ms files in a directroy.
