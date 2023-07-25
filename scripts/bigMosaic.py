@@ -3,6 +3,7 @@ import tarfile
 import shutil
 
 working_directory = '../data_new/'
+# working_directory = '../data/'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
@@ -22,16 +23,37 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
                 folders_list.append(os.path.join(directory, file))                
     return(folders_list)
 
+def extract_specific_file(tar_filename, file_to_extract, extract_to_path):
+    with tarfile.open(tar_filename, 'r') as tar:
+        for member in tar.getmembers():
+            if member.name == file_to_extract:
+                tar.extract(member, extract_to_path)
+                break
+
+def phase_center(ms_folder_name):
+    with open('./phasecenter/phasecenter_results.txt', 'r') as txt_file:
+        lines = txt_file.readlines()
+        for line in lines:
+            items = line.split()
+            if items[0] == ms_folder_name:
+                phase_center_value = str(items[1]) +' '+ str(items[2])  +' '+ str(items[3])  
+    return phase_center_value      
+
 mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
 print(mslist)
 
 
 
 for msfolder in mslist:
+    
+
     msfile = find_ms_folder(msfolder, '19', '.ms')
     msfile = msfile[0]
     print(msfile)
     msfilename = msfile.split('/')
+
+    phase_center_value =phase_center(msfolder.split('/')[-1])
+    print('phase center is = ' + phase_center_value)
 
     tclean(vis=msfile,
         field="3~58",
@@ -45,7 +67,7 @@ for msfolder in mslist:
         imagename=working_directory+"/Images/"+str(msfilename[-2]),
         imsize=[4096],
         cell="2.5arcsec",
-        # phasecenter=phase_center,
+        phasecenter=phase_center_value,
         stokes="I",
         projection="SIN",
         specmode="mfs",
