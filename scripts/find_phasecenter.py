@@ -48,9 +48,10 @@ def most_recent_listobs(file_path):
     line_index_list = []
     for idx, line in enumerate(lines):
         if "ID" in line and "RA" in line and "Decl" in line:
-            line_index_list.append((idx))
-    
+            line_index_list.append(idx)
+    print('Number of listobs= ', len(line_index_list))
     line_index = max(line_index_list)
+    print('index of RA and Dec line= ', line_index)
 
     return line_index
 
@@ -59,9 +60,8 @@ def most_recent_listobs(file_path):
 def read_log_file(file_path, line_index):
     with open(file_path, 'r') as log_file:
         lines = log_file.readlines()
-        target_lines= lines[line_index+4:line_index+57]
+        target_lines= lines[line_index+4:line_index+59]
 
-    results = []
     ID = []
     ra = []
     dec = []
@@ -70,26 +70,36 @@ def read_log_file(file_path, line_index):
         ID.append(items[4])
         ra.append(items[7])
         dec.append(items[8])
-        results.append((ID, ra, dec))
-    
-    return results[-1]        
+    results = [ID, ra, dec]
+    return results     
 ############################################################
-line_index = most_recent_listobs('./casa-20230721-224817.log')
-ra_dec_results = read_log_file('./casa-20230721-224817.log', line_index)
-print(np.array(ra_dec_results).T)
+# line_index = most_recent_listobs('./casa-20230721-224817.log')
+# ra_dec_results = read_log_file('./casa-20230721-224817.log', line_index)
+# append_to_text_file('./1.txt', ra_dec_results)
+
 ############################################################
 
-# log_file_name = get_most_recent_log('./')
-# print(log_file_name)
+log_file_name = get_most_recent_log('./')
+print(log_file_name)
 
-# ############################################################
 
-# ############################################################        
-# mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
-# print(mslist)
 
-# for msfolder in mslist:
-#     msfile = find_ms_folder(msfolder, '19', '.ms')
-#     msfile = msfile[0]
-#     print(msfile)
-#     listobs(msfile)
+############################################################        
+mslist = find_ms_folder (working_directory, startswith='19B-053', endswith='')
+print(mslist)
+
+
+for msfolder in mslist:
+    line_index = []
+    msfile = find_ms_folder(msfolder, '19', '.ms')
+    msfile = msfile[0]
+    print(msfile)
+    listobs(msfile)
+
+    log_file_name = get_most_recent_log('./')
+    print(log_file_name)
+
+    line_index = most_recent_listobs(log_file_name)
+    ra_dec_results = read_log_file(log_file_name, line_index)
+    append_to_text_file('./phasecenter/'+str(msfolder.split('/')[-1])+'_radecs.txt', ra_dec_results)
+
