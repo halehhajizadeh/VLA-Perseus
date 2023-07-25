@@ -2,7 +2,8 @@ import os
 import time
 import numpy as np
 
-working_directory = '../data_new/'
+# working_directory = '../data_new/'
+working_directory = '../data/'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
@@ -60,18 +61,22 @@ def most_recent_listobs(file_path):
 def read_log_file(file_path, line_index):
     with open(file_path, 'r') as log_file:
         lines = log_file.readlines()
-        target_lines= lines[line_index+4:line_index+59]
+        target_lines= lines[line_index+1:line_index+59]
 
     ID = []
     ra = []
     dec = []
     for line in target_lines:
         items = line.split()
-        ID.append(items[4])
-        ra.append(items[7])
-        dec.append(items[8])
+        if items[7] == '03:36:30.107600' or items[7] == '05:21:09.886022' or items[7] == '05:42:36.137916':
+            print('it is a calibrator')
+        else:
+            ID.append(items[4])
+            ra.append(items[7])
+            dec.append(items[8])
     results = [ID, ra, dec]
     return results     
+ 
 ############################################################
 # line_index = most_recent_listobs('./casa-20230721-224817.log')
 # ra_dec_results = read_log_file('./casa-20230721-224817.log', line_index)
