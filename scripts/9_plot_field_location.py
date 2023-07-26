@@ -87,12 +87,12 @@ for ms_folder in mslist:
     ax.plot(ra_deg, dec_deg, 'b.')
     ax.set_xlabel(r'RA (deg)',fontsize=15)
     ax.set_ylabel(r'DEC (deg)',fontsize=15)
-    # plt.xlim(265.5,262.5)
     ax.tick_params(axis='x',labelsize=14)
     ax.tick_params(axis='y',labelsize=14)
+    ax.set_title(str(ms_folder))
 
     for i, txt in enumerate(ID):
-        ax.annotate(txt, (ra_deg[i], dec_deg[i]))
+        ax.annxotate(txt, (ra_deg[i], dec_deg[i]))
 
     fig.savefig('./phasecenter/'+str(ms_folder.split('/')[-1])+'.png')
 
