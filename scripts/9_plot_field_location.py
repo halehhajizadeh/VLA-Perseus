@@ -82,16 +82,14 @@ for ms_folder in mslist:
 
     plt.subplot(111)
 
-    fig, ax = plt.subplots()
-
-    ax.plot(ra_deg, dec_deg, 'b.')
-    ax.set_xlabel(r'RA (deg)',fontsize=15)
-    ax.set_ylabel(r'DEC (deg)',fontsize=15)
-    ax.tick_params(axis='x',labelsize=14)
-    ax.tick_params(axis='y',labelsize=14)
+    plt.plot(ra_deg, dec_deg, 'b.')
+    plt.xlabel(r'RA (deg)',fontsize=15)
+    plt.ylabel(r'DEC (deg)',fontsize=15)
+    # plt.xlim(265.5,262.5)
+    plt.tick_params(axis='x',labelsize=14)
+    plt.tick_params(axis='y',labelsize=14)
 
     for i, txt in enumerate(ID):
-        ax.annotate(txt, (ra_deg[i], dec_deg[i]),fontsize=15)
+        plt.annotate(txt, (ra_deg[i], dec_deg[i]))
 
-    fig.savefig('./phasecenter/'+str(ms_folder.split('/')[-1])+'.png')
-
+    plt.savefig('./phasecenter/'+str(ms_folder.split('/')[-1])+'.png')
