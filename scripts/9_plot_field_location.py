@@ -89,8 +89,10 @@ for ms_folder in mslist:
     ax.set_ylabel(r'DEC (deg)',fontsize=15)
     ax.tick_params(axis='x',labelsize=14)
     ax.tick_params(axis='y',labelsize=14)
+    ax.set_title(str(ms_folder))
+
     for i, txt in enumerate(ID):
-        ax.annxotate(txt, (ra_deg[i], dec_deg[i]))
+        ax.annotate(txt, (ra_deg[i], dec_deg[i]),fontsize=15)
 
     fig.savefig('./phasecenter/'+str(ms_folder.split('/')[-1])+'.png')
 
