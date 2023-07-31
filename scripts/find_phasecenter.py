@@ -5,14 +5,14 @@ def find_txt(directory):
     print(files)
     return files
 
-files_name = find_txt('./phasecenter/')
+files_name = find_txt('./phasecenter/phasecenter/')
 
-with open('./phasecenter/phasecenter_results.txt', 'w') as result_file:
+with open('./phasecenter/phasecenter/phasecenter_results.txt', 'w') as result_file:
     for file in files_name:
         ms_folder = file.replace("_radecs.txt", "")
         print (ms_folder)
 
-        with open('./phasecenter/'+file, 'r') as txt_file:
+        with open('./phasecenter/phasecenter/'+file, 'r') as txt_file:
             ra = []
             dec= []
             lines = txt_file.readlines()
