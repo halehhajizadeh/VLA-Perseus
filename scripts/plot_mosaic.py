@@ -10,7 +10,7 @@ rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 #rc('font',**{'family':'serif','serif':['Palatino']})
 rc('text', usetex=True)
 
-f='./phasecenter/phasecenter_results.txt'
+f='./phasecenter/phasecenter/phasecenter_results.txt'
 l=open(f)
 data=l.readlines()
 
@@ -68,4 +68,4 @@ plt.tick_params(axis='y',labelsize=14)
 for i, txt in enumerate(ID):
     plt.annotate(txt, (ra_deg[i], dec_deg[i]))
 
-plt.savefig('./phasecenter/Allmosaic.png')
+plt.savefig('./phasecenter/phasecenter/Allmosaic.png')
