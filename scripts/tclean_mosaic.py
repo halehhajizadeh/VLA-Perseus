@@ -7,7 +7,8 @@ from glob import glob
 
 filename = path+'/targets.ms'
 
-imagename= threedigits + '-mosaic-fieldAll-2.5arc-'+str(int)+'-spw1pb0.2'
+imagename= threedigits + '-mosaic-fieldAll-StokesQ-2.5arc-'+str(nit)+'-spwALL-pb0.06'
+
 
 if os.path.exists(path+"/Images_new/"+imagename+".image.fits"):
     os.remove(path+"/Images_new/"+imagename+".image.fits")
@@ -19,7 +20,7 @@ for images in flist:
 
 tclean(vis=filename,
        field="",
-       spw="16:5~55",
+       spw="",
        timerange="",
        uvrange="",
        antenna="",
@@ -30,10 +31,10 @@ tclean(vis=filename,
        imsize=[4096],
        cell="2.5arcsec",
        phasecenter=phase_center,
-       stokes="I",
+       stokes="Q",
        projection="SIN",
        specmode="mfs",
-       gridder="awproject",
+       gridder="mosaic",
        mosweight=True,
        cfcache="",
        pblimit=0.06,
@@ -45,7 +46,7 @@ tclean(vis=filename,
        outlierfile="",
        weighting="briggs",
        robust=0.5,
-       npixels=2,
+       npixels=0,
        uvtaper=[],
        niter=nit,
        gain=0.1,
@@ -56,9 +57,10 @@ tclean(vis=filename,
        restart=True,
        calcres=True,
        calcpsf=True,
-       parallel=True,
+       parallel=False,
        interactive=False)
 
 
 
 exportfits(path+"/Images_new/"+imagename+".image", path+"/Images_new/"+imagename+".image.fits")
+

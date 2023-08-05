@@ -7,7 +7,7 @@ from glob import glob
 
 filename = path+'/targets.ms'
 
-imagename= threedigits + '-awproject-fieldAll-2.5arc-'+str(int)+'-spw16-pb0.01'
+imagename= threedigits + '-awproject-fieldAll-2.5arc-'+str(nit)+'-spwALL-pb0.06'
 
 if os.path.exists(path+"/Images_new/"+imagename+".image.fits"):
     os.remove(path+"/Images_new/"+imagename+".image.fits")
@@ -16,10 +16,11 @@ flist = glob(path+'/Images_new/'+imagename)
 for images in flist:
     shutil.rmtree(images)
 
+print('nint is ' + str(nit))
 
 tclean(vis=filename,
        field="",
-       spw="16:5~55",
+       spw="",
        timerange="",
        uvrange="",
        antenna="",
@@ -36,7 +37,7 @@ tclean(vis=filename,
        gridder="awproject",
        mosweight=True,
        cfcache="",
-       pblimit=0.01,
+       pblimit=0.06,
        normtype="flatnoise",
        deconvolver="hogbom",
        restoration=True,
@@ -45,7 +46,7 @@ tclean(vis=filename,
        outlierfile="",
        weighting="briggs",
        robust=0.5,
-       npixels=2,
+       npixels=0,
        uvtaper=[],
        niter=nit,
        gain=0.1,
@@ -56,7 +57,7 @@ tclean(vis=filename,
        restart=True,
        calcres=True,
        calcpsf=True,
-       parallel=True,
+    #    parallel=True,
        interactive=False,
        wbawp=False,
        rotatepastep=5.0,
