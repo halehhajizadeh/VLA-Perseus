@@ -17,7 +17,7 @@ filename = '../data/19B-053_2019_12_15_T07_36_56.546/products/19B-053.sb37264871
 
 
 setjy(vis=msfilename,
-      field='0',
+      field='0542+498=3C147',
       scan = '2,3',
       spw='',
       selectdata=False, 
@@ -31,7 +31,7 @@ setjy(vis=msfilename,
 
 
 setjy(vis=msfilename,
-      field='1',
+      field='0521+166=3C138',
       spw='',
       selectdata=False, 
       scalebychan=True, 

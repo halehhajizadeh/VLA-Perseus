@@ -6,7 +6,7 @@ polcal(
     vis=msfilename,
     caltable=msfilename+'.Xf_sbd',
     spw='',
-    field='1',
+    field='0521+166=3C138',
     solint='inf,2MHz',
     combine='scan',
     poltype='Xf',
