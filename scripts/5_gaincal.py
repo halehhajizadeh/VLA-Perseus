@@ -6,8 +6,8 @@ kcross_sbd = msfilename+".Kcross_sbd"
 
 gaincal(vis=msfilename,
     caltable=kcross_sbd,
-    field='0',
-    scan = '2,3',
+    field='1',
+    scan = '',
     spw='',
     refant=refant_name,
     gaintype="KCROSS",

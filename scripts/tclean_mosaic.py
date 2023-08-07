@@ -7,7 +7,7 @@ from glob import glob
 
 filename = path+'/targets.ms'
 
-imagename= threedigits + '-mosaic-fieldAll-StokesQ-2.5arc-'+str(nit)+'-spwALL-pb0.06'
+imagename= threedigits + '-mosaic-fieldAll-StokesQ-2.5arc-'+str(nit)+'-spwALL-pb0.1'
 
 
 if os.path.exists(path+"/Images_new/"+imagename+".image.fits"):
@@ -37,7 +37,7 @@ tclean(vis=filename,
        gridder="mosaic",
        mosweight=True,
        cfcache="",
-       pblimit=0.06,
+       pblimit=0.1,
        normtype="flatnoise",
        deconvolver="hogbom",
        restoration=True,
