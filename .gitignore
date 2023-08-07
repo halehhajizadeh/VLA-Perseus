@@ -10,3 +10,4 @@ __pycache__/
 *.dat
 Images/
 phasecenter/
+scripts_old/
