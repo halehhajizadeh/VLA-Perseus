@@ -4,7 +4,7 @@ from configs import msfilename, threedigits
 
 if threedigits=='546':
 
-    flagdata(vis=filename,
+    flagdata(vis=msfilename,
          mode='rflag', 
          correlation='RL, LR', 
          intent='*CALIBRATE*',
