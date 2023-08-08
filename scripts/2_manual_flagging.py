@@ -4,21 +4,6 @@ from configs import msfilename, threedigits
 
 if threedigits=='546':
 
-    flagdata(vis=msfilename,
-         mode='rflag', 
-         correlation='RL, LR', 
-         intent='*CALIBRATE*',
-         datacolumn='corrected', 
-         ntime='scan', 
-         combinescans=False,
-         extendflags=False, 
-         winsize=3, 
-         timedevscale=4.0, 
-         freqdevscale=4.0,
-         action='apply', 
-         flagbackup=True, 
-         savepars=True)
-
     flagdata(
     vis=msfilename, 
     mode='manual',
@@ -40,7 +25,7 @@ if threedigits=='546':
     flagdata( 
     vis=msfilename, 
     mode='manual', 
-    spw='9,11,12,7'
+    spw='12'
     )
 
     flagdata( 
