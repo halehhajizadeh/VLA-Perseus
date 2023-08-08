@@ -3,6 +3,22 @@ sys.path.append('.')
 from configs import msfilename, threedigits
 
 if threedigits=='546':
+
+    flagdata(vis=filename,
+         mode='rflag', 
+         correlation='RL, LR', 
+         intent='*CALIBRATE*',
+         datacolumn='corrected', 
+         ntime='scan', 
+         combinescans=False,
+         extendflags=False, 
+         winsize=3, 
+         timedevscale=4.0, 
+         freqdevscale=4.0,
+         action='apply', 
+         flagbackup=True, 
+         savepars=True)
+
     flagdata(
     vis=msfilename, 
     mode='manual',
