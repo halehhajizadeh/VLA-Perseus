@@ -37,7 +37,6 @@ if threedigits=='546':
     flagdata( 
     vis=msfilename, 
     mode='manual', 
-    field = '0',
     spw='9,11,7'
     )
 
