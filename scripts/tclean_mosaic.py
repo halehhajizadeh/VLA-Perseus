@@ -7,13 +7,15 @@ from glob import glob
 
 filename = path+'/targets.ms'
 
-imagename= threedigits + '-mosaic-fieldAll-StokesQ-2.5arc-'+str(nit)+'-spwALL-pb0.1'
+pblim = 0.06
+Stoke = 'I'
 
+imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwALL-pb'+str(pblim)
 
-if os.path.exists(path+"/Images_new/"+imagename+".image.fits"):
-    os.remove(path+"/Images_new/"+imagename+".image.fits")
+if os.path.exists(path+"/Images/"+imagename+".image.fits"):
+    os.remove(path+"/Images/"+imagename+".image.fits")
 
-flist = glob(path+'/Images_new/'+imagename)
+flist = glob(path+'/Images/'+imagename)
 for images in flist:
     shutil.rmtree(images)
 
@@ -31,13 +33,13 @@ tclean(vis=filename,
        imsize=[4096],
        cell="2.5arcsec",
        phasecenter=phase_center,
-       stokes="Q",
+       stokes=Stoke,
        projection="SIN",
        specmode="mfs",
        gridder="mosaic",
        mosweight=True,
        cfcache="",
-       pblimit=0.1,
+       pblimit=pblim,
        normtype="flatnoise",
        deconvolver="hogbom",
        restoration=True,
@@ -62,5 +64,5 @@ tclean(vis=filename,
 
 
 
-exportfits(path+"/Images_new/"+imagename+".image", path+"/Images_new/"+imagename+".image.fits")
+exportfits(path+"/Images/"+imagename+".image", path+"/Images/"+imagename+".image.fits")
 
