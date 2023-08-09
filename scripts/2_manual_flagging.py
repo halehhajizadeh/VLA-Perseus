@@ -33,6 +33,34 @@ if threedigits=='546':
     mode='manual', 
     spw='15:12~15'
     )
+
+    flagdata( 
+    vis=msfilename, 
+    mode='manual', 
+    field = '0',
+    spw='9,11,7'
+    )
+
+    flagdata( 
+    vis=msfilename, 
+    mode='manual', 
+    field = '0',
+    spw='15:7~8;14~27'
+    )
+
+    flagdata( 
+    vis=msfilename, 
+    mode='manual', 
+    field = '0',
+    spw='17:14~15;33~35'
+    )
+
+    flagdata( 
+    vis=msfilename, 
+    mode='manual', 
+    field = '3~58',
+    spw='0'
+    )
 #----------------------------------------------------------------
 if threedigits=='755':
 
