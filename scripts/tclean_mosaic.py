@@ -8,9 +8,10 @@ from glob import glob
 filename = path+'/targets.ms'
 
 pblim = 0.06
+
 Stoke = 'I'
 
-imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwALL-pb'+str(pblim)
+imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)
 
 if os.path.exists(path+"/Images/"+imagename+".image.fits"):
     os.remove(path+"/Images/"+imagename+".image.fits")
@@ -22,7 +23,7 @@ for images in flist:
 
 tclean(vis=filename,
        field="",
-       spw="",
+       spw="16:5~60",
        timerange="",
        uvrange="",
        antenna="",
@@ -61,8 +62,6 @@ tclean(vis=filename,
        calcpsf=True,
        parallel=False,
        interactive=False)
-
-
 
 exportfits(path+"/Images/"+imagename+".image", path+"/Images/"+imagename+".image.fits")
 
