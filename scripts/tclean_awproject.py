@@ -5,9 +5,10 @@ import shutil
 import os
 from glob import glob
 
+nit=100
 filename = path+'/targets.ms'
 
-imagename= threedigits + '-awproject-fieldAll-2.5arc-'+str(nit)+'-spwALL-pb0.06'
+imagename= threedigits + '-awproject-5000-fieldAll-2.5arc-'+str(nit)+'-spw16-pb-0.01-false'
 
 if os.path.exists(path+"/Images_new/"+imagename+".image.fits"):
     os.remove(path+"/Images_new/"+imagename+".image.fits")
@@ -19,8 +20,8 @@ for images in flist:
 print('nint is ' + str(nit))
 
 tclean(vis=filename,
-       field="16:5~60",
-       spw="",
+       field="",
+       spw="16:5~60",
        timerange="",
        uvrange="",
        antenna="",
@@ -28,7 +29,7 @@ tclean(vis=filename,
        intent="",
        datacolumn="corrected",
        imagename=path+"/Images_new/"+imagename,
-       imsize=[4096],
+       imsize=[5000],
        cell="2.5arcsec",
        phasecenter=phase_center,
        stokes="I",
@@ -37,7 +38,7 @@ tclean(vis=filename,
        gridder="awproject",
        mosweight=True,
        cfcache="",
-       pblimit=0.06,
+       pblimit=0.009,
        normtype="flatnoise",
        deconvolver="hogbom",
        restoration=True,
@@ -55,7 +56,7 @@ tclean(vis=filename,
        cycleniter=-1,
        cyclefactor=1.0,
        restart=True,
-       calcres=True,
+       calcres=False,
        calcpsf=True,
     #    parallel=True,
        interactive=False,
