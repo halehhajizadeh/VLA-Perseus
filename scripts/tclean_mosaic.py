@@ -11,7 +11,7 @@ pblim = 0.06
 
 Stoke = 'I'
 
-imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)
+imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit0'
 
 if os.path.exists(path+"/Images/"+imagename+".image.fits"):
     os.remove(path+"/Images/"+imagename+".image.fits")
@@ -54,9 +54,9 @@ tclean(vis=filename,
        niter=nit,
        gain=0.1,
        threshold=thresh,
-       nsigma=0.0,
-       cycleniter=-1,
-       cyclefactor=1.0,
+       nsigma=3,
+       cycleniter=750,
+       cyclefactor=1.5,
        restart=True,
        calcres=True,
        calcpsf=True,

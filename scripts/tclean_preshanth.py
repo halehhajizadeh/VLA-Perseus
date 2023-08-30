@@ -15,7 +15,7 @@ print('number of iterations is: ' + str(nit))
 print('threshold is '   + str(thresh))
 
 
-imagename= threedigits + '-awproject-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwALL-pb'+str(pblim)
+imagename= threedigits + '-awproject-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwALL-pb'+str(pblim)+'-nsigma3'
 
 if os.path.exists(path+"/Images/"+imagename+".image.fits"):
     os.remove(path+"/Images/"+imagename+".image.fits")
@@ -88,7 +88,7 @@ tclean(vis=filename,
        niter=nit,
        gain=0.1,
        threshold=thresh,
-       nsigma=1,
+       nsigma=3,
        cycleniter=-1,
        cyclefactor=1.0,
        minpsffraction=0.05,
@@ -119,3 +119,8 @@ tclean(vis=filename,
        parallel=False )
 
 exportfits(path+"/Images/"+imagename+".image", path+"/Images/"+imagename+".image.fits")
+
+
+#cycleniter
+#normtype=pbsquare
+#cyclefactor
