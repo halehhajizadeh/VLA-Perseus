@@ -19,7 +19,7 @@ for stok in stokes1:
             tic = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
             tclean(vis= filename,
-                field="PER_FIELD*",
+                field="PER_FIELD_*",
                 spw=str(s) + ':' + channel,
                 timerange="",
                 uvrange="",
