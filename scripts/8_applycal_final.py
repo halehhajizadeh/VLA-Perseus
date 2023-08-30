@@ -20,11 +20,3 @@ applycal(vis=msfilename,
 
 print('applycal is done!')
 print('--------------------------------')
-print('splitting is starting...')
-
-split(vis=msfilename,
-      outputvis=path+'targets.ms',
-      datacolumn='corrected',
-      field='3~58')
-
-print('splitting targets is done!')
