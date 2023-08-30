@@ -1,10 +1,10 @@
 import sys
 sys.path.append('.')
-from configs import path, phase_center, thresh, nit
+from configs import path, phase_center, thresh, nit, threedigits
 import time
 
 filename = path+'targets.ms'
-spw = [0, 2, 3 , 4, 5, 6, 8, 15, 16, 17]
+spw = [0, 2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
 stokes1 = [
         'I',
         'Q',
@@ -19,7 +19,7 @@ for stok in stokes1:
             tic = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
             tclean(vis= filename,
-                field="",
+                field="PER_FIELD*",
                 spw=str(s) + ':' + channel,
                 timerange="",
                 uvrange="",
@@ -28,7 +28,7 @@ for stok in stokes1:
                 observation="",
                 intent="",
                 datacolumn="data",
-                imagename=path+"./Images/img"+str(nit)+"/tclean/546-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok),
+                imagename=path+"./Images/img"+str(nit)+"/tclean/"+str(threedigits)+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok),
                 imsize=4320,
                 cell="2.5arcsec",
                 phasecenter= phase_center,
@@ -37,18 +37,18 @@ for stok in stokes1:
                 specmode="mfs",
                 reffreq="",
                 nchan=-1,
-                start="",
+                start="", 
                 width="",
                 outframe="LSRK",
                 veltype="radio",
                 restfreq=[],
                 interpolation="linear",
-                gridder="standard",
+                gridder="mosaic",
                 mosweight=True,
                 cfcache="",
                 computepastep=360.0,
                 rotatepastep=360.0,
-                pblimit=0.001,
+                pblimit=0.01,
                 normtype="flatnoise",
                 deconvolver="hogbom",
                 scales=[],
@@ -65,8 +65,8 @@ for stok in stokes1:
                 niter=nit,
                 gain=0.1,
                 threshold=thresh,
-                nsigma=0.0,
-                cycleniter=1000,
+                nsigma=3,
+                cycleniter=500,
                 cyclefactor=1.0,
                 restart=True,
                 savemodel="modelcolumn",
