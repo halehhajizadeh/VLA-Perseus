@@ -7,19 +7,13 @@ if threedigits=='546':
     flagdata(
     vis=msfilename, 
     mode='manual',
-    spw='0:19~32'
+    spw='0:0~8;19~32'
     )
 
     flagdata( 
     vis=msfilename, 
     mode='manual', 
     spw='3:0~5'
-    )
-
-    flagdata( 
-    vis=msfilename, 
-    mode='manual', 
-    spw='0:0~8'
     )
 
 
