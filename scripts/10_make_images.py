@@ -18,6 +18,9 @@ for stok in stokes1:
         for channel in channels:
             tic = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
+
+
+
             tclean(vis= filename,
                 field="PER_FIELD_*",
                 spw=str(s) + ':' + channel,
@@ -58,7 +61,6 @@ for stok in stokes1:
                 cycleniter=500,
                 cyclefactor=1.5,
                 restart=True,
-                savemodel="modelcolumn",
                 calcres=True,
                 calcpsf=True,
                 parallel=False,

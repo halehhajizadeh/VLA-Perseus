@@ -8,7 +8,7 @@ print('splitting is starting...')
 split(vis=msfilename,
       outputvis=path+'/targets.ms',
       datacolumn='corrected',
-      field='J0336+3218,PER_FIELD_*')
+      field='3~57')
 print('splitting targets is done!')
 
 
