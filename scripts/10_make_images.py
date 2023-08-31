@@ -18,11 +18,8 @@ for stok in stokes1:
         for channel in channels:
             tic = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
-
-
-
             tclean(vis= filename,
-                field="PER_FIELD_*",
+                field="",
                 spw=str(s) + ':' + channel,
                 timerange="",
                 uvrange="",
