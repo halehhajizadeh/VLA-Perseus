@@ -13,4 +13,4 @@
 #SBATCH --ntasks-per-node=8                   # Request 8 cores
 
 CASAPATH=/home/casa/packages/RHEL7/release/current # Use a specific version of CASA
-xvfb-run -d mpicasa ${CASAPATH}/bin/casa --nogui -c 10_make_images.py
+xvfb-run -d mpicasa ${CASAPATH}/bin/casa --nogui -c /lustre/aoc/observers/nm-12934/VLA-Perseus/scripts/10_make_images.py
