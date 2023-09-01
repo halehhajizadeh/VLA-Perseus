@@ -39,7 +39,7 @@ for stok in stokes1:
                 gridder="mosaic",
                 mosweight=True,
                 cfcache="",
-                pblimit=0.01,
+                pblimit=0.06,
                 normtype="flatnoise",
                 deconvolver="hogbom",
                 scales=[],
@@ -62,6 +62,7 @@ for stok in stokes1:
                 calcpsf=True,
                 parallel=False,
                 interactive=False)
+        
             toc = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is finished!")
             print(f"Finshed the process in {round((toc-tic)/60)} minutes")
