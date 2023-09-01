@@ -1,7 +1,7 @@
 import sys
 sys.path.append('.')
 from configs import path, phase_center, thresh, nit, threedigits
-import time
+# import time
 
 filename = path+'/targets.ms'
 spw = [2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
@@ -16,7 +16,7 @@ channels = ['00~07', '08~15', '16~23', '24~31', '32~39', '40~47', '48~55', '56~6
 for stok in stokes1:
     for s in spw:
         for channel in channels:
-            tic = time.time()
+            # tic = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
             tclean(vis=filename,
                     field="",
@@ -60,6 +60,6 @@ for stok in stokes1:
                     parallel=False,
                     interactive=False)
         
-            toc = time.time()
+            # toc = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is finished!")
             print(f"Finshed the process in {round((toc-tic)/60)} minutes")
