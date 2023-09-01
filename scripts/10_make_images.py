@@ -39,7 +39,7 @@ for stok in stokes1:
                 gridder="mosaic",
                 mosweight=True,
                 cfcache="",
-                pblimit=0.06,
+                pblimit=0.01,
                 normtype="flatnoise",
                 deconvolver="hogbom",
                 scales=[],
