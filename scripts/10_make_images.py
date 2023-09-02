@@ -18,7 +18,7 @@ for stok in stokes1:
         for channel in channels:
             tic = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
-            tclean(vis=filename,
+            tclean( vis=filename,
                     field="",
                     spw=str(s) + ':' + channel,
                     timerange="",
@@ -28,7 +28,7 @@ for stok in stokes1:
                     intent="",
                     datacolumn="corrected",
                     imagename=path+"/Images/img"+str(nit)+"/tclean/"+str(threedigits)+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok),
-                    imsize=[4096],
+                    imsize=[4320],
                     cell="2.5arcsec",
                     phasecenter=phase_center,
                     stokes=stok,
@@ -47,7 +47,6 @@ for stok in stokes1:
                     weighting="briggs",
                     robust=0.5,
                     npixels=0,
-                    uvtaper=[],
                     niter=nit,
                     gain=0.1,
                     threshold=thresh,
