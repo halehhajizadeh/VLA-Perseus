@@ -4,8 +4,6 @@ from reproject import reproject_interp
 import numpy as np
 
 
-
-
 # working_directory = '../data_new/'
 working_directory = '../data/'
 
