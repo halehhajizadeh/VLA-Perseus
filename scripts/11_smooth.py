@@ -3,7 +3,7 @@ sys.path.append('.')
 from configs import path, thresh, nit, threedigits
 import time
 
-spw = [0, 2, 3 , 4, 5, 6, 8, 15, 16, 17]
+spw = [0, 2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
 
 stokes = [
         'I',
