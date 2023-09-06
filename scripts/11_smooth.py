@@ -28,8 +28,8 @@ for stok in stokes:
         for channel in channels:  
             imsmooth(imagename = path+"/Images/img"+str(nit)+"/tclean/"+threedigits+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image',
                     targetres = True,
-                    major = '65arcsec',
-                    minor ='40arcsec',
+                    major = '55arcsec',
+                    minor ='50arcsec',
                     pa='0.0deg',
                     outfile = path+"/Images/img"+str(nit)+"/smo/"+threedigits+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image.smo',
                     overwrite=True
