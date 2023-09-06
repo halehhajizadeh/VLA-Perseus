@@ -17,7 +17,7 @@ stokes_list = [
           ]
 
 def create_empty_channel(fitsname):
-    flagged_channel = path+'Images/img'+str(nit)+'/fits/empty_channel.fits'
+    flagged_channel = path+'/Images/img'+str(nit)+'/fits/empty_channel.fits'
     syscommand='rm -rf '+flagged_channel
     os.system(syscommand)
     hdul = fits.open(fitsname)
@@ -38,11 +38,11 @@ def remove_empty_channel_form_start(filelist):
         return remove_empty_channel_form_start(filelist[1:])
     
 for stokes in stokes_list:    
-    cubename=path+'Images/img'+str(nit)+'/Stokes'+stokes+'.fits'
+    cubename=path+'/Images/img'+str(nit)+'/Stokes'+stokes+'.fits'
 
     syscommand='rm -rf '+cubename
     os.system(syscommand)
-    with open(path+'Images/img'+str(nit)+'/stokes'+stokes+'.txt', 'r') as f:
+    with open(path+'/Images/img'+str(nit)+'/stokes'+stokes+'.txt', 'r') as f:
         file_list = f.read().splitlines()
 
     file_list = remove_empty_channel_form_start(filelist=file_list)
@@ -66,7 +66,7 @@ for stokes in stokes_list:
             imgCP = hdulistCP[0].data      
             headerCP = hdulistCP[0].header
             # print(filename)
-            if filename == path+'Images/img' + str(nit) + '/fits/empty_channel.fits':
+            if filename == path+'/Images/img' + str(nit) + '/fits/empty_channel.fits':
                 imgCP = np.nan_to_num(x=imgCP, nan=1e30)
             img2cube=np.copy(imgCP[0,:,:,:])
             cube=np.append(cube,img2cube,0)
