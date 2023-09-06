@@ -4,8 +4,8 @@ from configs import path, thresh, nit, threedigits
 import numpy as np
 
 spw = [9,10,11,12,13,14,15,16,17,0,1,2,3,4,5,6,7,8]
-existing_spw = [0, 2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
-non_spw = [1, 7, 9, 11, 12, 13, 14]
+existing_spw = [0, 2, 3 , 4, 5, 6, 8, 15, 16, 17]
+non_spw = [1, 7, 9, 10, 11, 12, 13, 14]
 channels = ['00~07', '08~15', '16~23', '24~31', '32~39', '40~47', '48~55', '56~63']
 
 stokes = [
