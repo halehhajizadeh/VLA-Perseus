@@ -4,8 +4,12 @@ from configs import path, thresh, nit, threedigits
 import numpy as np
 import os 
 
-file_list = [file for file in os.listdir(path+"/Images/img"+str(nit)+"/fits/") if os.path.isfile(os.path.join(path+"/Images/img"+str(nit)+"/fits/", path+"/Images/img"+str(nit)+"/fits/"+file))]
-print (file_list)
+file_list = [file for file in os.listdir(path+"/Images/img"+str(nit)+"/fits/") if os.path.isfile(os.path.join(path+"/Images/img"+str(nit)+"/fits/", file))]
+file_list_total = []
+for file in file_list:
+    file = path+"/Images/img"+str(nit)+"/fits/" + file 
+    file_list_total.append(file)
+print (file_list_total)
 
 # spw = [9,10,11,12,13,14,15,16,17,0,1,2,3,4,5,6,7,8]
 # # existing_spw = [2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
