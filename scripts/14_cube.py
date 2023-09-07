@@ -67,7 +67,7 @@ for stokes in stokes_list:
             headerCP = hdulistCP[0].header
             # print(filename)
             if filename == path+'/Images/img' + str(nit) + '/fits/empty_channel.fits':
-                imgCP = np.nan_to_num(x=imgCP, nan=1e30) #original
+                # imgCP = np.nan_to_num(x=imgCP, nan=1e30) #original
                 imgCP[np.isnan(imgCP)] = 1e30 #to work on numpy 1.13
             img2cube=np.copy(imgCP[0,:,:,:])
             cube=np.append(cube,img2cube,0)
