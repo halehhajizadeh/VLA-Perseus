@@ -90,7 +90,6 @@ for stokes in Stokes:
         OUT=open(path+'Images/img'+str(nit)+'/RMsyn/'+spectrum_file,"w")
 
         print("Pixel coordinates: ",x0,y0,sourcename_RADEC,spectrum_file)
-
         print("## RA DEC: ",RA0[ip],DEC0[ip], file=OUT)
         print("## Pixel coordinates: ",x0,y0,"  Box : %d  %d" % (dx,dy), file=OUT)
         print("## Source name: ",sourcename_RADEC," Stokes ",stokes, file=OUT)
