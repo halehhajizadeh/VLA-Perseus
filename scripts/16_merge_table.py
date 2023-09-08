@@ -47,7 +47,7 @@ for i in range(len(freq_I)):
 
 
 
-with open(path+"/Images/img"+str(nit)+"/RMsyn/final_results1"+".dat", "w") as f:
+with open(path+"/Images/img"+str(nit)+"/RMsyn/final_results8"+".dat", "w") as f:
     print(len(flag_I))
     for i in range(len(flag_I)):
         if ((flag_I[i]<1) and (flag_Q[i]<1) and (flag_U[i]<1)):
