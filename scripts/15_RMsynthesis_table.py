@@ -61,7 +61,7 @@ else:
         DEC0=np.double(SOURCES[2])
 
 for stokes in Stokes:
-    fits_file =path+'Images/img'+str(nit)+'/Stokes'+stokes+'.fits'
+    fits_file =path+'/Images/img'+str(nit)+'/Stokes'+stokes+'.fits'
     hdulist=fits.open(fits_file)
     img=hdulist[0].data
     wcs=WCS(hdulist[0].header)
@@ -87,7 +87,7 @@ for stokes in Stokes:
 
         spectrum_file="%s_box_%03d_%03d_%s.pro" % (sourcename_RADEC,dx,dy,stokes)
 
-        OUT=open(path+'Images/img'+str(nit)+'/RMsyn/'+spectrum_file,"w")
+        OUT=open(path+'/Images/img'+str(nit)+'/RMsyn/'+spectrum_file,"w")
 
         print("Pixel coordinates: ",x0,y0,sourcename_RADEC,spectrum_file)
         print("## RA DEC: ",RA0[ip],DEC0[ip], file=OUT)
