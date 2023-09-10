@@ -7,7 +7,7 @@ from configs import msfilename, refant_name
 polcal(vis=msfilename,
        caltable=msfilename+'.Df_sbd',
        field='0542+498=3C147',
-       scan = '2,3',
+       scan = '',
        spw='',
        refant=refant_name,
        poltype='Df',
