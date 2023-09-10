@@ -3,15 +3,10 @@ sys.path.append('.')
 import shutil
 import os
 from glob import glob
+from configs import path, phase_center, nit, thresh, threedigits
 
-path = '../data/19B-053_2019_12_16_T08_12_56.775/products'
+# path = '../data/19B-053_2019_12_16_T08_12_56.775/products'
 # msfilename = path + '/19B-053.sb37264871.eb37596495.58833.2500384375_calibrated.ms'
-
-refant_name = 'ea24'
-phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
-thresh = '1e-4'
-nit = 5000
-threedigits ='775'
 
 filename = path+'/targets.ms'
 
@@ -19,7 +14,7 @@ pblim = 0.06
 
 Stoke = 'I'
 
-imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw2-pb'+str(pblim)+'-cyclenit500'
+imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwALL-pb'+str(pblim)+'-cyclenit500'
 
 if os.path.exists(path+"/Images/"+imagename+".image.fits"):
     os.remove(path+"/Images/"+imagename+".image.fits")
@@ -31,7 +26,7 @@ for images in flist:
 
 tclean(vis=filename,
        field="",
-       spw="2",
+       spw="",
        timerange="",
        uvrange="",
        antenna="",
