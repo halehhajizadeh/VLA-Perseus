@@ -10,7 +10,7 @@ from configs import path, phase_center, nit, thresh, threedigits
 
 filename = path+'/targets.ms'
 
-pblim = 0.06
+pblim = 0.01
 
 Stoke = 'I'
 
@@ -36,7 +36,7 @@ tclean(vis=filename,
        imagename=path+"/Images/"+imagename,
        imsize=[4096],
        cell="2.5arcsec",
-    #    phasecenter=phase_center,
+       phasecenter=phase_center,
        stokes=Stoke,
        projection="SIN",
        specmode="mfs",
