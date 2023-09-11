@@ -10,7 +10,7 @@ from configs import path, phase_center, nit, thresh, threedigits
 
 filename = path+'/targets.ms'
 
-pblim = 0.01
+pblim = 0.06
 
 Stoke = 'I'
 
