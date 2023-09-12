@@ -7,7 +7,7 @@ from glob import glob
 
 filename = path+'/targets.ms'
 
-imagename= threedigits + '-standard-fieldAll-2.5arc-'+str(int)+'-spw16-pb0.06'
+imagename= threedigits + '-standard-fieldAll-2.5arc-'+str(nit)+'-spw16-pb0.06'
 
 if os.path.exists(path+"/Images_new/"+imagename+".image.fits"):
     os.remove(path+"/Images_new/"+imagename+".image.fits")
