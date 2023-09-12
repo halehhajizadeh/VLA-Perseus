@@ -56,7 +56,7 @@ tclean(vis=filename,
        restart=True,
        calcres=True,
        calcpsf=True,
-       parallel=True,
+       parallel=False,
        interactive=False)
 
 
