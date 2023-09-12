@@ -25,7 +25,7 @@ path = '../data/19B-053_2019_12_23_T00_48_56.933/products'
 msfilename = path + '/19B-053.sb37618267.eb37630620.58840.93710494213_calibrated.ms'
 
 refant_name = 'ea24'
-phase_center = 'J2000 03:32:54.719000 +31.23.37.05900'
+phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
 thresh = '1e-4'
 nit = 5000
 threedigits ='933'
