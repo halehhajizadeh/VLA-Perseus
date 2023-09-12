@@ -6,7 +6,7 @@ from glob import glob
 from configs import path, phase_center, nit, thresh, threedigits
 
 # path = '../data/19B-053_2019_12_16_T08_12_56.775/products'
-msfilename = path + '/19B-053.sb37618267.eb37630620.58840.93710494213.ms'
+# msfilename = path + '/19B-053.sb37618267.eb37630620.58840.93710494213.ms'
 
 filename = path+'/targets.ms'
 
