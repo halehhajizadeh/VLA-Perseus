@@ -6,7 +6,7 @@ from glob import glob
 from configs import path, phase_center, nit, thresh, threedigits
 
 # path = '../data/19B-053_2019_12_16_T08_12_56.775/products'
-# msfilename = path + '/19B-053.sb37264871.eb37596495.58833.2500384375_calibrated.ms'
+msfilename = path + '/19B-053.sb37618267.eb37630620.58840.93710494213.ms'
 
 filename = path+'/targets.ms'
 
@@ -14,7 +14,7 @@ pblim = 0.06
 
 Stoke = 'I'
 
-imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
+imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500-original'
 
 if os.path.exists(path+"/Images/"+imagename+".image.fits"):
     os.remove(path+"/Images/"+imagename+".image.fits")
@@ -57,7 +57,7 @@ tclean(vis=filename,
        niter=nit,
        gain=0.1,
        threshold=thresh,
-       nsigma=0,
+       nsigma=3,
        cycleniter=500,
        cyclefactor=1,
        restart=True,
