@@ -9,10 +9,10 @@ filename = path+'/targets.ms'
 
 imagename= threedigits + '-standard-fieldAll-2.5arc-'+str(nit)+'-spw16-pb0.06'
 
-if os.path.exists(path+"/Images_new/"+imagename+".image.fits"):
-    os.remove(path+"/Images_new/"+imagename+".image.fits")
+if os.path.exists(path+"/Images/"+imagename+".image.fits"):
+    os.remove(path+"/Images/"+imagename+".image.fits")
 
-flist = glob(path+'/Images_new/'+imagename)
+flist = glob(path+'/Images/'+imagename)
 for images in flist:
     shutil.rmtree(images)
 
@@ -61,4 +61,4 @@ tclean(vis=filename,
 
 
 
-exportfits(path+"/Images_new/"+imagename+".image", path+"/Images_new/"+imagename+".image.fits")
+exportfits(path+"/Images/"+imagename+".image", path+"/Images/"+imagename+".image.fits")
