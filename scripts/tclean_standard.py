@@ -7,7 +7,7 @@ from glob import glob
 
 filename = path+'/targets.ms'
 
-imagename= threedigits + '-mosaic-fieldAll-2.5arc-'+str(int)+'-spw1pb0.2'
+imagename= threedigits + '-standard-fieldAll-2.5arc-'+str(int)+'-spw16-pb0.06'
 
 if os.path.exists(path+"/Images_new/"+imagename+".image.fits"):
     os.remove(path+"/Images_new/"+imagename+".image.fits")
@@ -45,13 +45,13 @@ tclean(vis=filename,
        outlierfile="",
        weighting="briggs",
        robust=0.5,
-       npixels=2,
+       npixels=0,
        uvtaper=[],
        niter=nit,
        gain=0.1,
        threshold=thresh,
        nsigma=0.0,
-       cycleniter=-1,
+       cycleniter=500,
        cyclefactor=1.0,
        restart=True,
        calcres=True,
