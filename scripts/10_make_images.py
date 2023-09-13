@@ -4,7 +4,7 @@ from configs import path, phase_center, thresh, nit, threedigits
 import time
 
 filename = path+'/targets.ms'
-spw = [2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
+spw = [0, 2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
 stokes1 = [
         'I',
         'Q',
