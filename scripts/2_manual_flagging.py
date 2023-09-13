@@ -41,7 +41,7 @@ elif threedigits=='775':
     flagdata(
     vis=msfilename, 
     mode='manual',
-    spw='1,12,13,14'
+    spw='1,7,9,11,12,13,14'
     )
 
     flagdata(
