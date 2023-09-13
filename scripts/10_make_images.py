@@ -4,7 +4,7 @@ from configs import path, phase_center, thresh, nit, threedigits
 import time
 
 filename = path+'/targets.ms'
-spw = [0, 2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
+spw = [ 2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
 stokes1 = [
         'I',
         'Q',
@@ -28,7 +28,7 @@ for stok in stokes1:
                     intent="",
                     datacolumn="corrected",
                     imagename=path+"/Images/img"+str(nit)+"/tclean/"+str(threedigits)+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok),
-                    imsize=[4320],
+                    imsize=[4096],
                     cell="2.5arcsec",
                     phasecenter=phase_center,
                     stokes=stok,
