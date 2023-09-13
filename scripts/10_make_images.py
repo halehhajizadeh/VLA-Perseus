@@ -50,7 +50,7 @@ for stok in stokes1:
                     niter=nit,
                     gain=0.1,
                     threshold=thresh,
-                    nsigma=3,
+                    nsigma=2,
                     cycleniter=500,
                     cyclefactor=1,
                     restart=True,
