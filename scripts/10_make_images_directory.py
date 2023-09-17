@@ -3,7 +3,7 @@ sys.path.append('.')
 from configs import path, phase_center, thresh, nit, threedigits, pblim
 import time
 
-filename = path+'/targets.ms'
+filename = '../'+path+'/targets.ms'
 # spw = [ 2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
 s = 2
 stokes1 = [
@@ -27,7 +27,7 @@ for stok in stokes1:
                 observation="",
                 intent="",
                 datacolumn="corrected",
-                imagename=path+"/Images/img"+str(nit)+"/tclean/"+str(threedigits)+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok),
+                imagename='../'+path+"/Images/img"+str(nit)+"/tclean/"+str(threedigits)+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok),
                 imsize=[4320],
                 cell="2.5arcsec",
                 phasecenter=phase_center,
