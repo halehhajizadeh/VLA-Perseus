@@ -1,19 +1,25 @@
 import sys
 sys.path.append('.')
-from configs import path, nit
+from configs import path, nit, threedigits, thresh
 import numpy as np
 from astropy.io import fits
 from astropy.wcs import WCS
 import math
+import pandas as pd
+
+pblim = 0.06
+Stoke = 'I'
 
 dx=4
 dy=4
-manual_setting=1
+
 Stokes = [
         'I',
         'Q',
         'U'
         ]
+
+manual_setting=0
 
 
 def ra_dec_to_degrees(ra, dec):
@@ -36,30 +42,33 @@ def ra_dec_to_degrees(ra, dec):
 
     return ra_degrees, dec_degrees
 
-ra_list = ['3:31:54', '3:34:16', '3:33:21', '3:35:05', '3:31:19', '3:30:09', '3:28:40', '3:32:41', '3:34:01']
-dec_list = ['31:04:39', '31:12:10', '30:55:28', '30:47:04', '30:47:23', '30:32:53', '30:49:56', '30:20:11', '31:18:40']
+#----------------------------------------------------------------
+if manual_setting == 1:
+    ra_list = ['3:31:54', '3:34:16', '3:33:21', '3:35:05', '3:31:19', '3:30:09', '3:28:40', '3:32:41', '3:34:01']
+    dec_list = ['31:04:39', '31:12:10', '30:55:28', '30:47:04', '30:47:23', '30:32:53', '30:49:56', '30:20:11', '31:18:40']
 
-ra_list = np.array(ra_list)
-dec_list = np.array(dec_list)
+    ra_list = np.array(ra_list)
+    dec_list = np.array(dec_list)
 
-RA=[]
-DEC=[]
-for i in range(ra_list.shape[0]):
-    radec=ra_dec_to_degrees(ra_list[i], dec_list[i])
-    RA.append(radec[0])
-    DEC.append(radec[1])
+    RA0=[]
+    DEC0=[]
+    for i in range(ra_list.shape[0]):
+        radec=ra_dec_to_degrees(ra_list[i], dec_list[i])
+        RA0.append(radec[0])
+        DEC0.append(radec[1])
 
-print(RA)
-print(DEC)
 
-if manual_setting!=0:
-    RA0=RA
-    DEC0=DEC
-else:
-    with open("source_list_test_G17.dat", 'r') as SOURCES:
-        RA0=np.double(SOURCES[1])
-        DEC0=np.double(SOURCES[2])
+elif manual_setting == 0:   
 
+    imagename= threedigits + '-mosaic-fieldALL-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwALL-pb'+str(pblim)+'-cyclenit500'
+
+    catalog_name= path +'/Images/'+ imagename + '.image.pybdsf.srl'
+
+    df = pd.read_csv(catalog_name, delim_whitespace=True)
+
+    RA0 = df['RA'].tolist()
+    DEC0 = df['DEC'].tolist()
+#----------------------------------------------------------------
 for stokes in Stokes:
     fits_file =path+'/Images/img'+str(nit)+'/Stokes'+stokes+'.fits'
     hdulist=fits.open(fits_file)
@@ -81,11 +90,11 @@ for stokes in Stokes:
         y0=int(pixcrd2[0][1]+0.5)
 
         if (DEC0[ip]>=0):
-            sourcename_RADEC="J%07.3f+%06.3f"  % (int(1.E3*RA0[ip])/1000.,int(1.E3*DEC0[ip])/1000.)
+            sourcename_RADEC="H%07.3f+%06.3f"  % (int(1.E3*RA0[ip])/1000.,int(1.E3*DEC0[ip])/1000.)
         else:  
-            sourcename_RADEC="J%07.3f%06.3f"  % (int(1.E3*RA0[ip])/1000.,int(1.E3*DEC0[ip])/1000.)
+            sourcename_RADEC="H%07.3f%06.3f"  % (int(1.E3*RA0[ip])/1000.,int(1.E3*DEC0[ip])/1000.)
 
-        spectrum_file="%s_box_%03d_%03d_%s.pro" % (sourcename_RADEC,dx,dy,stokes)
+        spectrum_file="%s_%s.pro" % (sourcename_RADEC,dx,dy,stokes)
 
         OUT=open(path+'/Images/img'+str(nit)+'/RMsyn/'+spectrum_file,"w")
 
