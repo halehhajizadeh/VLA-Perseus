@@ -3,20 +3,13 @@ sys.path.append('.')
 import shutil
 import os
 from glob import glob
-from configs import path, phase_center, nit, thresh, threedigits
-
-# path = '../data/19B-053_2019_12_16_T08_12_56.775/products'
-# msfilename = path + '/19B-053.sb37618267.eb37630620.58840.93710494213.ms'
-
-#specsmooth
+from configs import path, phase_center, nit, thresh, threedigits, pblim
 
 filename = path+'/targets.ms'
 
-pblim = 0.2
-
 Stoke = 'I'
 
-imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
+imagename= threedigits + '-mosaic-fieldALL-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwALL-pb'+str(pblim)+'-cyclenit500'
 
 if os.path.exists(path+"/Images/"+imagename+".image.fits"):
     os.remove(path+"/Images/"+imagename+".image.fits")
@@ -28,7 +21,7 @@ for images in flist:
 
 tclean(vis=filename,
        field="",
-       spw="16:5~60",
+       spw="",
        timerange="",
        uvrange="",
        antenna="",
@@ -69,4 +62,3 @@ tclean(vis=filename,
        interactive=False)
 
 exportfits(path+"/Images/"+imagename+".image", path+"/Images/"+imagename+".image.fits")
-

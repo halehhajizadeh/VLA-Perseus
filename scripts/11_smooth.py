@@ -3,7 +3,7 @@ sys.path.append('.')
 from configs import path, thresh, nit, threedigits
 import time
 
-spw = [2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
+spw = [0, 2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
 
 stokes = [
         'I',
@@ -28,7 +28,7 @@ for stok in stokes:
         for channel in channels:  
             imsmooth(imagename = path+"/Images/img"+str(nit)+"/tclean/"+threedigits+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image',
                     targetres = True,
-                    major = '60arcsec',
+                    major = '65arcsec',
                     minor ='50arcsec',
                     pa='0.0deg',
                     outfile = path+"/Images/img"+str(nit)+"/smo/"+threedigits+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image.smo',

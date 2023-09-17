@@ -1,6 +1,6 @@
 import sys
 sys.path.append('.')
-from configs import path, phase_center, thresh, nit, threedigits
+from configs import path, phase_center, thresh, nit, threedigits, pblim
 import time
 
 filename = path+'/targets.ms'
@@ -37,7 +37,7 @@ for stok in stokes1:
                     gridder="mosaic",
                     mosweight=True,
                     cfcache="",
-                    pblimit=0.06,
+                    pblimit=pblim,
                     normtype="flatnoise",
                     deconvolver="hogbom",
                     restoration=True,
