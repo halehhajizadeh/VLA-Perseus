@@ -58,3 +58,11 @@ elif threedigits=='933':
     mode='manual',
     spw='7,9,11,12'
     )
+
+#----------------------------------------------------------------
+elif threedigits=='627':
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,11,12'
+    )
