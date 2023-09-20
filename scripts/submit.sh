@@ -1,4 +1,4 @@
-# !/bin/sh
+#!/bin/sh
 
 # Set PBS Directives
 # Lines starting with "#SBATCH", before any shell commands are
