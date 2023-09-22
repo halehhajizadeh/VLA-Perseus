@@ -58,7 +58,7 @@ for stok in stokes1:
                     restart=True,
                     calcres=True,
                     calcpsf=True,
-                    parallel=False,
+                    parallel=True,
                     interactive=False)
         
             toc = time.time()
