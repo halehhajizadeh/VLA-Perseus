@@ -7,6 +7,9 @@
 # SBATCH --nodes=1                             # Request 1 node
 # SBATCH --ntasks-per-node=8                   # Request 8 cores
 
-CASAPATH=/opt/local/bin/
-# xvfb-run -d mpicasa ${CASAPATH}/bin/casa --nogui -c /lustre/aoc/observers/nm-12934/VLA-Perseus/scripts/10_make_images.py >>file.txt 2>&1
-xvfb-run -d ${CASAPATH}/mpicasa --oversubscribe ${CASAPATH}/casa --nogui -c /lustre/aoc/observers/nm-12934/VLA-Perseus/scripts/10_make_images.py >>file.txt 2>&1
+
+CASAPATH=/home/casa/packages/RHEL7/release/current # Use a specific version of CASA
+# CASAPATH=/opt/local/bin/
+
+xvfb-run -d ${CASAPATH}/bin/mpicasa ${CASAPATH}/bin/casa --nogui -c /lustre/aoc/observers/nm-12934/VLA-Perseus/scripts/10_make_images.py >>file.txt 2>&1
+# xvfb-run -d ${CASAPATH}/mpicasa --oversubscribe ${CASAPATH}/casa --nogui -c /lustre/aoc/observers/nm-12934/VLA-Perseus/scripts/10_make_images.py >>file.txt 2>&1
