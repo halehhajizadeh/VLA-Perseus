@@ -37,7 +37,7 @@ for stok in stokes1:
                     specmode="mfs",
                     gridder="awproject",
                     mosweight=True,
-                    cfcache="",
+                    cfcache="test.cf",
                     pblimit=pblim,
                     normtype="flatnoise",
                     deconvolver="hogbom",
@@ -56,9 +56,11 @@ for stok in stokes1:
                     cyclefactor=1,
                     restart=True,
                     calcres=True,
+                    wbawp=False,
                     calcpsf=True,
                     parallel=True,
-                    interactive=False)
+                    interactive=False,
+                    conjbeams=False)
         
             toc = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is finished!")
