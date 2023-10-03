@@ -30,14 +30,14 @@ for stok in stokes1:
                     datacolumn="corrected",
                     imagename=path+"/Images/img"+str(nit)+"/tclean/"+str(threedigits)+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok),
                     imsize=[4320],
-                    cell="2.5arcsec",
+                    cell=2.5,
                     phasecenter=phase_center,
                     stokes=stok,
                     projection="SIN",
                     specmode="mfs",
                     gridder="awproject",
                     mosweight=True,
-                    cfcache="test.cf",
+                    cfcache="",
                     pblimit=pblim,
                     normtype="flatnoise",
                     deconvolver="hogbom",
@@ -50,6 +50,7 @@ for stok in stokes1:
                     npixels=0,
                     niter=nit,
                     gain=0.1,
+                    psfcutoff=0.35,
                     threshold=thresh,
                     nsigma=0,
                     cycleniter=-1,
@@ -58,7 +59,8 @@ for stok in stokes1:
                     calcres=True,
                     wbawp=False,
                     calcpsf=True,
-                    parallel=False)
+                    parallel=False,
+                    verbose=True,)
         
             toc = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is finished!")
