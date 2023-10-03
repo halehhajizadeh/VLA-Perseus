@@ -1,5 +1,5 @@
 import sys
-sys.path.append('.')
+sys.path.append('..')
 from configs import path, phase_center, thresh, nit, threedigits, pblim
 import time
 
