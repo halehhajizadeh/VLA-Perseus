@@ -51,17 +51,14 @@ for stok in stokes1:
                     niter=nit,
                     gain=0.1,
                     threshold=thresh,
-                    nsigma=3,
+                    nsigma=0,
                     cycleniter=-1,
                     cyclefactor=1,
                     restart=True,
                     calcres=True,
                     wbawp=False,
                     calcpsf=True,
-                    parallel=False,
-                    interactive=False,
-                    conjbeams=False, 
-                    wprojplanes=1)
+                    parallel=False)
         
             toc = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is finished!")
