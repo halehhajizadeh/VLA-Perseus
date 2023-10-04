@@ -35,7 +35,7 @@ for stok in stokes1:
                     stokes=stok,
                     projection="SIN",
                     specmode="mfs",
-                    gridder="awproject",
+                    gridder="mosaic",
                     mosweight=True,
                     cfcache="",
                     pblimit=pblim,
