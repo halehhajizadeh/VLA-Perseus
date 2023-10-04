@@ -3,7 +3,6 @@ sys.path.append('.')
 from configs import path, phase_center, thresh, nit, threedigits, pblim
 import time
 
-pblim = -0.005
 filename = path+'/targets.ms'
 # spw = [ 2, 3 , 4, 5, 6, 8, 9, 10, 15, 16, 17]
 spw = [6, 8, 9, 10, 15, 16, 17]
@@ -60,11 +59,11 @@ for stok in stokes1:
                     calcres=True,
                     wbawp=False,
                     calcpsf=True,
-                    parallel=True,
-                    verbose=True,
-                    wprojplanes=1,
-                    psterm=False,
-                    conjbeams=False)
+                    parallel=False)
+                    # verbose=True,
+                    # wprojplanes=1,
+                    # psterm=False,
+                    # conjbeams=False)
         
             toc = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is finished!")
