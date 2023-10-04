@@ -60,7 +60,7 @@ for stok in stokes1:
                     calcres=True,
                     wbawp=False,
                     calcpsf=True,
-                    parallel=False,
+                    parallel=True,
                     verbose=True,
                     wprojplanes=1,
                     psterm=False,
