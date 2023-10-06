@@ -10,7 +10,7 @@ channels = ['00~07', '08~15', '16~23', '24~31', '32~39', '40~47', '48~55', '56~6
 for s in spw:
     for channel in channels:
         tic = time.time()
-        print(f"stokes: IQUV, s: {s}, channel: {channel} is started ...")
+        print(f"stokes: IQU, s: {s}, channel: {channel} is started ...")
         tclean( vis=filename,
                 field="",
                 spw=str(s) + ':' + channel,
@@ -20,11 +20,11 @@ for s in spw:
                 observation="",
                 intent="",
                 datacolumn="corrected",
-                imagename=path+"/Images/img"+str(nit)+"/tclean/"+str(threedigits)+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-IQUV",
+                imagename=path+"/Images/img"+str(nit)+"/tclean/"+str(threedigits)+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-IQU",
                 imsize=[4320],
-                cell=2.5,
+                cell='2.5arcsec',
                 phasecenter=phase_center,
-                stokes="IQUV",
+                stokes="IQU",
                 projection="SIN",
                 specmode="mfs",
                 gridder="awproject",
@@ -53,10 +53,11 @@ for s in spw:
                 calcpsf=True,
                 parallel=True,
                 verbose=True,
-                wprojplanes=1,
+                wprojplanes=32,
                 psterm=False,
-                conjbeams=False)
+                conjbeams=False,
+                aterm=True)
     
         toc = time.time()
-        print(f"stokes: IQUV, s: {s}, channel: {channel} is finished!")
+        print(f"stokes: IQU, s: {s}, channel: {channel} is finished!")
         print(f"Finshed the process in {round((toc-tic)/60)} minutes")
