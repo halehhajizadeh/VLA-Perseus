@@ -64,5 +64,28 @@ elif threedigits=='627':
     flagdata(
     vis=msfilename, 
     mode='manual',
-    spw='7,11,12'
+    spw='7,9,11,12'
     )
+
+#----------------------------------------------------------------
+
+elif threedigits=='198':
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,14'
+    )
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    scan='35,36'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    filed='0521+166=3C138',
+    channel='11,14,20~30;36~42,'
+    )
+
+ #-------------------------------------------------------------------   
