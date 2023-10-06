@@ -20,11 +20,11 @@ for s in spw:
                 observation="",
                 intent="",
                 datacolumn="corrected",
-                imagename=path+"/Images/img"+str(nit)+"/tclean/"+str(threedigits)+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-IQU",
+                imagename=path+"/Images/img"+str(nit)+"/tclean/"+str(threedigits)+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-IQUV",
                 imsize=[4320],
                 cell='2.5arcsec',
                 phasecenter=phase_center,
-                stokes="IQU",
+                stokes="IQUV",
                 projection="SIN",
                 specmode="mfs",
                 gridder="awproject",
@@ -59,5 +59,5 @@ for s in spw:
                 aterm=True)
     
         toc = time.time()
-        print(f"stokes: IQU, s: {s}, channel: {channel} is finished!")
+        print(f"stokes: IQUV, s: {s}, channel: {channel} is finished!")
         print(f"Finshed the process in {round((toc-tic)/60)} minutes")
