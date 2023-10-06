@@ -60,10 +60,6 @@ for stok in stokes1:
                     wbawp=False,
                     calcpsf=True,
                     parallel=False)
-                    # verbose=True,
-                    # wprojplanes=1,
-                    # psterm=False,
-                    # conjbeams=False)
         
             toc = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is finished!")
