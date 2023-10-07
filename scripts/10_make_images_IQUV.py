@@ -10,7 +10,7 @@ channels = ['00~07', '08~15', '16~23', '24~31', '32~39', '40~47', '48~55', '56~6
 for s in spw:
     for channel in channels:
         tic = time.time()
-        print(f"stokes: IQU, s: {s}, channel: {channel} is started ...")
+        print(f"stokes: IQUV, s: {s}, channel: {channel} is started ...")
         tclean( vis=filename,
                 field="",
                 spw=str(s) + ':' + channel,
