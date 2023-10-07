@@ -1,11 +1,10 @@
 import sys
 sys.path.append('.')
-from configs import path, phase_center, thresh, nit, threedigits, pblim
+from configs import path, phase_center, thresh, nit, threedigits, pblim, spw
 import time
 
 filename = path+'/targets.ms'
 # spw = [ 2, 3 , 4, 5, 6, 8, 9, 10, 15, 16, 17]
-spw = [6, 8, 9, 10, 15, 16, 17]
 stokes1 = [
         # 'I',
         # 'Q',
@@ -50,15 +49,10 @@ for stok in stokes1:
                     npixels=0,
                     niter=nit,
                     gain=0.1,
-                    psfcutoff=0.35,
                     threshold=thresh,
                     nsigma=0,
-                    cycleniter=-1,
+                    cycleniter=500,
                     cyclefactor=1,
-                    restart=True,
-                    calcres=True,
-                    wbawp=False,
-                    calcpsf=True,
                     parallel=False)
         
             toc = time.time()
