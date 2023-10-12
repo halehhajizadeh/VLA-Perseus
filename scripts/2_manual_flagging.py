@@ -95,3 +95,12 @@ elif threedigits=='861':
     spw='7,9,10,11,12'
     )   
 
+ #-------------------------------------------------------------------
+elif threedigits=='076':
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12,14'
+    )  
+
+    
