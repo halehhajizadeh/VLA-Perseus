@@ -5,7 +5,7 @@ import os
 from glob import glob
 
 path = '../data/concat'
-msfilename = path + '/546_775.ms'
+msfilename = path + '/original.ms'
 
 
 pblim = 0.06
@@ -14,11 +14,11 @@ Stoke = 'I'
 thresh='1e-4'
 phase_center='J2000 03:32:04.530001 +31.05.04.00000'
 
-imagename = '546_775'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwAll-pb'+str(pblim)+'-cyclenit500'
+imagename = 'original-'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwAll-pb'+str(pblim)+'-cyclenit500'
 
 
 tclean(vis=msfilename,
-       field="",
+       field="PER_FIELD_*",
        spw="",
        timerange="",
        uvrange="",
