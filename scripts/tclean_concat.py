@@ -14,12 +14,12 @@ Stoke = 'I'
 thresh='1e-4'
 phase_center='J2000 03:32:04.530001 +31.05.04.00000'
 
-imagename = '546_775'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
+imagename = '546_775'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwAll-pb'+str(pblim)+'-cyclenit500'
 
 
 tclean(vis=msfilename,
        field="",
-       spw="16:5~60",
+       spw="",
        timerange="",
        uvrange="",
        antenna="",
