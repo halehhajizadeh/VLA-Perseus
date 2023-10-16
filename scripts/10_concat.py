@@ -24,10 +24,16 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
                 folders_list.append(os.path.join(directory, file))                
     return(folders_list)
 
+
 folders_list = find_ms_folder(working_directory, "19B-053")
+folders_list = np.array(folders_list)
 
-print(folders_list)
+ms_list = []
+for i in range(folders_list.shape[0]):
+    ms_list.append(i+'/targets.ms')
 
-concat(folders_list, concatvis=new_ms_name+'.ms')
+print(ms_list)
+
+concat(ms_list, concatvis=new_ms_name+'.ms')
 
 
