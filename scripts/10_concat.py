@@ -2,7 +2,7 @@ import os
 import sys
 import tarfile
 import shutil
-import numpy as np
+
 
 working_directory = '../data'
 new_ms_name = 'J2000_03:32:04.530001_+31.05.04.00000'
@@ -30,7 +30,7 @@ folders_list = find_ms_folder(working_directory, "19B-053")
 folders_list = np.array(folders_list)
 
 ms_list = []
-for i in range(folders_list.shape[0]):
+for i in folders_list:
     ms_list.append(i+'/targets.ms')
 
 print(ms_list)
