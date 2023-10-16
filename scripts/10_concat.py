@@ -34,6 +34,6 @@ for i in folders_list:
 
 print(ms_list)
 
-concat(ms_list, concatvis=working_directory+'/concat/'+new_ms_name+'.ms')
+concat(vis=ms_list, concatvis=working_directory+'/concat/'+new_ms_name+'.ms')
 
 
