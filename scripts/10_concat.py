@@ -30,10 +30,10 @@ folders_list = find_ms_folder(working_directory, "19B-053")
 
 ms_list = []
 for i in folders_list:
-    ms_list.append(i+'/targets.ms')
+    ms_list.append(i+'/products/targets.ms')
 
 print(ms_list)
 
-concat(ms_list, concatvis=working_directory+'/'+new_ms_name+'.ms')
+concat(ms_list, concatvis=working_directory+'/concat/'+new_ms_name+'.ms')
 
 
