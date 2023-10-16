@@ -34,6 +34,6 @@ for i in range(folders_list.shape[0]):
 
 print(ms_list)
 
-concat(ms_list, concatvis=new_ms_name+'.ms')
+concat(ms_list, concatvis=working_directory+'/'+new_ms_name+'.ms')
 
 
