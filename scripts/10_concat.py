@@ -4,6 +4,7 @@ import tarfile
 import shutil
 
 working_directory = '../data'
+new_ms_name = 'J2000_03:32:04.530001_+31.05.04.00000'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
@@ -26,5 +27,7 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
 folders_list = find_ms_folder(working_directory, "19B-053")
 
 print(folders_list)
+
+concat(folders_list, visname=new_ms_name+'.ms')
 
 
