@@ -27,7 +27,6 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
 
 
 folders_list = find_ms_folder(working_directory, "19B-053")
-folders_list = np.array(folders_list)
 
 ms_list = []
 for i in folders_list:
