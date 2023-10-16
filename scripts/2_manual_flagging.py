@@ -64,7 +64,7 @@ elif threedigits=='627':
     flagdata(
     vis=msfilename, 
     mode='manual',
-    spw='7,9,11,12'
+    spw='7,9,10,11,12'
     )
 
 #----------------------------------------------------------------
@@ -103,4 +103,34 @@ elif threedigits=='076':
     spw='7,9,10,11,12,14'
     )  
 
-    
+ #-------------------------------------------------------------------
+elif threedigits=='228':
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    scan='48'
+    )
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12'
+    )  
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    scan='8'
+    )
+
+ #-------------------------------------------------------------------
+elif threedigits=='672':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12,13'
+    )  
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    scan='27,30'
+    )  
