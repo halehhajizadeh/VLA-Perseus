@@ -28,6 +28,6 @@ folders_list = find_ms_folder(working_directory, "19B-053")
 
 print(folders_list)
 
-concat(folders_list, visname=new_ms_name+'.ms')
+concat(folders_list, concatvis=new_ms_name+'.ms')
 
 
