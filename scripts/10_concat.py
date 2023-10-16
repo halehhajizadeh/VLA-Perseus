@@ -2,6 +2,7 @@ import os
 import sys
 import tarfile
 import shutil
+import numpy as np
 
 working_directory = '../data'
 new_ms_name = 'J2000_03:32:04.530001_+31.05.04.00000'
