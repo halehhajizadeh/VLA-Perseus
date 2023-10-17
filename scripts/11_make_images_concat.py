@@ -1,6 +1,7 @@
 import sys
 sys.path.append('.')
 import time
+import os
 
 path='../data/concat/03:32:04.530001_+31.05.04.00000'
 filename = path+'/J2000_03:32:04.530001_+31.05.04.00000.ms'
@@ -24,6 +25,13 @@ for stok in stokes1:
         for channel in channels:
             tic = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
+
+            img_filename = path + "/Images/img" + str(nit) + "/tclean/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)
+
+            if os.path.exists(img_filename):
+                print(f"stokes: {stok}, s: {s}, channel: {channel} image already exists, skipping...")
+                continue
+
             tclean( vis=filename,
                     field="",
                     spw=str(s) + ':' + channel,
@@ -33,7 +41,7 @@ for stok in stokes1:
                     observation="",
                     intent="",
                     datacolumn="corrected",
-                    imagename=path+"/Images/img"+str(nit)+"/tclean/"+str(threedigits)+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok),
+                    imagename=img_filename,
                     imsize=[4320],
                     cell=2.5,
                     phasecenter=phase_center,
