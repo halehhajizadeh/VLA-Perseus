@@ -1,5 +1,6 @@
 import sys
 sys.path.append('.')
+import time
 
 path='../data/concat/03:32:04.530001_+31.05.04.00000'
 filename = path+'/J2000_03:32:04.530001_+31.05.04.00000.ms'
