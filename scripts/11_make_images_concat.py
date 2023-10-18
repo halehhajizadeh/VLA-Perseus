@@ -3,8 +3,37 @@ sys.path.append('.')
 import time
 import os
 
-path='../data/concat/03:32:04.530001_+31.05.04.00000'
-filename = path+'/J2000_03:32:04.530001_+31.05.04.00000.ms'
+path='../data/'
+
+def find_ms_folder(directory, startswith='19B-053', endswith=''):
+    """
+    Finds names of ms files in a directroy.
+
+    directory (str): The directory to search
+    startswith (str): The beginning of the file to search
+    endswith (str): The end of the file to search
+
+    Returns:
+    str : An array including the name of the ms files found.
+    """
+    folders_list = []
+    for file in os.listdir(directory):
+        if file.startswith(startswith):
+            if file.endswith(endswith):
+                folders_list.append(os.path.join(directory, file))                
+    return(folders_list)
+
+
+folders_list = find_ms_folder(path, "19B-053")
+
+ms_list = []
+for i in folders_list:
+    ms_list.append(i+'/products/targets.ms')
+
+print(ms_list)
+
+
+
 spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
 stokes1 = [
         'I',
@@ -26,13 +55,9 @@ for stok in stokes1:
             tic = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
 
-            img_filename = path + "/Images/img" + str(nit) + "/tclean/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)
+            img_filename = path + "/concat/"+str(threedigits)+"/Images/img" + str(nit) + "/tclean/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)
 
-            if os.path.exists(img_filename):
-                print(f"stokes: {stok}, s: {s}, channel: {channel} image already exists, skipping...")
-                continue
-
-            tclean( vis=filename,
+            tclean( vis=ms_list,
                     field="",
                     spw=str(s) + ':' + channel,
                     timerange="",
