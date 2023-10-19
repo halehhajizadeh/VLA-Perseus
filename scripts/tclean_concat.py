@@ -5,7 +5,7 @@ import os
 from glob import glob
 
 path = '../data/concat/03:32:04.530001_+31.05.04.00000/'
-msfilename = path + '03:32:04.530001_+31.05.04.00000.ms'
+msfilename = path + 'J2000_03:32:04.530001_+31.05.04.00000.ms'
 
 
 pblim = 0.06
