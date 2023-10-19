@@ -4,8 +4,8 @@ import shutil
 import os
 from glob import glob
 
-path = '../data/concat'
-msfilename = path + '/original.ms'
+path = '../data/concat/03:32:04.530001_+31.05.04.00000/'
+msfilename = path + '03:32:04.530001_+31.05.04.00000.ms'
 
 
 pblim = 0.06
@@ -14,19 +14,19 @@ Stoke = 'I'
 thresh='1e-4'
 phase_center='J2000 03:32:04.530001 +31.05.04.00000'
 
-imagename = 'original-'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwAll-pb'+str(pblim)+'-cyclenit500'
+imagename = 'original-'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
 
 
 tclean(vis=msfilename,
        field="PER_FIELD_*",
-       spw="",
+       spw="16:5~60",
        timerange="",
        uvrange="",
        antenna="",
        observation="",
        intent="",
        datacolumn="corrected",
-       imagename=path+"/Images/"+imagename,
+       imagename=path+imagename,
        imsize=[4320],
        cell="2.5arcsec",
        phasecenter=phase_center,
@@ -59,5 +59,5 @@ tclean(vis=msfilename,
        parallel=False,
        interactive=False)
 
-exportfits(path+"/Images/"+imagename+".image", path+"/Images/"+imagename+".image.fits")
+exportfits(path+imagename+".image", path+imagename+".image.fits")
 
