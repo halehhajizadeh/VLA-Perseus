@@ -4,8 +4,34 @@ import shutil
 import os
 from glob import glob
 
-path = '../data/concat/03:32:04.530001_+31.05.04.00000/'
-msfilename = path + 'J2000_03:32:04.530001_+31.05.04.00000.ms'
+path='../data/'
+
+def find_ms_folder(directory, startswith='19B-053', endswith=''):
+    """
+    Finds names of ms files in a directroy.
+
+    directory (str): The directory to search
+    startswith (str): The beginning of the file to search
+    endswith (str): The end of the file to search
+
+    Returns:
+    str : An array including the name of the ms files found.
+    """
+    folders_list = []
+    for file in os.listdir(directory):
+        if file.startswith(startswith):
+            if file.endswith(endswith):
+                folders_list.append(os.path.join(directory, file))                
+    return(folders_list)
+
+
+folders_list = find_ms_folder(path, "19B-053")
+
+ms_list = []
+for i in folders_list:
+    ms_list.append(i+'/products/targets.ms')
+
+print(ms_list)
 
 
 pblim = 0.06
@@ -17,7 +43,7 @@ phase_center='J2000 03:32:04.530001 +31.05.04.00000'
 imagename = 'original-'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
 
 
-tclean(vis=msfilename,
+tclean(vis=ms_list,
        field="PER_FIELD_*",
        spw="16:5~60",
        timerange="",
@@ -26,7 +52,7 @@ tclean(vis=msfilename,
        observation="",
        intent="",
        datacolumn="corrected",
-       imagename=path+imagename,
+       imagename=path+'concat/03:32:04.530001_+31.05.04.00000/'+imagename,
        imsize=[4320],
        cell="2.5arcsec",
        phasecenter=phase_center,
@@ -59,5 +85,5 @@ tclean(vis=msfilename,
        parallel=False,
        interactive=False)
 
-exportfits(path+imagename+".image", path+imagename+".image.fits")
+exportfits(path+'concat/03:32:04.530001_+31.05.04.00000/'+imagename+".image", path+imagename+".image.fits")
 
