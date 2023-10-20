@@ -8,6 +8,8 @@ directory_path = path + "/targets.ms"
 
 if os.path.exists(directory_path):
     shutil.rmtree(directory_path)
+
+if os.path.exists(directory_path):
     shutil.rmtree(directory_path+".flagversions")
 
 print('splitting is starting...')
