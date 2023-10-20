@@ -2,9 +2,12 @@ import sys
 sys.path.append('.')
 from configs import msfilename, path
 import os
+import shutil
 
-if os.path.exists(path+"/targets.ms"):
-    os.remove(path+"/targets.ms") 
+directory_path = path + "/targets.ms"
+
+if os.path.exists(directory_path):
+    shutil.rmtree(directory_path)
 
 print('splitting is starting...')
 
