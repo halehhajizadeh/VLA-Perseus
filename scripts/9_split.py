@@ -7,14 +7,12 @@ import shutil
 directory_path = path + "/targets.ms"
 
 if os.path.exists(directory_path) and os.path.isdir(directory_path):
-    os.remove(directory_path)
     shutil.rmtree(directory_path)
-    os.rmdir(directory_path)
 
-if os.path.exists(directory_path+".flagversions/")and os.path.isdir(directory_path+".flagversions/"):
-    os.remove(directory_path+".flagversions/")
-    shutil.rmtree(directory_path+".flagversions/")
-    os.remove(directory_path+".flagversions/")
+flagversions_path = directory_path + ".flagversions"
+
+if os.path.exists(flagversions_path) and os.path.isdir(flagversions_path):
+    shutil.rmtree(flagversions_path)
 
 print('splitting is starting...')
 
