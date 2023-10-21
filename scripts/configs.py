@@ -22,29 +22,29 @@
 # pblim = 0.06
 
 #----------------------------------------------------------------
-# 56-933
-path = '../data/19B-053_2019_12_23_T00_48_56.933/products'
-msfilename = path + '/19B-053.sb37618267.eb37630620.58840.93710494213_calibrated.ms'
-
-refant_name = 'ea23' #ea24 is flagged!
-phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
-thresh = '1e-4'
-nit = 5000
-threedigits ='933'
-pblim = 0.06
-
-# ---------------------------------------------------------------
-
-# # 627
-# path = '../data/19B-053_2019_12_28_T04_48_58.627/products'
-# msfilename = path + '/19B-053.sb37597606.eb37643121.58845.10603858797_calibrated.ms'
+# # 56-933
+# path = '../data/19B-053_2019_12_23_T00_48_56.933/products'
+# msfilename = path + '/19B-053.sb37618267.eb37630620.58840.93710494213_calibrated.ms'
 
 # refant_name = 'ea23' #ea24 is flagged!
 # phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
 # thresh = '1e-4'
 # nit = 5000
-# threedigits ='627'
+# threedigits ='933'
 # pblim = 0.06
+
+# ---------------------------------------------------------------
+
+# 627
+path = '../data/19B-053_2019_12_28_T04_48_58.627/products'
+msfilename = path + '/19B-053.sb37597606.eb37643121.58845.10603858797_calibrated.ms'
+
+refant_name = 'ea23' #ea24 is flagged!
+phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
+thresh = '1e-4'
+nit = 5000
+threedigits ='627'
+pblim = 0.06
 
 # ---------------------------------------------------------------
 
