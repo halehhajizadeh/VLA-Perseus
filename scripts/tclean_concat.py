@@ -40,7 +40,7 @@ Stoke = 'I'
 thresh='1e-4'
 phase_center='J2000 03:32:04.530001 +31.05.04.00000'
 
-imagename = 'original-'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
+imagename = 'original-'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500_phase'
 
 
 tclean(vis=ms_list,
@@ -85,5 +85,5 @@ tclean(vis=ms_list,
        parallel=False,
        interactive=False)
 
-exportfits(path+'concat/03:32:04.530001_+31.05.04.00000/'+imagename+".image", path+imagename+".image.fits")
+exportfits(path+'concat/03:32:04.530001_+31.05.04.00000/'+imagename+".image", path+'concat/03:32:04.530001_+31.05.04.00000/'+imagename+".image.fits")
 
