@@ -40,7 +40,7 @@ Stoke = 'I'
 thresh='1e-4'
 phase_center='J2000 03:32:04.530001 +31.05.04.00000'
 
-imagename = 'original-'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500_phase_new'
+imagename = 'original-'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500_phase_4500'
 
 
 tclean(vis=ms_list,
