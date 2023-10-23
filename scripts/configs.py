@@ -108,4 +108,4 @@ thresh = '1e-4'
 nit = 5000
 threedigits ='672'
 pblim = 0.06
-spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
+
