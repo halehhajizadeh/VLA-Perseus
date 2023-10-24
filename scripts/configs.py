@@ -10,16 +10,16 @@
 # pblim = 0.06
 
 # ---------------------------------------------------------------
-# #775
-# path = '../data/19B-053_2019_12_16_T08_12_56.775/products'
-# msfilename = path + '/19B-053.sb37264871.eb37596495.58833.2500384375_calibrated.ms'
+#775
+path = '../data/19B-053_2019_12_16_T08_12_56.775/products'
+msfilename = path + '/19B-053.sb37264871.eb37596495.58833.2500384375_calibrated.ms'
 
-# refant_name = 'ea24'
-# phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
-# thresh = '1e-4'
-# nit = 5000
-# threedigits ='775'
-# pblim = 0.06
+refant_name = 'ea24'
+phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
+thresh = '1e-4'
+nit = 5000
+threedigits ='775'
+pblim = 0.06
 
 #----------------------------------------------------------------
 # # 56-933
@@ -98,14 +98,14 @@
 
 #------------------------------------------------------------------
 
-#672
-path = '../data/19B-053_2020_01_03_T03_00_57.672/products'
-msfilename = path + '/19B-053.sb37597606.eb37655287.58851.034640983795_calibrated.ms'
+# #672
+# path = '../data/19B-053_2020_01_03_T03_00_57.672/products'
+# msfilename = path + '/19B-053.sb37597606.eb37655287.58851.034640983795_calibrated.ms'
 
-refant_name = 'ea23' 
-phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
-thresh = '1e-4'
-nit = 5000
-threedigits ='672'
-pblim = 0.06
+# refant_name = 'ea23' 
+# phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
+# thresh = '1e-4'
+# nit = 5000
+# threedigits ='672'
+# pblim = 0.06
 
