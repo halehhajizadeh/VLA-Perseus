@@ -12,9 +12,9 @@ from configs import path, phase_center, nit, thresh, threedigits
 
 filename = path+'/targets.ms'
 
-pblim = 0.2
+pblim = 0.06
 
-Stoke = 'I'
+Stoke = 'Q'
 
 imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
 
@@ -59,7 +59,7 @@ tclean(vis=filename,
        niter=nit,
        gain=0.1,
        threshold=thresh,
-       nsigma=3,
+       nsigma=0,
        cycleniter=500,
        cyclefactor=1,
        restart=True,
