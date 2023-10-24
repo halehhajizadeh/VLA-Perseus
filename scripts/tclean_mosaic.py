@@ -27,7 +27,7 @@ for images in flist:
 
 
 tclean(vis=filename,
-       field="",
+       field="PER_FIELD_*",
        spw="16:5~60",
        timerange="",
        uvrange="",
