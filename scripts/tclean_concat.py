@@ -36,15 +36,15 @@ print(ms_list)
 
 pblim = 0.06
 nit = 5000
-Stoke = 'I'
+Stoke = 'Q'
 thresh='1e-4'
 phase_center='J2000 03:32:04.530001 +31.05.04.00000'
 
-imagename = 'original-'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500_phase_4500'
+imagename = 'original-'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
 
 
 tclean(vis=ms_list,
-       field="",
+       field="PER_FIELD_*",
        spw="16:5~60",
        timerange="",
        uvrange="",
@@ -53,7 +53,7 @@ tclean(vis=ms_list,
        intent="",
        datacolumn="corrected",
        imagename=path+'concat/03:32:04.530001_+31.05.04.00000/'+imagename,
-       imsize=[4500],
+       imsize=[4320],
        cell="2.5arcsec",
        phasecenter=phase_center,
        stokes=Stoke,
