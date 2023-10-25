@@ -58,7 +58,7 @@ for stok in stokes1:
             img_filename = path + "/concat/"+str(threedigits)+"/Images/img" + str(nit) + "/tclean/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)
 
             tclean( vis=ms_list,
-                    field="",
+                    field="PER_FIELD_*",
                     spw=str(s) + ':' + channel,
                     timerange="",
                     uvrange="",
