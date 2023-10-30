@@ -3,7 +3,7 @@ sys.path.append('.')
 from configs import path, thresh, nit, threedigits
 import time
 
-spw = [2, 3 , 4, 5, 6, 8, 10, 15, 16, 17]
+spw = [2, 3 , 4, 5, 6, 8, 15, 16, 17]
 
 stokes = [
         'I',
@@ -26,12 +26,18 @@ tic = time.time()
 for stok in stokes:
     for s in spw:
         for channel in channels:  
-            imsmooth(imagename = path+"/Images/img"+str(nit)+"/tclean/"+threedigits+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image',
+
+            # image_name = path+"/Images/img"+str(nit)+"/tclean/"+threedigits+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image',
+            image_name =  path + "/concat/"+str(threedigits)+"/Images/img" + str(nit) + "/tclean/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)
+            # smo_image_name = path+"/Images/img"+str(nit)+"/smo/"+threedigits+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image.smo',
+            smo_image_name =  path + "/concat/"+str(threedigits)+"/Images/img" + str(nit) + "/smo/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)+'.image.smo'
+
+            imsmooth(imagename = image_name,
                     targetres = True,
                     major = '65arcsec',
                     minor ='50arcsec',
                     pa='0.0deg',
-                    outfile = path+"/Images/img"+str(nit)+"/smo/"+threedigits+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image.smo',
+                    outfile = smo_image_name,
                     overwrite=True
                     )
 toc = time.time()
