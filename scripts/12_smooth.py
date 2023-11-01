@@ -35,7 +35,7 @@ for stok in stokes:
             imsmooth(imagename = image_name,
                     targetres = True,
                     major = '55arcsec',
-                    minor ='50arcsec',
+                    minor ='53arcsec',
                     pa='0.0deg',
                     outfile = smo_image_name,
                     overwrite=True
@@ -44,3 +44,4 @@ toc = time.time()
 print(f"Finshed the smoothing process in {round((toc-tic)/60)} minutes")                
 
 #45, 55
+#50, 55
