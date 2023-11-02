@@ -4,11 +4,13 @@
 # Fourth index is RA
 import sys
 sys.path.append('.')
-from configs import path, nit
+from configs import path, nit, threedigits
 import os
 import numpy as np
 from astropy.io import fits
 
+# Turn it on when it is concatinating task!
+path = path + + "/concat/"+str(threedigits)
 
 stokes_list = [
         'I',
@@ -18,6 +20,7 @@ stokes_list = [
 
 def create_empty_channel(fitsname):
     flagged_channel = path+'/Images/img'+str(nit)+'/fits/empty_channel.fits'
+
     syscommand='rm -rf '+flagged_channel
     os.system(syscommand)
     hdul = fits.open(fitsname)
