@@ -10,7 +10,7 @@ import numpy as np
 from astropy.io import fits
 
 # Turn it on when it is concatinating task!
-path = path + + "/concat/"+str(threedigits)
+path = path +  "/concat/"+str(threedigits)
 
 stokes_list = [
         'I',
