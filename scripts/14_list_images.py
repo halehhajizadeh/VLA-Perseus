@@ -5,7 +5,7 @@ import numpy as np
 import os 
 
 # Turn it on when it is concatinating task!
-path = path + "/concat/"+str(threedigits)
+path = path + "/concat/" + str(threedigits)
 
 file_list = [file for file in os.listdir(path+"/Images/img"+str(nit)+"/fits/") if os.path.isfile(os.path.join(path+"/Images/img"+str(nit)+"/fits/", file))]
 file_list_total = []
