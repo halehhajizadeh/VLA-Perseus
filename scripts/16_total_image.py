@@ -5,7 +5,36 @@ import os
 from glob import glob
 from configs import path, phase_center, nit, thresh, threedigits, pblim
 
-filename = path+'/targets.ms'
+
+def find_ms_folder(directory, startswith='19B-053', endswith=''):
+    """
+    Finds names of ms files in a directroy.
+
+    directory (str): The directory to search
+    startswith (str): The beginning of the file to search
+    endswith (str): The end of the file to search
+
+    Returns:
+    str : An array including the name of the ms files found.
+    """
+    folders_list = []
+    for file in os.listdir(directory):
+        if file.startswith(startswith):
+            if file.endswith(endswith):
+                folders_list.append(os.path.join(directory, file))                
+    return(folders_list)
+
+
+folders_list = find_ms_folder(path, "19B-053")
+
+ms_list = []
+for i in folders_list:
+    ms_list.append(i+'/products/targets.ms')
+
+print(ms_list)
+
+
+# filename = path+'/targets.ms'
 
 Stoke = 'I'
 
@@ -19,7 +48,7 @@ for images in flist:
     shutil.rmtree(images)
 
 
-tclean(vis=filename,
+tclean(vis=ms_list,
        field="",
        spw="",
        timerange="",
