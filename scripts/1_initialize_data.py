@@ -7,7 +7,7 @@ import shutil
 
 # working_directory = sys.argv[1]
 working_directory = '../data'
-working_directory = '../data/03:36:00.000000_+30.30.00.00001'
+# working_directory = '../data/03:36:00.000000_+30.30.00.00001'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
