@@ -137,3 +137,16 @@ elif threedigits=='59-933':
     )  
 
  #-------------------------------------------------------------------
+ elif threedigits=='684':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12,13'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    scan='14, 15'
+    )  
