@@ -49,7 +49,7 @@ for images in flist:
 
 
 tclean(vis=ms_list,
-       field="",
+       field="PER_FIELD_*",
        spw="",
        timerange="",
        uvrange="",
