@@ -131,7 +131,7 @@ ms_file_name = input('Which file do you want to continue with?\n')
 
 
 #----------------------------------------------------------------------------------------
-filename = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/19B-053_2020_01_11_T03_36_56.543/19B-053.sb37658530.eb37691790.58859.0565694213.ms/'
+filename = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/19B-053_2020_01_11_T03_36_56.543/products/19B-053.sb37658530.eb37691790.58859.0565694213.ms/'
 
 
 #print the flaglist to restore
