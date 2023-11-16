@@ -129,14 +129,17 @@ ms_file_name = input('Which file do you want to continue with?\n')
 # filename = find_ms_folder('.', '19', '.ms')
 # filename = filename[0]
 
-# #print the flaglist to restore
-# flags_list = flagmanager(vis=filename)
-# print(flags_list)
-
-# flag_version = input('which flagversion do you want to restore?\n')
 
 #----------------------------------------------------------------------------------------
 filename = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/19B-053_2020_01_11_T03_36_56.543/19B-053.sb37658530.eb37691790.58859.0565694213.ms/'
+
+
+#print the flaglist to restore
+flags_list = flagmanager(vis=filename)
+print(flags_list)
+
+flag_version = input('which flagversion do you want to restore?\n')
+
 
 flagmanager(vis=filename , mode='restore', versionname=flag_version)
 
