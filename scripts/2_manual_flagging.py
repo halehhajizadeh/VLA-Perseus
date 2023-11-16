@@ -174,4 +174,8 @@ elif threedigits=='447':
     mode='manual',
     spw='7,9,10,11,13'
     )
-
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    scan='22,27,28,29,30,37'
+    )
