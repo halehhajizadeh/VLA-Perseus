@@ -105,35 +105,38 @@ print(folders_list)
 #-----------------------------------------------------------------------------------------
 ms_file_name = input('Which file do you want to continue with?\n')
 
-#------------------------------------------------------------------------------------------
-#unzipping the products folder
-unzip(path=ms_file_name, endswith=".tar")
-print('Unzipping the tar file is done!')   
+# #------------------------------------------------------------------------------------------
+# #unzipping the products folder
+# unzip(path=ms_file_name, endswith=".tar")
+# print('Unzipping the tar file is done!')   
 
-#unzippng the tables 
-unzip(ms_file_name + '/products', ".caltables.tgz")
-print('Unzipping tables is done!')
+# #unzippng the tables 
+# unzip(ms_file_name + '/products', ".caltables.tgz")
+# print('Unzipping tables is done!')
 
-#copy the ms file and its flagversion to products folder    
-copy(directory=ms_file_name,startswith='19B-053',endswith='.ms')
-print('ms file copied to products')
-copy(directory=ms_file_name,startswith='19B-053',endswith='.ms.flagversions')
-print('flagversions copied to products')
+# #copy the ms file and its flagversion to products folder    
+# copy(directory=ms_file_name,startswith='19B-053',endswith='.ms')
+# print('ms file copied to products')
+# copy(directory=ms_file_name,startswith='19B-053',endswith='.ms.flagversions')
+# print('flagversions copied to products')
 
-#------------------------------------------------------------------------------------------
-#Change working directory to products
-os.chdir(ms_file_name+ '/products/')
-print(os.getcwd())
-os.makedirs('plots')
+# #------------------------------------------------------------------------------------------
+# #Change working directory to products
+# os.chdir(ms_file_name+ '/products/')
+# print(os.getcwd())
+# os.makedirs('plots')
 
-filename = find_ms_folder('.', '19', '.ms')
-filename = filename[0]
+# filename = find_ms_folder('.', '19', '.ms')
+# filename = filename[0]
 
-#print the flaglist to restore
-flags_list = flagmanager(vis=filename)
-print(flags_list)
+# #print the flaglist to restore
+# flags_list = flagmanager(vis=filename)
+# print(flags_list)
 
-flag_version = input('which flagversion do you want to restore?\n')
+# flag_version = input('which flagversion do you want to restore?\n')
+
+#----------------------------------------------------------------------------------------
+filename = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/19B-053_2020_01_11_T03_36_56.543/19B-053.sb37658530.eb37691790.58859.0565694213.ms/'
 
 flagmanager(vis=filename , mode='restore', versionname=flag_version)
 
