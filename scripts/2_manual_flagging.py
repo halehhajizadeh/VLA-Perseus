@@ -179,3 +179,12 @@ elif threedigits=='447':
     mode='manual',
     scan='22,27,28,29,30,37'
     )
+
+ #-------------------------------------------------------------------
+elif threedigits=='362':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12'
+    )
