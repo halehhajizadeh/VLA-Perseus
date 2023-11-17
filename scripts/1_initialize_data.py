@@ -6,8 +6,8 @@ import tarfile
 import shutil
 
 # working_directory = sys.argv[1]
-working_directory = '../data'
-# working_directory = '../data/03:36:00.000000_+30.30.00.00001'
+# working_directory = '../data'
+working_directory = '../data/03:34:30.000000_+31.59.59.99999/'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
@@ -105,33 +105,29 @@ print(folders_list)
 #-----------------------------------------------------------------------------------------
 ms_file_name = input('Which file do you want to continue with?\n')
 
-# #------------------------------------------------------------------------------------------
-# #unzipping the products folder
-# unzip(path=ms_file_name, endswith=".tar")
-# print('Unzipping the tar file is done!')   
+#------------------------------------------------------------------------------------------
+#unzipping the products folder
+unzip(path=ms_file_name, endswith=".tar")
+print('Unzipping the tar file is done!')   
 
-# #unzippng the tables 
-# unzip(ms_file_name + '/products', ".caltables.tgz")
-# print('Unzipping tables is done!')
+#unzippng the tables 
+unzip(ms_file_name + '/products', ".caltables.tgz")
+print('Unzipping tables is done!')
 
-# #copy the ms file and its flagversion to products folder    
-# copy(directory=ms_file_name,startswith='19B-053',endswith='.ms')
-# print('ms file copied to products')
-# copy(directory=ms_file_name,startswith='19B-053',endswith='.ms.flagversions')
-# print('flagversions copied to products')
+#copy the ms file and its flagversion to products folder    
+copy(directory=ms_file_name,startswith='19B-053',endswith='.ms')
+print('ms file copied to products')
+copy(directory=ms_file_name,startswith='19B-053',endswith='.ms.flagversions')
+print('flagversions copied to products')
 
-# #------------------------------------------------------------------------------------------
-# #Change working directory to products
-# os.chdir(ms_file_name+ '/products/')
-# print(os.getcwd())
-# os.makedirs('plots')
+#------------------------------------------------------------------------------------------
+#Change working directory to products
+os.chdir(ms_file_name+ '/products/')
+print(os.getcwd())
+os.makedirs('plots')
 
-# filename = find_ms_folder('.', '19', '.ms')
-# filename = filename[0]
-
-
-#----------------------------------------------------------------------------------------
-filename = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/19B-053_2020_01_11_T03_36_56.543/products/19B-053.sb37658530.eb37691790.58859.0565694213.ms/'
+filename = find_ms_folder('.', '19', '.ms')
+filename = filename[0]
 
 
 #print the flaglist to restore
