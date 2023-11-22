@@ -185,3 +185,15 @@ thresh = '1e-4'
 nit = 5000
 threedigits ='362'
 pblim = 0.06
+#------------------------------------------------------------------
+
+#102
+path = '../data/19B-053_2020_01_05_T00_25_02.102/products'
+msfilename = path + '/19B-053.sb37659292.eb37664379.58853.92688378472_calibrated.ms'
+
+refant_name = 'ea24' 
+phase_center = 'J2000 03:34:30.000000 +31.59.59.99999'
+thresh = '1e-4'
+nit = 5000
+threedigits ='102'
+pblim = 0.06
