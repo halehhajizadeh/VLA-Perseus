@@ -43,5 +43,3 @@ for stok in stokes:
 toc = time.time()
 print(f"Finshed the smoothing process in {round((toc-tic)/60)} minutes")                
 
-#45, 55
-#50, 55
