@@ -203,4 +203,47 @@ elif threedigits=='102':
     scan='35,53,45,46,37,44,39,54,49,52,59,54,51,47,43, 50,58'
     )
 
+#-------------------------------------------------------------------
+elif threedigits=='263':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7'
+    )
   
+    flagdata(
+        vis=msfilename, 
+        mode='manual',
+        scan='45,46,53,35,37,59'
+        )
+    
+
+#-------------------------------------------------------------------
+elif threedigits=='208':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11'
+    )
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    scan='27,28,48,53,46,45,44,52,54,37,47,59,35,36,51,58,43'
+    )
+
+#-------------------------------------------------------------------
+elif threedigits=='587':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    scan='9,43,56,44,45,46,53,58,59,54,37,52,35'
+    )
