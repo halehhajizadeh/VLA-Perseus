@@ -8,10 +8,15 @@ import math
 import pandas as pd
 
 pblim = 0.06
-Stoke = 'I'
 
 dx=4
 dy=4
+
+
+deltax = 10
+deltay = 10
+deltaxy = 7
+
 
 Stokes = [
         'I',
@@ -19,7 +24,7 @@ Stokes = [
         'U'
         ]
 
-manual_setting=0
+manual_setting=1
 
 
 def ra_dec_to_degrees(ra, dec):
@@ -70,16 +75,18 @@ elif manual_setting == 0:
     DEC0 = df['DEC'].tolist()
 #----------------------------------------------------------------
 for stokes in Stokes:
+    
     fits_file =path+'/Images/img'+str(nit)+'/Stokes'+stokes+'.fits'
     hdulist=fits.open(fits_file)
     img=hdulist[0].data
     wcs=WCS(hdulist[0].header)
+    
     if stokes=='I':
         stok = 1
     if stokes=='Q':
         stok = 2
     if stokes=='U':
-        stoke = 3        
+        stok = 3        
 
     for ip in range(len(RA0)):
         sky1=[[RA0[ip],DEC0[ip],1.47339395E9,0]]
@@ -94,7 +101,7 @@ for stokes in Stokes:
         else:  
             sourcename_RADEC="H%07.3f%06.3f"  % (int(1.E3*RA0[ip])/1000.,int(1.E3*DEC0[ip])/1000.)
 
-        spectrum_file="%s_%s.pro" % (sourcename_RADEC,dx,dy,stokes)
+        spectrum_file = "%s_%s_%s_%s.pro" % (sourcename_RADEC, dx, dy, stokes)
 
         OUT=open(path+'/Images/img'+str(nit)+'/RMsyn/'+spectrum_file,"w")
 
@@ -108,13 +115,14 @@ for stokes in Stokes:
         box_spectrum=img[:,(y0-dy):(y0+dy),(x0-dx):(x0+dx)]
         mean_spectrum=img[:,x0,y0]
         freq=np.copy(mean_spectrum)
+        
 
         # Use the array flag to keep track of flagged channels
         flag=np.copy(mean_spectrum)*0.0
 
         flag[np.isnan(flag)]=0.0
 
-        ispec=0
+       
         for ispec in range(len(mean_spectrum)):
             # Get ferquency of channel:
             # I have to change th 4th index
@@ -123,12 +131,30 @@ for stokes in Stokes:
 
             # Average over the box:
             mean_spectrum[ispec]=np.average(box_spectrum[ispec,:,:])
+            
+            
+            #Background
+            background_1 = img[ispec,x0, (y0+deltay)]
+            background_2 = img[ispec,x0, (y0-deltay)]
+            background_3 = img[ispec,(x0+deltax), y0]
+            background_4 = img[ispec,(x0-deltax), y0]
+            background_5 = img[ispec,(x0+deltax), (y0+deltay)]
+            background_6 = img[ispec,(x0+deltax), (y0-deltay)]
+            background_7 = img[ispec,(x0-deltax), (y0-deltay)]
+            background_8 = img[ispec,(x0-deltax), (y0+deltay)]
+            print (f"Backgrounds:{background_1},{background_2},{background_3},{background_4},{background_5},{background_6},{background_7},{background_8}")
+            
+            diff = [background_1,background_2,background_3,background_4,
+                    background_5,background_6,background_7,background_8]-mean_spectrum[ispec]
+            
+            mean_spectrum_reduced = np.median(diff)
+            
             if (mean_spectrum[ispec]>1.E10):
                 # If in here, found at least some pixels with BLANK vale 1.E30
                 # Discard the whole channel. Set flag array value to 1.
                 mean_spectrum[ispec]=0
                 flag[ispec]=1.
-            print("%15.12e  %15.8e  %d" % (freq[ispec],mean_spectrum[ispec],int(flag[ispec]+0.5)), file=OUT)
+            print("%15.12e  %15.8e  %d" % (freq[ispec],mean_spectrum_reduced,int(flag[ispec]+0.5)), file=OUT)
 
 
         OUT.close()
@@ -137,4 +163,3 @@ for stokes in Stokes:
 
     if (rms>0.002):
         print(sourcename_RADEC, rms)
-
