@@ -144,8 +144,8 @@ for stokes in Stokes:
             background_8 = img[ispec,(x0-deltax), (y0+deltay)]
             print (f"Backgrounds:{background_1},{background_2},{background_3},{background_4},{background_5},{background_6},{background_7},{background_8}")
             
-            diff = [background_1,background_2,background_3,background_4,
-                    background_5,background_6,background_7,background_8]-mean_spectrum[ispec]
+            diff = mean_spectrum[ispec]-[background_1,background_2,background_3,background_4,
+                    background_5,background_6,background_7,background_8]
             
             mean_spectrum_reduced = np.median(diff)
             
