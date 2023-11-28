@@ -3,7 +3,18 @@ sys.path.append('.')
 import shutil
 import os
 from glob import glob
-from configs import path, phase_center, nit, thresh, threedigits, pblim
+# from configs import path, phase_center, nit, thresh, threedigits, pblim
+
+
+
+path = '../data'
+phase_center = 'J2000 03:34:30.000000 +31.59.59.99999'
+thresh = '1e-4'
+nit = 5000
+threedigits = '03:34:30.000000_+31.59.59.99999'
+pblim = 0.06
+
+
 
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
