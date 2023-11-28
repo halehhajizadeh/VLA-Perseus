@@ -3,7 +3,7 @@ sys.path.append('.')
 import time
 import os
 
-path='../data/'
+path='../data'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
