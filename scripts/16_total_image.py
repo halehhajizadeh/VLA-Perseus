@@ -29,16 +29,16 @@ folders_list = find_ms_folder(path, "19B-053")
 
 ms_list = []
 for i in folders_list:
-    ms_list.append(i+'/products/targets.ms')
+    # ms_list.append(i+'/products/targets.ms')
+    ms_list.append(i+'/*.ms')
 
 print(ms_list)
 
 
-# filename = path+'/targets.ms'
 
 Stoke = 'I'
 
-imagename= threedigits + '-mosaic-fieldALL-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwALL-pb'+str(pblim)+'-cyclenit500'
+imagename= threedigits + '-mosaic-fieldALL-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
 
 if os.path.exists(path+"/Images/"+imagename+".image.fits"):
     os.remove(path+"/Images/"+imagename+".image.fits")
@@ -50,7 +50,7 @@ for images in flist:
 
 tclean(vis=ms_list,
        field="PER_FIELD_*",
-       spw="",
+       spw="16",
        timerange="",
        uvrange="",
        antenna="",
