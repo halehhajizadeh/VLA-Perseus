@@ -3,18 +3,20 @@ sys.path.append('.')
 import shutil
 import os
 from glob import glob
-from configs import path, phase_center, nit, thresh, threedigits
+# from configs import path, phase_center, nit, thresh, threedigits
 
-# path = '../data/19B-053_2019_12_16_T08_12_56.775/products'
-# msfilename = path + '/19B-053.sb37618267.eb37630620.58840.93710494213.ms'
-
-#specsmooth
-
-filename = path+'/targets.ms'
-
+path = '../data'
+phase_center = 'J2000 03:34:30.000000 +31.59.59.99999'
+thresh = '1e-4'
+nit = 5000
+threedigits = '03:34:30.000000_+31.59.59.99999'
 pblim = 0.06
 
-Stoke = 'Q'
+path = '../data/19B-053_2020_01_05_T00_25_02.102/'
+filename = path + '/19B-053.sb37659292.eb37664379.58853.92688378472.ms/'
+
+
+Stoke = 'I'
 
 imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
 
