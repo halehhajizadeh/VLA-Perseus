@@ -6,10 +6,10 @@ from glob import glob
 # from configs import path, phase_center, nit, thresh, threedigits
 
 path = '../data'
-phase_center = 'J2000 03:34:30.000000 +31.59.59.99999'
+phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
 thresh = '1e-4'
 nit = 5000
-threedigits = 'J2000 03:25:30.000000 +29.29.59.99999
+threedigits = '03:25:30.000000_+29.29.59.99999'
 pblim = 0.06
 
 path = '../data/03:25:30.000000_+29.29.59.99999/data/19B-053_2020_01_09_T02_00_58.482/products/'
