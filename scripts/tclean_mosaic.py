@@ -18,7 +18,7 @@ filename = path + '/19B-053.sb37665557.eb37682286.58857.98850918982_calibrated.m
 
 Stoke = 'I'
 
-imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwALL-pb'+str(pblim)+'-cyclenit500'
+imagename= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
 
 if os.path.exists(path+"/Images/"+imagename+".image.fits"):
     os.remove(path+"/Images/"+imagename+".image.fits")
@@ -30,7 +30,7 @@ for images in flist:
 
 tclean(vis=filename,
        field="PER_FIELD_*",
-       spw="",
+       spw="16",
        timerange="",
        uvrange="",
        antenna="",
