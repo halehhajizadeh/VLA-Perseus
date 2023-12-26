@@ -12,8 +12,8 @@ nit = 5000
 threedigits = '03:25:30.000000_+29.29.59.99999'
 pblim = 0.06
 
-path = '../data/19B-053_2020_01_09_T02_00_58.482/products'
-filename = path + '/19B-053.sb37665557.eb37682286.58857.98850918982_calibrated.ms/'
+path = '../data/19B-053_2020_01_11_T01_24_53.930/products'
+filename = path + '/19B-053.sb37665557.eb37692641.58859.97034046296_calibrated.ms/'
 
 
 Stoke = 'I'
