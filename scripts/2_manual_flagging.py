@@ -262,3 +262,9 @@ elif threedigits=='482':
     mode='manual',
     spw='15:3;4;7;12;14;16;21;42;56;44;25;46;36;28;40;60;59'
     )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='15:5;6;9;10;22;24;45;47;55;57'
+    )
