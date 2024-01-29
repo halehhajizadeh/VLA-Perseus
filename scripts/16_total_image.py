@@ -3,7 +3,7 @@ sys.path.append('.')
 import shutil
 import os
 from glob import glob
-from configs import path, phase_center, nit, thresh, threedigits, pblim
+from configs import  phase_center, nit, thresh, threedigits, pblim
 
 path = '../data/03:32:04.530001_+31.05.04.00000/'
 
