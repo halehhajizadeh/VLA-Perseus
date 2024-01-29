@@ -38,7 +38,7 @@ print(ms_list)
 
 Stoke = 'I'
 
-imagename= threedigits + '-mosaic-fieldALL-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
+imagename= threedigits + '-mosaic-fieldALL-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwALL-pb'+str(pblim)+'-cyclenit500'
 
 if os.path.exists(path+"/Images/"+imagename+".image.fits"):
     os.remove(path+"/Images/"+imagename+".image.fits")
@@ -50,7 +50,7 @@ for images in flist:
 
 tclean(vis=ms_list,
        field="PER_FIELD_*",
-       spw="16",
+       spw="",
        timerange="",
        uvrange="",
        antenna="",
@@ -81,7 +81,7 @@ tclean(vis=ms_list,
        niter=nit,
        gain=0.1,
        threshold=thresh,
-       nsigma=3,
+       nsigma=0,
        cycleniter=500,
        cyclefactor=1,
        restart=True,
