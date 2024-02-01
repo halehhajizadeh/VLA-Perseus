@@ -292,13 +292,26 @@
 
 # #------------------------------------------------------------------
 
-#458
-path = '../data/19B-053_2020_01_19_T00_36_59.458/products'
-msfilename = path + '/19B-053.sb37698456.eb37733767.58867.89210462963_calibrated.ms'
+# #458
+# path = '../data/19B-053_2020_01_19_T00_36_59.458/products'
+# msfilename = path + '/19B-053.sb37698456.eb37733767.58867.89210462963_calibrated.ms'
+
+# refant_name = 'ea23' 
+# phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
+# thresh = '1e-4'
+# nit = 5000
+# threedigits ='458'
+# pblim = 0.06
+
+# #------------------------------------------------------------------
+
+#838
+path = '../data/19B-053_2020_01_24_T02_01_00.838/products'
+msfilename = path + '/19B-053.sb37746617.eb37781745.58872.9918871875_calibrated.ms'
 
 refant_name = 'ea23' 
 phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
 thresh = '1e-4'
 nit = 5000
-threedigits ='458'
+threedigits ='838'
 pblim = 0.06
