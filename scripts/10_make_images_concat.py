@@ -2,8 +2,7 @@ import sys
 sys.path.append('.')
 import time
 import os
-
-path='../data'
+import path, phasecenter, threedigits, thresh, pblim, nit
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
@@ -40,11 +39,6 @@ stokes1 = [
         'Q',
         'U'
           ]
-phase_center = 'J2000 03:34:30.000000 +31.59.59.99999'
-threedigits = '03:34:30.000000_+31.59.59.99999'
-thresh = '1e-4'
-nit = 5000
-pblim = 0.06
 
 channels = ['00~07', '08~15', '16~23', '24~31', '32~39', '40~47', '48~55', '56~63']
 
