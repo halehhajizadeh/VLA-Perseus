@@ -23,7 +23,7 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
     return(folders_list)
 
 
-folders_list = find_ms_folder(path + '/' + phase_center + '/data', "19B-053")
+folders_list = find_ms_folder(path + '/' + threedigits + '/data', "19B-053")
 
 ms_list = []
 for i in folders_list:
