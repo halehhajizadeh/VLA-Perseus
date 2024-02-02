@@ -5,7 +5,7 @@ import os
 from glob import glob
 from configs import  phase_center, nit, thresh, threedigits, pblim
 
-path = '../data/03:36:00.000000_+30.30.00.00001/'
+path = '../data/03:25:30.000000_+29.29.59.99999/'
 
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
