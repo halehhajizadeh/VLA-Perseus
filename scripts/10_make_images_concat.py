@@ -2,7 +2,7 @@ import sys
 sys.path.append('.')
 import time
 import os
-import path, phase_center, threedigits, thresh, pblim, nit
+from configs import path, phase_center, threedigits, thresh, pblim, nit
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
