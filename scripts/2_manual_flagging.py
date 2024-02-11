@@ -248,7 +248,7 @@ elif threedigits=='587':
     scan='9,43,56,44,45,46,53,58,59,54,37,52,35'
     )
 
-    #-------------------------------------------------------------------
+#-------------------------------------------------------------------
 elif threedigits=='482':
 
     flagdata(
@@ -267,4 +267,96 @@ elif threedigits=='482':
     vis=msfilename, 
     mode='manual',
     spw='15:5;6;9;10;22;24;45;47;55;57'
+    )
+
+
+#-------------------------------------------------------------------
+elif threedigits=='930':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='8:14;20;22;38;39;42;46'
+    )
+
+#-------------------------------------------------------------------
+elif threedigits=='930':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='8:14;20;22;38;39;42;46'
+    )
+
+#-------------------------------------------------------------------
+elif threedigits=='42.458':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='8:28;36;53;45;52;58;60;53;25;55;27;54'
+    )
+
+
+#-------------------------------------------------------------------
+elif threedigits=='838':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='2:10;23;24;27;28;29;53,8:9;14;53,17:23;35;36;37;45,15:41;51;53,6:44;46;48'
+    )   
+     
+#-------------------------------------------------------------------
+elif threedigits=='242':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12,13,14'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='2:56~60'
+    )  
+
+    #-------------------------------------------------------------------
+elif threedigits=='458':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='8:16;30;34;42;23;53;54;56;37;60;54'
     )
