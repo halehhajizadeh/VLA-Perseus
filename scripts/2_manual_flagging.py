@@ -212,13 +212,6 @@ elif threedigits=='263':
     spw='7'
     )
   
-    flagdata(
-        vis=msfilename, 
-        mode='manual',
-        scan='45,46,53,35,37,59'
-        )
-    
-
 #-------------------------------------------------------------------
 elif threedigits=='208':
 
@@ -227,11 +220,7 @@ elif threedigits=='208':
     mode='manual',
     spw='7,9,10,11'
     )
-    flagdata(
-    vis=msfilename, 
-    mode='manual',
-    scan='27,28,48,53,46,45,44,52,54,37,47,59,35,36,51,58,43'
-    )
+
 
 #-------------------------------------------------------------------
 elif threedigits=='587':
@@ -242,11 +231,6 @@ elif threedigits=='587':
     spw='7'
     )
 
-    flagdata(
-    vis=msfilename, 
-    mode='manual',
-    scan='9,43,56,44,45,46,53,58,59,54,37,52,35'
-    )
 
 #-------------------------------------------------------------------
 elif threedigits=='482':
@@ -346,7 +330,7 @@ elif threedigits=='242':
     spw='2:56~60'
     )  
 
-    #-------------------------------------------------------------------
+#-------------------------------------------------------------------
 elif threedigits=='458':
 
     flagdata(
@@ -359,4 +343,69 @@ elif threedigits=='458':
     vis=msfilename, 
     mode='manual',
     spw='8:16;30;34;42;23;53;54;56;37;60;54'
+    )
+
+#-------------------------------------------------------------------
+elif threedigits=='458':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='1,7,9,10,11,12,13,14'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='8:16;30;34;42;23;53;54;56;37;60;54'
+    )    
+
+#-------------------------------------------------------------------
+elif threedigits=='294':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12,13'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='8:33;32;34;35;38;40;45;50;27;28;22;21;11;49;53;47;16;24;36;37;48;46;17;57,2:25;11'
+    )      
+#-------------------------------------------------------------------
+elif threedigits=='045':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='0,7,9,10,11,12,13'
+    ) 
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='15:11;47;48;38;21;41;42;15;22;13;35;36;25;13;35;36;25;13;39;40;51;12;21;25,2:58;43;53;54;41;33;17;21,8:31'
+    )     
+
+#-------------------------------------------------------------------
+elif threedigits=='010':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='7,9,10,11,12,13,14'
+    ) 
+
+    flagdata(
+    vis=msfilename,
+    mode='manual',
+    timerange='22:41:41.500~22:41:41.500'
+    )
+
+    flagdata(
+    vis=msfilename,
+    mode='manual',
+    timerange='22:41:52.500~22:41:57.500'
     )
