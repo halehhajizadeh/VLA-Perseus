@@ -32,7 +32,8 @@ for i in folders_list:
 print(ms_list)
 
 
-spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
+# spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
+spw = [16, 17]
 
 stokes1 = [
         'I',
