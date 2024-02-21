@@ -203,7 +203,7 @@
 
 #102
 path = '../data/19B-053_2020_01_05_T00_25_02.102/products'
-msfilename = path + '/19B-053.sb37659292.eb37664379.58853.92688378472_calibrated.ms'
+msfilename = path + '/19B-053.sb37659292.eb37664379.58853.92688378472_calibrated.ms/'
 
 refant_name = 'ea11' 
 phase_center = 'J2000 03:34:30.000000 +31.59.59.99999'
