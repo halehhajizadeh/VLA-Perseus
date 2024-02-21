@@ -218,9 +218,29 @@ elif threedigits=='208':
     flagdata(
     vis=msfilename, 
     mode='manual',
-    spw='7,9,10,11'
+    spw='0,1,7,9,10,11,12,13,14'
     )
 
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    scan='27,28'
+    )
+
+#-------------------------------------------------------------------
+elif threedigits=='970':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='0,1,7,9,10,11,12,13,14'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    scan='44'
+    )
 
 #-------------------------------------------------------------------
 elif threedigits=='587':
@@ -228,7 +248,7 @@ elif threedigits=='587':
     flagdata(
     vis=msfilename, 
     mode='manual',
-    spw='7'
+    spw='0,1,7,9,10,11,12,13,14'
     )
 
 
@@ -269,20 +289,6 @@ elif threedigits=='930':
     spw='8:14;20;22;38;39;42;46'
     )
 
-#-------------------------------------------------------------------
-elif threedigits=='930':
-
-    flagdata(
-    vis=msfilename, 
-    mode='manual',
-    spw='7,9,10,11,12'
-    )
-
-    flagdata(
-    vis=msfilename, 
-    mode='manual',
-    spw='8:14;20;22;38;39;42;46'
-    )
 
 #-------------------------------------------------------------------
 elif threedigits=='42.458':
@@ -367,6 +373,12 @@ elif threedigits=='294':
     vis=msfilename, 
     mode='manual',
     spw='7,9,10,11,12,13'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    scan='55'
     )
 
     flagdata(

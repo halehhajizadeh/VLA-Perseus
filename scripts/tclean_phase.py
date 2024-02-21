@@ -7,7 +7,7 @@ from glob import glob
 
 path = '../data'
 phase_center = 'J2000 03:34:30.000000 +31.59.59.99999'
-thresh = '1e-4'
+thresh = '2e-3'
 nit = 10
 threedigits = '03:34:30.000000_+31.59.59.99999'
 pblim = 0.06
@@ -28,7 +28,7 @@ image_name= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(ni
 
 
 tclean(vis=mslist,
-       field="J",
+       field="J0336+3218",
        spw="16",
        timerange="",
        uvrange="",
