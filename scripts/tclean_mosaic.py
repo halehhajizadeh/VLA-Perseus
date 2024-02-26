@@ -6,7 +6,7 @@ from glob import glob
 from configs import phase_center, nit, thresh, threedigits
 
 path = '../data/' + threedigits + '/19B-053_2020_01_07_T00_24_57.010/'
-msfilename='19B-053.sb37666269.eb37673819.58855.921388993054.ms/'
+msfilename= path + '19B-053.sb37666269.eb37673819.58855.921388993054.ms/'
 # phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
 # thresh = '1e-4'
 # nit = 5000
