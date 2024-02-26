@@ -2,6 +2,7 @@ import sys
 sys.path.append('.')
 import time
 import os
+import numpy as np
 
 path = '../data'
 thresh = '1e-4'
@@ -45,7 +46,7 @@ print(pointings_folders_list)
 #----------------------------------------------------------------
 
 ms_file_list = []
-for j in pointings_folders_list:
+for j in np.array(pointings_folders_list):
     ms_file = find_ms_folder(j + '/', "19B-053", ".ms")
     ms_file_list.append(j + '/' + ms_file)
 
