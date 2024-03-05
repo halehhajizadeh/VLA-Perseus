@@ -1,10 +1,10 @@
 import sys
 sys.path.append('.')
-from configs import path, phase_center, thresh, nit, threedigits, pblim, spw
+from configs import path, phase_center, thresh, nit, threedigits, pblim
 import time
 
 filename = path+'/targets.ms'
-# spw = [ 2, 3 , 4, 5, 6, 8, 9, 10, 15, 16, 17]
+spw = [ 2, 3 , 4, 5, 6, 8, 9, 10, 15, 16, 17]
 stokes1 = [
         'I',
         'Q',
