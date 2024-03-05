@@ -33,7 +33,6 @@ print(ms_list)
 
 
 spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
-# spw = [16, 17]
 
 stokes1 = [
         'I',
@@ -75,9 +74,9 @@ for stok in stokes1:
                     deconvolver="hogbom",
                     restoration=True,
                     restoringbeam=[],
-                    pbcor=True,
+                    pbcor=False, #default is True
                     outlierfile="",
-                    weighting="briggs",
+                    weighting="natural",  #default is briggs
                     robust=0.5,
                     npixels=0,
                     niter=nit,
