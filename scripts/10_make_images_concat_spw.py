@@ -32,7 +32,7 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
 # pointings_folders = find_ms_folder(path + '/', "03")
 
 
-pointings_folders =['../data/03:32:04.530001_+31.05.04.00000/', '../data/03:25:30.000000_+29.29.59.99999/']
+pointings_folders =['../data/03:32:04.530001_+31.05.04.00000', '../data/03:25:30.000000_+29.29.59.99999']
 
 pointings_folders_list= []
 for i in pointings_folders:
