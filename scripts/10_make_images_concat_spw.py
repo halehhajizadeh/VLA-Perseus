@@ -9,12 +9,6 @@ thresh = '1e-4'
 pblim = '0.06'
 nit = 5000
 spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
-stokes1 = [
-        'I',
-        # 'Q',
-        # 'U'
-          ]
-
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
@@ -35,7 +29,10 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
     return(folders_list)
 
 
-pointings_folders = find_ms_folder(path + '/', "03")
+# pointings_folders = find_ms_folder(path + '/', "03")
+
+
+pointings_folders =['../data/03:32:04.530001_+31.05.04.00000', '../data/03:25:30.000000_+29.29.59.99999']
 
 pointings_folders_list= []
 for i in pointings_folders:
@@ -54,50 +51,50 @@ print(ms_file_list)
 
 #----------------------------------------------------------------
 
-# for stok in stokes1:
-#     for s in spw:
-#         tic = time.time()
-#         print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
 
-#         img_filename = path + "/concat/"+str(threedigits)+"/Images/img" + str(nit) + "/tclean/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)
+for s in spw:
+    tic = time.time()
+    print(f"Stokes: I, s: {s} is started ...")
 
-#         tclean( vis=ms_file_list,
-#                 field="PER_FIELD_*",
-#                 spw=str(s) + ':' + '0~62',
-#                 timerange="",
-#                 uvrange="",
-#                 antenna="",
-#                 observation="",
-#                 intent="",
-#                 datacolumn="corrected",
-#                 imagename=img_filename,
-#                 imsize=[4320],
-#                 cell=2.5,
-#                 # phasecenter=phase_center,
-#                 stokes=stok,
-#                 projection="SIN",
-#                 specmode="mfs",
-#                 gridder="mosaic",
-#                 mosweight=True,
-#                 cfcache="",
-#                 pblimit=pblim,
-#                 normtype="flatnoise",
-#                 deconvolver="hogbom",
-#                 restoration=True,
-#                 restoringbeam=[],
-#                 pbcor=True,
-#                 outlierfile="",
-#                 weighting="briggs",
-#                 robust=0.5,
-#                 npixels=0,
-#                 niter=nit,
-#                 gain=0.1,
-#                 threshold=thresh,
-#                 nsigma=0,
-#                 cycleniter=500,
-#                 cyclefactor=1,
-#                 parallel=False)
-    
-#         toc = time.time()
-#         print(f"stokes: {stok}, s: {s}, channel: {'0~62'} is finished!")
-#         print(f"Finshed the process in {round((toc-tic)/60)} minutes")
+    img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "spw" + str(s) + '-' + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) 
+
+    tclean( vis=ms_file_list,
+            field="PER_FIELD_*",
+            spw=str(s),
+            timerange="",
+            uvrange="",
+            antenna="",
+            observation="",
+            intent="",
+            datacolumn="corrected",
+            imagename=img_filename,
+            imsize=[8000],
+            cell=2.5,
+            # phasecenter=phase_center,
+            stokes='I',
+            projection="SIN",
+            specmode="mfs",
+            gridder="mosaic",
+            mosweight=True,
+            cfcache="",
+            pblimit=pblim,
+            normtype="flatnoise",
+            deconvolver="hogbom",
+            restoration=True,
+            restoringbeam=[],
+            pbcor=True,
+            outlierfile="",
+            weighting="briggs",
+            robust=0.5,
+            npixels=0,
+            niter=nit,
+            gain=0.1,
+            threshold=thresh,
+            nsigma=0,
+            cycleniter=500,
+            cyclefactor=1,
+            parallel=False)
+
+    toc = time.time()
+    print(f"stokesI, s: {s} is finished!")
+    print(f"Finshed the process in {round((toc-tic)/60)} minutes")
