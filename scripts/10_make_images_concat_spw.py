@@ -39,13 +39,13 @@ for i in pointings_folders:
     pointings_folders_list.append(i+'/data')
 
 print(pointings_folders_list)
-
+print('================================================================')
 #----------------------------------------------------------------
 
 ms_file_list = []
 for j in np.array(pointings_folders_list):
     ms_file = find_ms_folder(j + '/', "19B-053")
-    print (ms_file)
+    print ("MS File: ", ms_file)
     ms_file = np.array(ms_file)
     ms_file_list.append(j + '/' + ms_file + '/products/targets.ms')
 
