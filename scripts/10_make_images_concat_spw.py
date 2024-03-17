@@ -55,49 +55,49 @@ print(ms_file_list)
 #----------------------------------------------------------------
 
 
-# for s in spw:
-#     tic = time.time()
-#     print(f"Stokes: I, s: {s} is started ...")
+for s in spw:
+    tic = time.time()
+    print(f"Stokes: I, s: {s} is started ...")
 
-#     img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "spw" + str(s) + '-' + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) 
+    img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "spw" + str(s) + '-' + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) 
 
-#     tclean( vis=ms_file_list,
-#             field="PER_FIELD_*",
-#             spw=str(s),
-#             timerange="",
-#             uvrange="",
-#             antenna="",
-#             observation="",
-#             intent="",
-#             datacolumn="corrected",
-#             imagename=img_filename,
-#             imsize=[8000],
-#             cell=2.5,
-#             # phasecenter=phase_center,
-#             stokes='I',
-#             projection="SIN",
-#             specmode="mfs",
-#             gridder="mosaic",
-#             mosweight=True,
-#             cfcache="",
-#             pblimit=pblim,
-#             normtype="flatnoise",
-#             deconvolver="hogbom",
-#             restoration=True,
-#             restoringbeam=[],
-#             pbcor=True,
-#             outlierfile="",
-#             weighting="briggs",
-#             robust=0.5,
-#             npixels=0,
-#             niter=nit,
-#             gain=0.1,
-#             threshold=thresh,
-#             nsigma=0,
-#             cycleniter=500,
-#             cyclefactor=1,
-#             parallel=False)
+    tclean( vis=ms_file_list,
+            field="PER_FIELD_*",
+            spw=str(s),
+            timerange="",
+            uvrange="",
+            antenna="",
+            observation="",
+            intent="",
+            datacolumn="corrected",
+            imagename=img_filename,
+            imsize=[8000],
+            cell=2.5,
+            # phasecenter=phase_center,
+            stokes='I',
+            projection="SIN",
+            specmode="mfs",
+            gridder="mosaic",
+            mosweight=True,
+            cfcache="",
+            pblimit=pblim,
+            normtype="flatnoise",
+            deconvolver="hogbom",
+            restoration=True,
+            restoringbeam=[],
+            pbcor=True,
+            outlierfile="",
+            weighting="briggs",
+            robust=0.5,
+            npixels=0,
+            niter=nit,
+            gain=0.1,
+            threshold=thresh,
+            nsigma=0,
+            cycleniter=500,
+            cyclefactor=1,
+            parallel=False)
 
-#     toc = time.time()
-#     print(f"stokesI, s: {s} is finished!")
-#     print(f"Finshed the process in {round((toc-tic)/60)} minutes")
+    toc = time.time()
+    print(f"stokesI, s: {s} is finished!")
+    print(f"Finshed the process in {round((toc-tic)/60)} minutes")
