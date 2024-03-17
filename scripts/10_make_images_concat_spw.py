@@ -49,6 +49,7 @@ for j in np.array(pointings_folders_list):
     for k in ms_file:
         ms_file_list.append(j + '/' + k + '/products/targets.ms')
 
+print('================================================================')
 print(ms_file_list)
 
 #----------------------------------------------------------------
