@@ -80,7 +80,7 @@ for s in spw:
             gridder="awproject",
             mosweight=True,
             cfcache="",
-            pblimit=pblim,
+            # pblimit=pblim,
             normtype="flatnoise",
             deconvolver="hogbom",
             restoration=True,
