@@ -47,7 +47,7 @@ for j in np.array(pointings_folders_list):
     ms_file = find_ms_folder(j + '/', "19B-053")
     print ("MS File: ", ms_file)
     for k in ms_file:
-        ms_file_list.append(j + '/' + k + '/products/targets.ms')
+        ms_file_list.append(k + '/products/targets.ms')
 
 print('================================================================')
 print(ms_file_list)
