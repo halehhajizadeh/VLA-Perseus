@@ -77,7 +77,7 @@ for s in spw:
             stokes='I',
             projection="SIN",
             specmode="mfs",
-            gridder="mosaic",
+            gridder="awproject",
             mosweight=True,
             cfcache="",
             pblimit=pblim,
@@ -96,7 +96,7 @@ for s in spw:
             nsigma=0,
             cycleniter=500,
             cyclefactor=1,
-            parallel=False)
+            parallel=True)
 
     toc = time.time()
     print(f"stokesI, s: {s} is finished!")
