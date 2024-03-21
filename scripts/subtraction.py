@@ -1,7 +1,7 @@
 cl.addcomponent(flux=1.55, fluxunit='Jy', shape='point', dir='J2000 03:36:30.107600 +32.18.29.34239')
 cl.rename('component.cl')
 cl.close()
-ft(vis='19B-053.sb37659292.eb37664379.58853.92688378472_calibrated.ms/', complist='co')
+2
 
 
 ##########################################################################################
