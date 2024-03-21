@@ -72,7 +72,7 @@ for s in spw:
             intent="",
             datacolumn="corrected",
             imagename=img_filename,
-            imsize=[4320],
+            imsize=[4860],
             cell="2.5arcsec",
             phasecenter=phase_center,
             stokes='I',
@@ -97,7 +97,7 @@ for s in spw:
             nsigma=0,
             cycleniter=500,
             cyclefactor=1,
-            parallel=True)
+            parallel=False)
 
     toc = time.time()
     print(f"stokesI, s: {s} is finished!")
