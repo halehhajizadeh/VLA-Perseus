@@ -73,7 +73,7 @@ for s in spw:
             datacolumn="corrected",
             imagename=img_filename,
             imsize=[4320],
-            cell=2.5,
+            cell="2.5arcsec",
             phasecenter=phase_center,
             stokes='I',
             projection="SIN",
