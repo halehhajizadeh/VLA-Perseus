@@ -9,6 +9,7 @@ thresh = '1e-4'
 pblim = '0.06'
 nit = 5000
 spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
+phase_center = '03:25:30.000000_+29.29.59.99999'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
@@ -32,7 +33,7 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
 # pointings_folders = find_ms_folder(path + '/', "03")
 
 
-pointings_folders =['../data/03:32:04.530001_+31.05.04.00000', '../data/03:25:30.000000_+29.29.59.99999']
+pointings_folders =['../data/03:25:30.000000_+29.29.59.99999']
 
 pointings_folders_list= []
 for i in pointings_folders:
@@ -59,7 +60,7 @@ for s in spw:
     tic = time.time()
     print(f"Stokes: I, s: {s} is started ...")
 
-    img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "spw" + str(s) + '-' + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) 
+    img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
 
     tclean( vis=ms_file_list,
             field="PER_FIELD_*",
@@ -71,16 +72,16 @@ for s in spw:
             intent="",
             datacolumn="corrected",
             imagename=img_filename,
-            imsize=[7000],
+            imsize=[4320],
             cell=2.5,
-            # phasecenter=phase_center,
+            phasecenter=phase_center,
             stokes='I',
             projection="SIN",
             specmode="mfs",
-            gridder="awproject",
+            gridder="mosaic",
             mosweight=True,
             cfcache="",
-            # pblimit=pblim,
+            pblimit=pblim,
             normtype="flatnoise",
             deconvolver="hogbom",
             restoration=True,
