@@ -6,7 +6,7 @@ import numpy as np
 
 path = '../data'
 thresh = '1e-4'
-pblim = '0.06'
+pblim = 0.06
 nit = 5000
 spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
 phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
