@@ -7,9 +7,9 @@ import numpy as np
 path = '../data'
 thresh = '1e-4'
 pblim = 0.06
-nit = 3500
-# spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
-spw = [3 , 4, 5, 6, 8, 15, 16, 17]
+nit = 5000
+spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
+
 phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
@@ -57,49 +57,74 @@ print(ms_file_list)
 #----------------------------------------------------------------
 
 
+# for s in spw:
+#     tic = time.time()
+#     print(f"Stokes: I, s: {s} is started ...")
+
+#     img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
+
+#     tclean( vis=ms_file_list,
+#             field="PER_FIELD_*",
+#             spw=str(s),
+#             timerange="",
+#             uvrange="",
+#             antenna="",
+#             observation="",
+#             intent="",
+#             datacolumn="corrected",
+#             imagename=img_filename,
+#             imsize=[4860],
+#             cell="2.5arcsec",
+#             phasecenter=phase_center,
+#             stokes='I',
+#             projection="SIN",
+#             specmode="mfs",
+#             gridder="mosaic",
+#             mosweight=True,
+#             cfcache="",
+#             pblimit=pblim,
+#             normtype="flatnoise",
+#             deconvolver="hogbom",
+#             restoration=True,
+#             restoringbeam=[],
+#             pbcor=True,
+#             outlierfile="",
+#             weighting="briggs",
+#             robust=0.5,
+#             npixels=0,
+#             niter=nit,
+#             gain=0.1,
+#             threshold=thresh,
+#             nsigma=0,
+#             cycleniter=500,
+#             cyclefactor=1,
+#             parallel=False)
+
+#     toc = time.time()
+#     print(f"stokesI, s: {s} is finished!")
+#     print(f"Finshed the process in {round((toc-tic)/60)} minutes")
+
+
+###########################################################################################
+
 for s in spw:
-    tic = time.time()
-    print(f"Stokes: I, s: {s} is started ...")
 
-    img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
+    image_name =   path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image'
+    smo_image_name =   path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.smo'
 
-    tclean( vis=ms_file_list,
-            field="PER_FIELD_*",
-            spw=str(s),
-            timerange="",
-            uvrange="",
-            antenna="",
-            observation="",
-            intent="",
-            datacolumn="corrected",
-            imagename=img_filename,
-            imsize=[4860],
-            cell="2.5arcsec",
-            phasecenter=phase_center,
-            stokes='I',
-            projection="SIN",
-            specmode="mfs",
-            gridder="mosaic",
-            mosweight=True,
-            cfcache="",
-            pblimit=pblim,
-            normtype="flatnoise",
-            deconvolver="hogbom",
-            restoration=True,
-            restoringbeam=[],
-            pbcor=True,
-            outlierfile="",
-            weighting="briggs",
-            robust=0.5,
-            npixels=0,
-            niter=nit,
-            gain=0.1,
-            threshold=thresh,
-            nsigma=0,
-            cycleniter=500,
-            cyclefactor=1,
-            parallel=False)
+    imsmooth(imagename = image_name,
+            targetres = True,
+            major = '60arcsec',
+            minor ='35arcsec',
+            pa='0.0deg',
+            outfile = smo_image_name,
+            overwrite=True
+            )     
 
-    toc = time.time()
-    print(f"stokesI, s: {s} is finished!")
-    print(f"Finshed the process in {round((toc-tic)/60)} minutes")
+############################################################################################
+
+for s in spw:
+    exportfits(
+        imagename =  path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.smo',
+        fitsimage =  path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.smo.fits'           
+    )
