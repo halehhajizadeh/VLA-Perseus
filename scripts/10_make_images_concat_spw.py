@@ -7,9 +7,9 @@ import numpy as np
 path = '../data'
 thresh = '1e-4'
 pblim = 0.06
-nit = 5000
+nit = 3500
 # spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
-spw = [ 2]
+spw = [3 , 4, 5, 6, 8, 15, 16, 17]
 phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
