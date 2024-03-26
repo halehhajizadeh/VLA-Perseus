@@ -61,11 +61,11 @@ for ms in ms_file_list:
  
     tic = time.time()
     print(f"Stokes: I, folder: {ms} is started ...")
-    digits=ms.split('/')[-2]
+    digits=ms.split('/')[-1]
 
     img_filename = path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL"  + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
 
-    tclean( vis=ms + '/producst/targets.ms',
+    tclean( vis=ms + '/products/targets.ms',
             field="PER_FIELD_*",
             spw='',
             timerange="",
