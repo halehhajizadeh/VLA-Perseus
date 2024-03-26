@@ -48,23 +48,24 @@ for j in np.array(pointings_folders_list):
     ms_file = find_ms_folder(j + '/', "19B-053")
     print ("MS File: ", ms_file)
     for k in ms_file:
-        ms_file_list.append(k + '/products/targets.ms')
+        ms_file_list.append(k )
 
 print('================================================================')
 print(ms_file_list)
 
 #----------------------------------------------------------------
 
-for folder in pointings_folders_list:
+for ms in ms_file_list:
     print('================================================================')
-    print(folder)
+    print(ms)
  
     tic = time.time()
-    print(f"Stokes: I, folder: {folder} is started ...")
+    print(f"Stokes: I, folder: {ms} is started ...")
+    digits=ms.split('/')[-2]
 
-    img_filename = path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-"+folder+"-spwALL"  + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
+    img_filename = path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL"  + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
 
-    tclean( vis=folder + '/producst/targets.ms',
+    tclean( vis=ms + '/producst/targets.ms',
             field="PER_FIELD_*",
             spw='',
             timerange="",
@@ -110,6 +111,6 @@ for folder in pointings_folders_list:
 
 for folder in pointings_folders_list:
     exportfits(
-        imagename =  path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + folder + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image',
-        fitsimage =  path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + folder + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
+        imagename =  path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image',
+        fitsimage =  path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
     )
