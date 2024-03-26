@@ -107,24 +107,24 @@ print(ms_file_list)
 
 ###########################################################################################
 
-for s in spw:
+# for s in spw:
 
-    image_name =   path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image'
-    smo_image_name =   path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.smo'
+#     image_name =   path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image'
+#     smo_image_name =   path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.smo'
 
-    imsmooth(imagename = image_name,
-            targetres = True,
-            major = '60arcsec',
-            minor ='35arcsec',
-            pa='0.0deg',
-            outfile = smo_image_name,
-            overwrite=True
-            )     
+#     imsmooth(imagename = image_name,
+#             targetres = True,
+#             major = '60arcsec',
+#             minor ='35arcsec',
+#             pa='0.0deg',
+#             outfile = smo_image_name,
+#             overwrite=True
+#             )     
 
 ############################################################################################
 
 for s in spw:
     exportfits(
-        imagename =  path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.smo',
-        fitsimage =  path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.smo.fits'           
+        imagename =  path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image',
+        fitsimage =  path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
     )
