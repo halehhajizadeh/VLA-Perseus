@@ -8,9 +8,9 @@ path = '../data'
 thresh = '1e-4'
 pblim = 0.06
 nit = 10000
-spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
-
+# spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
 phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
+threedigits = '03:25:30.000000_+29.29.59.99999'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
@@ -31,10 +31,9 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
     return(folders_list)
 
 
-# pointings_folders = find_ms_folder(path + '/', "03")
 
 
-pointings_folders =['../data/03:25:30.000000_+29.29.59.99999']
+pointings_folders =[path + '/' + threedigits]
 
 pointings_folders_list= []
 for i in pointings_folders:
@@ -56,16 +55,18 @@ print(ms_file_list)
 
 #----------------------------------------------------------------
 
-
-for s in spw:
+for folder in pointings_folders_list:
+    print('================================================================')
+    print(folder)
+ 
     tic = time.time()
-    print(f"Stokes: I, s: {s} is started ...")
+    print(f"Stokes: I, folder: {folder} is started ...")
 
-    img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
+    img_filename = path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-"+folder+"-spwALL"  + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
 
-    tclean( vis=ms_file_list,
+    tclean( vis=folder + '/producst/targets.ms',
             field="PER_FIELD_*",
-            spw=str(s),
+            spw='',
             timerange="",
             uvrange="",
             antenna="",
@@ -105,26 +106,10 @@ for s in spw:
     print(f"Finshed the process in {round((toc-tic)/60)} minutes")
 
 
-###########################################################################################
-
-# for s in spw:
-
-#     image_name =   path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image'
-#     smo_image_name =   path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.smo'
-
-#     imsmooth(imagename = image_name,
-#             targetres = True,
-#             major = '60arcsec',
-#             minor ='35arcsec',
-#             pa='0.0deg',
-#             outfile = smo_image_name,
-#             overwrite=True
-#             )     
-
 ############################################################################################
 
-for s in spw:
+for folder in pointings_folders_list:
     exportfits(
-        imagename =  path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image',
-        fitsimage =  path + "/concat/total/Images/img" + str(nit) + "/fits/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
+        imagename =  path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + folder + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image',
+        fitsimage =  path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + folder + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
     )
