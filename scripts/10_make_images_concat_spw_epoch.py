@@ -63,7 +63,7 @@ for ms in ms_file_list:
     print(f"Stokes: I, folder: {ms} is started ...")
     digits=ms.split('/')[-1]
 
-    img_filename = path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL"  + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
+    img_filename = path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL"  + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
 
     tclean( vis=ms + '/products/targets.ms',
             field="PER_FIELD_*",
@@ -111,6 +111,6 @@ for ms in ms_file_list:
 
 for folder in pointings_folders_list:
     exportfits(
-        imagename =  path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image',
-        fitsimage =  path + '/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
+        imagename =  path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image',
+        fitsimage =  path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
     )
