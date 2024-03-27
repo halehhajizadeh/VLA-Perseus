@@ -10,13 +10,13 @@ msfilename= path + '/targets.ms'
 pblim = 0.06
 Stoke = 'Q'
 
-image_name= '/test1'
+image_name= '/test2'
 
 
 
 tclean(vis=msfilename,
        field="PER_FIELD_*",
-       spw="15",
+       spw="15:0~7",
        timerange="",
        uvrange="",
        antenna="",
