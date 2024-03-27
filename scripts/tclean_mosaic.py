@@ -3,37 +3,27 @@ sys.path.append('.')
 import shutil
 import os
 from glob import glob
-from configs import phase_center, nit, thresh, threedigits
+from configs import path, phase_center, nit, thresh, threedigits
 
-path = '../data/' + threedigits + '/data/19B-053_2020_01_19_T00_36_59.458/'
-msfilename= path + '19B-053.sb37698456.eb37733767.58867.89210462963.ms/'
-# phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
-# thresh = '1e-4'
-# nit = 5000
-# threedigits = '03:25:30.000000_+29.29.59.99999'
+
+msfilename= path + '/targets.ms'
 pblim = 0.06
-Stoke = 'I'
+Stoke = 'Q'
 
-image_name= threedigits + '-mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
+image_name= '/test1'
 
-if os.path.exists(path+"/Images/"+image_name+".image.fits"):
-    os.remove(path+"/Images/"+image_name+".image.fits")
-
-flist = glob(path+'/Images/'+image_name)
-for images in flist:
-    shutil.rmtree(images)
 
 
 tclean(vis=msfilename,
        field="PER_FIELD_*",
-       spw="16",
+       spw="15",
        timerange="",
        uvrange="",
        antenna="",
        observation="",
        intent="",
        datacolumn="corrected",
-       imagename=path+"/Images/"+image_name,
+       imagename=path+image_name,
        imsize=[4320],
        cell=2.5,
        phasecenter=phase_center,
