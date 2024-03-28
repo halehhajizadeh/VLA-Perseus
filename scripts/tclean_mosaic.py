@@ -10,7 +10,7 @@ msfilename= path + '/targets.ms'
 pblim = 0.06
 Stoke = 'Q'
 
-image_name= '/test2'
+image_name= '/test1'
 
 
 
