@@ -65,7 +65,7 @@ for stok in stokes1:
                     field="PER_FIELD_*",
                     spw=str(s) + ':' + channel,
                     timerange="",
-                    uvrange=">57meters",
+                    uvrange=">57m",
                     antenna="",
                     observation="",
                     intent="",
