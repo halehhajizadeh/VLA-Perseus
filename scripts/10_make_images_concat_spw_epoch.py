@@ -103,7 +103,6 @@ for ms in ms_file_list:
             parallel=False)
 
     toc = time.time()
-    print(f"stokesI, s: {s} is finished!")
     print(f"Finshed the process in {round((toc-tic)/60)} minutes")
 
 
