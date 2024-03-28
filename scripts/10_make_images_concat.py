@@ -58,14 +58,14 @@ for stok in stokes1:
             tic = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
 
-            img_filename = path + "/concat/"+str(threedigits)+"/Images/img" + str(nit) + "/tclean/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)
-            img_filename = path + "/concat/test/test2"
+            # img_filename = path + "/concat/"+str(threedigits)+"/Images/img" + str(nit) + "/tclean/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)
+            img_filename = path + "/concat/test/test3"
 
             tclean( vis=ms_list,
                     field="PER_FIELD_*",
                     spw=str(s) + ':' + channel,
                     timerange="",
-                    uvrange=">57m",
+                    uvrange=">60m",
                     antenna="",
                     observation="",
                     intent="",
