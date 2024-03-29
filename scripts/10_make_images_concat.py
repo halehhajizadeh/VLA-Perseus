@@ -59,13 +59,13 @@ for stok in stokes1:
             print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
 
             # img_filename = path + "/concat/"+str(threedigits)+"/Images/img" + str(nit) + "/tclean/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)
-            img_filename = path + "/concat/test/test4"
+            img_filename = path + "/concat/test/test5"
 
             tclean( vis=ms_list,
                     field="PER_FIELD_*",
                     spw=str(s) + ':' + channel,
                     timerange="",
-                    uvrange=">65m",
+                    uvrange=">70m",
                     antenna="",
                     observation="",
                     intent="",
@@ -85,9 +85,9 @@ for stok in stokes1:
                     deconvolver="hogbom",
                     restoration=True,
                     restoringbeam=[],
-                    pbcor=False, #default is True
+                    pbcor=True, #default is True
                     outlierfile="",
-                    weighting="natural",  #default is briggs
+                    weighting="briggs",  #default is briggs
                     robust=0.5,
                     npixels=0,
                     niter=nit,
