@@ -5,7 +5,7 @@ import os
 import numpy as np
 
 path = '../data'
-thresh = '1e-4'
+thresh = '5e-4'
 pblim = 0.06
 nit = 10000
 spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
@@ -84,7 +84,7 @@ for s in spw:
             cfcache="",
             pblimit=pblim,
             normtype="flatnoise",
-            deconvolver="clark",
+            deconvolver="hogbom",
             restoration=True,
             restoringbeam=[],
             pbcor=True,
