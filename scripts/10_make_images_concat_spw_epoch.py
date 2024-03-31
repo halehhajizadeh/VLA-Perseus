@@ -111,5 +111,5 @@ for ms in ms_file_list:
 for folder in pointings_folders_list:
     exportfits(
         imagename =  path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image',
-        fitsimage =  path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
+        fitsimage =  path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/fits/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
     )
