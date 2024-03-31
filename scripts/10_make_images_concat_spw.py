@@ -61,7 +61,7 @@ for s in spw:
     tic = time.time()
     print(f"Stokes: I, s: {s} is started ...")
 
-    img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
+    img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic-clark'
 
     tclean( vis=ms_file_list,
             field="PER_FIELD_*",
@@ -84,7 +84,7 @@ for s in spw:
             cfcache="",
             pblimit=pblim,
             normtype="flatnoise",
-            deconvolver="hogbom",
+            deconvolver="clark",
             restoration=True,
             restoringbeam=[],
             pbcor=True,
