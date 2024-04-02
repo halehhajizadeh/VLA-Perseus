@@ -61,7 +61,7 @@ for s in spw:
     tic = time.time()
     print(f"Stokes: I, s: {s} is started ...")
 
-    img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic-clark'
+    img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject'
 
     tclean( vis=ms_file_list,
             field="PER_FIELD_*",
@@ -79,7 +79,7 @@ for s in spw:
             stokes='I',
             projection="SIN",
             specmode="mfs",
-            gridder="mosaic",
+            gridder="awproject",
             mosweight=True,
             cfcache="",
             pblimit=pblim,
@@ -98,7 +98,10 @@ for s in spw:
             nsigma=0,
             cycleniter=500,
             cyclefactor=1,
-            parallel=False)
+            parallel=False,
+            psterm=True,
+            rotatepastep=5.0
+            )
 
     toc = time.time()
     print(f"stokesI, s: {s} is finished!")
@@ -125,6 +128,6 @@ for s in spw:
 
 for s in spw:
     exportfits(
-        imagename =  path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image',
-        fitsimage =  path + "/concat/total/Images/img" + str(nit) + "/fits/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
+        imagename =  path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject' + '.image',
+        fitsimage =  path + "/concat/total/Images/img" + str(nit) + "/fits/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject' + '.image.fits'           
     )
