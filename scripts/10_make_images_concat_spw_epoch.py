@@ -55,6 +55,60 @@ print(ms_file_list)
 
 #----------------------------------------------------------------
 
+# for ms in ms_file_list:
+#     print('================================================================')
+#     print(ms)
+ 
+#     tic = time.time()
+#     print(f"Stokes: I, folder: {ms} is started ...")
+#     digits=ms.split('/')[-1]
+
+#     img_filename = path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL"  + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
+
+#     tclean( vis=ms + '/products/targets.ms',
+#             field="PER_FIELD_*",
+#             spw='',
+#             timerange="",
+#             uvrange="",
+#             antenna="",
+#             observation="",
+#             intent="",
+#             datacolumn="corrected",
+#             imagename=img_filename,
+#             imsize=[4860],
+#             cell="2.5arcsec",
+#             phasecenter=phase_center,
+#             stokes='I',
+#             projection="SIN",
+#             specmode="mfs",
+#             gridder="mosaic",
+#             mosweight=True,
+#             cfcache="",
+#             pblimit=pblim,
+#             normtype="flatnoise",
+#             deconvolver="hogbom",
+#             restoration=True,
+#             restoringbeam=[],
+#             pbcor=True,
+#             outlierfile="",
+#             weighting="briggs",
+#             robust=0.5,
+#             npixels=0,
+#             niter=nit,
+#             gain=0.1,
+#             threshold=thresh,
+#             nsigma=0,
+#             cycleniter=500,
+#             cyclefactor=1,
+#             parallel=False)
+
+#     toc = time.time()
+#     print(f"Finshed the process in {round((toc-tic)/60)} minutes")
+
+
+# ############################################################################################
+
+
 for ms in ms_file_list:
     print('================================================================')
     print(ms)
@@ -62,53 +116,6 @@ for ms in ms_file_list:
     tic = time.time()
     print(f"Stokes: I, folder: {ms} is started ...")
     digits=ms.split('/')[-1]
-
-    img_filename = path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL"  + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic'
-
-    tclean( vis=ms + '/products/targets.ms',
-            field="PER_FIELD_*",
-            spw='',
-            timerange="",
-            uvrange="",
-            antenna="",
-            observation="",
-            intent="",
-            datacolumn="corrected",
-            imagename=img_filename,
-            imsize=[4860],
-            cell="2.5arcsec",
-            phasecenter=phase_center,
-            stokes='I',
-            projection="SIN",
-            specmode="mfs",
-            gridder="mosaic",
-            mosweight=True,
-            cfcache="",
-            pblimit=pblim,
-            normtype="flatnoise",
-            deconvolver="hogbom",
-            restoration=True,
-            restoringbeam=[],
-            pbcor=True,
-            outlierfile="",
-            weighting="briggs",
-            robust=0.5,
-            npixels=0,
-            niter=nit,
-            gain=0.1,
-            threshold=thresh,
-            nsigma=0,
-            cycleniter=500,
-            cyclefactor=1,
-            parallel=False)
-
-    toc = time.time()
-    print(f"Finshed the process in {round((toc-tic)/60)} minutes")
-
-
-############################################################################################
-
-for folder in pointings_folders_list:
     exportfits(
         imagename =  path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image',
         fitsimage =  path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/fits/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
