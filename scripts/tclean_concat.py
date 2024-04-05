@@ -4,7 +4,7 @@ import shutil
 import os
 from glob import glob
 
-path='../data/03:32:04.530001_+31.05.04.00000/data'
+path='../data/03:32:04.530001_+31.05.04.00000/data/'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
