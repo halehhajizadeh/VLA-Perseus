@@ -36,7 +36,7 @@ print(ms_list)
 
 pblim = 0.06
 nit = 5000
-Stoke = 'Q'
+Stoke = 'U'
 thresh='1e-4'
 phase_center='J2000 03:32:04.530001 +31.05.04.00000'
 
