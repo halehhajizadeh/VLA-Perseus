@@ -52,7 +52,7 @@ tclean(vis=ms_list,
        observation="",
        intent="",
        datacolumn="corrected",
-       imagename=path+'concat/03:32:04.530001_+31.05.04.00000/'+imagename,
+       imagename=path+imagename,
        imsize=[4320],
        cell="2.5arcsec",
        phasecenter=phase_center,
@@ -85,5 +85,5 @@ tclean(vis=ms_list,
        parallel=False,
        interactive=False)
 
-exportfits(path+'concat/03:32:04.530001_+31.05.04.00000/'+imagename+".image", path+'concat/03:32:04.530001_+31.05.04.00000/'+imagename+".image.fits")
+exportfits(path+imagename+".image", path+imagename+".image.fits")
 
