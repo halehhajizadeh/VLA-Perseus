@@ -16,7 +16,7 @@ image_name= '/test1'
 
 tclean(vis=msfilename,
        field="PER_FIELD_*",
-       spw="15:0~7",
+       spw="16:5~60",
        timerange="",
        uvrange="",
        antenna="",
