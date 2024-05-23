@@ -5,8 +5,8 @@ import os
 from glob import glob
 from configs import  phase_center, nit, thresh, threedigits, pblim
 
-path = '../data/03:23:30.000001_+31.30.00.00000/'
-
+path = '../data/03:25:30.000000_+29.29.59.99999/'
+nit=0
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
@@ -40,7 +40,7 @@ print(ms_list)
 
 Stoke = 'I'
 
-imagename= threedigits + '-mosaic-fieldALL-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwALL-pb'+str(pblim)+'-cyclenit500'
+imagename= threedigits + 'dirty-mosaic-fieldALL-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spwALL-pb'+str(pblim)+'-cyclenit500'
 
 if os.path.exists(path+"/Images/"+imagename+".image.fits"):
     os.remove(path+"/Images/"+imagename+".image.fits")
@@ -84,7 +84,7 @@ tclean(vis=ms_list,
        gain=0.1,
        threshold=thresh,
        nsigma=0,
-       cycleniter=500,
+       cycleniter=0,
        cyclefactor=1,
        restart=True,
        calcres=True,
