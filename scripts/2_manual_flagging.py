@@ -227,6 +227,13 @@ elif threedigits=='208':
     scan='27,28'
     )
 
+
+    flagdata(
+    vis=msfilename,
+    mode='manual',
+    timerange='01:30:42.500~01:30:52.500'
+    )
+
 #-------------------------------------------------------------------
 elif threedigits=='970':
 
@@ -236,10 +243,11 @@ elif threedigits=='970':
     spw='0,1,7,9,10,11,12,13,14'
     )
 
+
     flagdata(
     vis=msfilename, 
     mode='manual',
-    scan='44'
+    spw='2'
     )
 
 #-------------------------------------------------------------------
@@ -249,6 +257,13 @@ elif threedigits=='587':
     vis=msfilename, 
     mode='manual',
     spw='0,1,7,9,10,11,12,13,14'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    field='PER_FIELD_*',
+    mode='manual',
+    scan='9'
     )
 
 

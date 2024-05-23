@@ -4,55 +4,46 @@ import time
 import os
 import numpy as np
 
-path = '../data'
-thresh = '5e-4'
-pblim = 0.06
-nit = 10000
-spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
+thresh = '2e-4'
+pblim = 0.001
+nit = 5000
+spw = [
+    #    2,
+    #    3 , 
+    #    4, 
+    #    5, 
+    #    6, 
+    #    8, 
+    #    15, 
+       16, 
+    #    17
+       ]
 
-phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
+def find_calibrated_files(base_directory):
+    calibrated_files = []
 
-def find_ms_folder(directory, startswith='19B-053', endswith=''):
-    """
-    Finds names of ms files in a directroy.
+    # Traverse through all directories and subdirectories
+    for root, dirs, files in os.walk(base_directory):
+        for directory in dirs:
+            if directory.startswith('19B-053'):
+                products_path = os.path.join(root, directory, 'products')
+                if os.path.exists(products_path):
+                    for file in os.listdir(products_path):
+                        if file.startswith('19B-053') and file.endswith('_calibrated.ms'):
+                            calibrated_files.append(os.path.join(products_path, file))
 
-    directory (str): The directory to search
-    startswith (str): The beginning of the file to search
-    endswith (str): The end of the file to search
+    return calibrated_files
 
-    Returns:
-    str : An array including the name of the ms files found.
-    """
-    folders_list = []
-    for file in os.listdir(directory):
-        if file.startswith(startswith):
-            if file.endswith(endswith):
-                folders_list.append(os.path.join(directory, file))                
-    return(folders_list)
+# Specify the base directory
+base_directory = '../data/'
 
+# Get the list of calibrated files
+ms_file_list = find_calibrated_files(base_directory)
 
-# pointings_folders = find_ms_folder(path + '/', "03")
+# Print the list of calibrated files
+for file in ms_file_list:
+    print(file)
 
-
-pointings_folders =['../data/03:25:30.000000_+29.29.59.99999']
-
-pointings_folders_list= []
-for i in pointings_folders:
-    pointings_folders_list.append(i+'/data')
-
-print(pointings_folders_list)
-print('================================================================')
-#----------------------------------------------------------------
-
-ms_file_list = []
-for j in np.array(pointings_folders_list):
-    ms_file = find_ms_folder(j + '/', "19B-053")
-    print ("MS File: ", ms_file)
-    for k in ms_file:
-        ms_file_list.append(k + '/products/targets.ms')
-
-print('================================================================')
-print(ms_file_list)
 
 #----------------------------------------------------------------
 
@@ -64,7 +55,7 @@ for s in spw:
     img_filename = path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject'
 
     tclean( vis=ms_file_list,
-            field="PER_FIELD_*",
+            field="PER_FIELD_*, J0336+3218",
             spw=str(s),
             timerange="",
             uvrange="",
@@ -73,34 +64,36 @@ for s in spw:
             intent="",
             datacolumn="corrected",
             imagename=img_filename,
-            imsize=[4860],
+            imsize=[10000],
             cell="2.5arcsec",
-            phasecenter=phase_center,
+            # phasecenter=phase_center,
             stokes='I',
-            projection="SIN",
+            # projection="SIN",
             specmode="mfs",
             gridder="awproject",
             mosweight=True,
-            cfcache="",
+            # cfcache="",
             pblimit=pblim,
-            normtype="flatnoise",
-            deconvolver="hogbom",
-            restoration=True,
-            restoringbeam=[],
+            # normtype="flatnoise",
+            deconvolver="mtmfs",
+            # restoration=True,
+            # restoringbeam=[],
             pbcor=True,
-            outlierfile="",
+            # outlierfile="",
             weighting="briggs",
             robust=0.5,
-            npixels=0,
+            # npixels=0,
             niter=nit,
             gain=0.1,
             threshold=thresh,
             nsigma=0,
-            cycleniter=500,
+            cycleniter=200,
             cyclefactor=1,
-            parallel=False,
+            parallel=True,
             psterm=True,
-            rotatepastep=5.0
+            nterm=2,
+            rotatepastep=5.0,
+            interactive=True,
             )
 
     toc = time.time()
@@ -108,26 +101,10 @@ for s in spw:
     print(f"Finshed the process in {round((toc-tic)/60)} minutes")
 
 
-###########################################################################################
-
-# for s in spw:
-
-#     image_name =   path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image'
-#     smo_image_name =   path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.smo'
-
-#     imsmooth(imagename = image_name,
-#             targetres = True,
-#             major = '60arcsec',
-#             minor ='35arcsec',
-#             pa='0.0deg',
-#             outfile = smo_image_name,
-#             overwrite=True
-#             )     
-
 ############################################################################################
 
 for s in spw:
     exportfits(
-        imagename =  path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject' + '.image',
-        fitsimage =  path + "/concat/total/Images/img" + str(nit) + "/fits/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject' + '.image.fits'           
+        imagename =  path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "16-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject' + '.image',
+        fitsimage =  path + "/concat/total/Images/img" + str(nit) + "/fits/" +  "16-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject' + '.image.fits'           
     )

@@ -25,4 +25,4 @@ print('splitting targets is done!')
 
 
 
-statwt(vis=path+'/targets.ms',datacolumn='data',minsamp=8)
+statwt(vis=path+'/targets.ms',datacolumn='corrected',minsamp=8)
