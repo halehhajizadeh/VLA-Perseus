@@ -105,6 +105,6 @@ for s in spw:
 
 for s in spw:
     exportfits(
-        imagename =  path + "/concat/total/Images/img" + str(nit) + "/tclean/" +  "16-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject' + '.image',
-        fitsimage =  path + "/concat/total/Images/img" + str(nit) + "/fits/" +  "16-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject' + '.image.fits'           
+        imagename =  base_directory + "concat/total/Images/img" + str(nit) + "/tclean/" +  "16-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject' + '.image',
+        fitsimage =  base_directory + "concat/total/Images/img" + str(nit) + "/fits/" +  "16-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject' + '.image.fits'           
     )
