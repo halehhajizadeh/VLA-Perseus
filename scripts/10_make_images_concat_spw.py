@@ -91,7 +91,7 @@ for s in spw:
             cyclefactor=1,
             parallel=True,
             psterm=True,
-            nterm=2,
+            nterms=2,
             rotatepastep=5.0,
             interactive=True,
             )
