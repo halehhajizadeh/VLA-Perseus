@@ -93,7 +93,7 @@ for s in spw:
             psterm=True,
             nterms=2,
             rotatepastep=5.0,
-            interactive=True,
+            interactive=False,
             )
 
     toc = time.time()
