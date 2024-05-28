@@ -28,9 +28,11 @@ def find_ms_folder(directory, startswith='19B-053', endswith=''):
 folders_list = find_ms_folder(path, "19B-053")
 
 ms_list = []
-for i in folders_list:
-    ms_list.append(i + '/products/' + i.split('/')[-1] + '_calibrated.ms')
-
+for folder in folders_list:
+    products_path = os.path.join(folder, 'products')
+    for file_name in os.listdir(products_path):
+        if file_name.endswith('_calibrated.ms'):
+            ms_list.append(os.path.join(products_path, file_name))
 
 print(ms_list)
 
