@@ -244,12 +244,6 @@ elif threedigits=='970':
     )
 
 
-    flagdata(
-    vis=msfilename, 
-    mode='manual',
-    spw='2'
-    )
-
 #-------------------------------------------------------------------
 elif threedigits=='587':
 

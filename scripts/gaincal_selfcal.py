@@ -171,8 +171,7 @@ applycal(vis='19B-053.sb37659292.eb37739287.58869.013119236115_flagged.ms/',
          gaintable=['pcal1'],
          gainfield='',
          calwt=False,
-         flagbackup=False,
-         interp='linearperobs')
+         flagbackup=False)
 
 flagmanager(vis='19B-053.sb37659292.eb37739287.58869.013119236115_flagged.ms/',mode='save',versionname='after_pcal1')
 
@@ -271,11 +270,10 @@ gaincal(vis='19B-053.sb37659292.eb37739287.58869.013119236115_flagged.ms/',
 
 
 applycal(vis='19B-053.sb37659292.eb37739287.58869.013119236115_flagged.ms/',
-         field='PER_FIELD_*',
+         field='PER_FIELD_*, J0336+3218',
          gaintable=['pcal4','apcal'],
          gainfield='',
          calwt=False,
-         flagbackup=False,
-         interp='linearperobs')
+         flagbackup=False)
 
 flagmanager(vis='19B-053.sb37659292.eb37739287.58869.013119236115_flagged.ms/',mode='save',versionname='after_pcal5')
