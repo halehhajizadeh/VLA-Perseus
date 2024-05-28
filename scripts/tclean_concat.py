@@ -4,7 +4,7 @@ import shutil
 import os
 from glob import glob
 
-path='../data/03:32:04.530001_+31.05.04.00000/data/'
+path='../data/03:34:30.000000_+31.59.59.99999/data/'
 
 def find_ms_folder(directory, startswith='19B-053', endswith=''):
     """
@@ -29,42 +29,41 @@ folders_list = find_ms_folder(path, "19B-053")
 
 ms_list = []
 for i in folders_list:
-    ms_list.append(i+'/products/targets.ms')
+    ms_list.append(i + '/products/' + i.split('/')[-1] + '_calibrated.ms')
+
 
 print(ms_list)
 
 
-pblim = 0.06
+pblim = 0.001
 nit = 5000
-Stoke = 'U'
+Stoke = 'I'
 thresh='1e-4'
-phase_center='J2000 03:32:04.530001 +31.05.04.00000'
-
-imagename = '1original-'+'mosaic-fieldAll-Stokes'+str(Stoke)+'-2.5arc-'+str(nit)+'-'+str(thresh)+'-spw16-pb'+str(pblim)+'-cyclenit500'
+phase_center='J2000 03:36:30.200000 +32.18.28.00000'
+imagename = 'mosaic3'
 
 
 tclean(vis=ms_list,
-       field="PER_FIELD_*",
-       spw="16:5~60",
+       field="PER_FIELD_*, J0336+3218",
+       spw="",
        timerange="",
-       uvrange=">75m",
        antenna="",
        observation="",
        intent="",
        datacolumn="corrected",
        imagename=path+imagename,
-       imsize=[4320],
+       imsize=[5000],
        cell="2.5arcsec",
        phasecenter=phase_center,
        stokes=Stoke,
        projection="SIN",
        specmode="mfs",
-       gridder="mosaic",
+       gridder="awproject",
        mosweight=True,
        cfcache="",
        pblimit=pblim,
        normtype="flatnoise",
-       deconvolver="hogbom",
+       deconvolver="mtmfs",
        restoration=True,
        restoringbeam=[],
        pbcor=True,
@@ -77,13 +76,14 @@ tclean(vis=ms_list,
        gain=0.1,
        threshold=thresh,
        nsigma=0,
-       cycleniter=500,
+       nterms=2,
+       rotatepastep=5.0,
+       cycleniter=200,
        cyclefactor=1,
        restart=True,
        calcres=True,
        calcpsf=True,
-       parallel=False,
-       interactive=False)
+       parallel=True,
+       interactive=True)
 
-exportfits(path+imagename+".image", path+imagename+".image.fits")
 
