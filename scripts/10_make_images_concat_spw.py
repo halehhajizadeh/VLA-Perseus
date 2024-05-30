@@ -18,6 +18,7 @@ spw = [
        16, 
     #    17
        ]
+phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
 
 def find_calibrated_files(base_directory):
     calibrated_files = []
@@ -52,7 +53,7 @@ for s in spw:
     tic = time.time()
     print(f"Stokes: I, s: {s} is started ...")
 
-    img_filename = base_directory + "concat/total/Images/img" + str(nit) + "/tclean/" +  "4-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject'
+    img_filename = base_directory + "concat/total/Images/img" + str(nit) + "/tclean/" +  "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject'
 
     tclean( vis=ms_file_list,
             field="PER_FIELD_*, J0336+3218",
@@ -66,7 +67,7 @@ for s in spw:
             imagename=img_filename,
             imsize=[10000],
             cell="2.5arcsec",
-            # phasecenter=phase_center,
+            phasecenter=phase_center,
             stokes='I',
             # projection="SIN",
             specmode="mfs",
@@ -103,8 +104,3 @@ for s in spw:
 
 ############################################################################################
 
-for s in spw:
-    exportfits(
-        imagename =  base_directory + "concat/total/Images/img" + str(nit) + "/tclean/" +  "16-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject' + '.image',
-        fitsimage =  base_directory + "concat/total/Images/img" + str(nit) + "/fits/" +  "16-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject' + '.image.fits'           
-    )
