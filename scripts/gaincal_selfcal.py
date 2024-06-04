@@ -156,7 +156,7 @@ tclean(vis='19B-053.sb37659292.eb37739287.58869.013119236115_flagged.ms/',
        rotatepastep=5.0)
 
 rmtables('pcal1')
-gaincal(vis='19B-053.sb37659292.eb37739287.58869.013119236115_flagged.ms/',
+gaincal(vis='19B-053.sb37659292.eb37739287.58869.013119236115_calibrated.ms/',
         caltable='pcal1',
         field='PER_FIELD_*, J0336+3218',
         gaintype='G',
@@ -166,9 +166,20 @@ gaincal(vis='19B-053.sb37659292.eb37739287.58869.013119236115_flagged.ms/',
         minsnr=3.0,
         minblperant=6)
 
-applycal(vis='19B-053.sb37659292.eb37739287.58869.013119236115_flagged.ms/',
+rmtables('bpcal1')
+bandpass(vis='19B-053.sb37659292.eb37739287.58869.013119236115_calibrated.ms/',
+        caltable='bpcal1',
+        field='PER_FIELD_*, J0336+3218',
+        bandtype='B',
+        refant='ea16',
+        solint='inf',
+        minsnr=3.0,
+        minblperant=6,
+        solnorm=False)
+
+applycal(vis='19B-053.sb37659292.eb37739287.58869.013119236115_calibrated.ms/',
          field='PER_FIELD_*,  J0336+3218',
-         gaintable=['pcal1'],
+         gaintable=['bpcal1'],
          gainfield='',
          calwt=False,
          flagbackup=False)
