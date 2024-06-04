@@ -240,7 +240,20 @@ elif threedigits=='970':
     flagdata(
     vis=msfilename, 
     mode='manual',
-    spw='0,1,7,9,10,11,12,13,14'
+    spw='0,1,2,7,8,9,10,11,12,13,14'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='3:0~10'
+    )
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    field='PER_FIELD_39',
+    spw='4:14~17, 5:14~17'
     )
 
 
