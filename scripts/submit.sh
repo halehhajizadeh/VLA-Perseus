@@ -11,4 +11,4 @@
 CASAPATH=/home/casa/packages/RHEL7/release/current/bin/ # Use a specific version of CASA
 # CASAPATH=/opt/local/bin/
 
-xvfb-run -d ${CASAPATH}/mpicasa -n 16 ${CASAPATH}/casa -c /lustre/aoc/observers/nm-12934/VLA-Perseus/scripts/10_make_images_concat_spw.py >>file.txt 2>&1
+xvfb-run -d ${CASAPATH}/mpicasa -n 16 ${CASAPATH}/casa /lustre/aoc/observers/nm-12934/VLA-Perseus/scripts/10_make_images_concat_spw.py >>file.txt 2>&1
