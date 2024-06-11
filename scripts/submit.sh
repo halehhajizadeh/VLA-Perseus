@@ -10,4 +10,6 @@
 
 CASAPATH=/home/casa/packages/RHEL7/release/current/bin/ # Use a specific version of CASA
 
-xvfb-run -d ${CASAPATH}mpicasa ${CASAPATH}casa --nogui -c /lustre/aoc/observers/nm-12934/VLA-Perseus/scripts/10_make_images_concat_spw.py >>file.txt 2>&1
+#srun hostname > /tmp/machinefile.$$
+xvfb-run -d ${CASAPATH}mpicasa -machinefile /tmp/machinefile.$$ ${CASAPATH}casa --nogui -c /lustre/aoc/observers/nm-12934/VLA-Perseus/scripts/10_make_images_concat_spw.py >>file.txt 2>&1
+#rm -f /tmp/machinefile.$$
