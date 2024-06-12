@@ -221,11 +221,6 @@ elif threedigits=='208':
     spw='0,1,7,9,10,11,12,13,14'
     )
 
-    flagdata(
-    vis=msfilename, 
-    mode='manual',
-    scan='27,28'
-    )
 
 
     flagdata(
