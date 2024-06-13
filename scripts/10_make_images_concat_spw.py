@@ -4,9 +4,9 @@ import time
 import os
 import numpy as np
 
-thresh = '2e-4'
+thresh = '1e-4'
 pblim = -0.01
-nit = 5000
+nit = 6500
 spw = [
     #    2,
     #    3 , 
@@ -88,7 +88,7 @@ for s in spw:
             gain=0.1,
             threshold=thresh,
             nsigma=0,
-            cycleniter=200,
+            cycleniter=500,
             cyclefactor=1,
             parallel=True,
             psterm=True,

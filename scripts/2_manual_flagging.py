@@ -195,7 +195,7 @@ elif threedigits=='102':
     flagdata(
     vis=msfilename, 
     mode='manual',
-    spw='7,9,10,11,12'
+    spw='0,1,7,9,10,11,12,13,14',
     )
     flagdata(
     vis=msfilename, 
@@ -209,7 +209,7 @@ elif threedigits=='263':
     flagdata(
     vis=msfilename, 
     mode='manual',
-    spw='7'
+    spw='0,1,7,9,10,11,12,13,14'
     )
   
 #-------------------------------------------------------------------
@@ -221,6 +221,11 @@ elif threedigits=='208':
     spw='0,1,7,9,10,11,12,13,14'
     )
 
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    scan='27,28'
+    )
 
 
     flagdata(
@@ -228,6 +233,8 @@ elif threedigits=='208':
     mode='manual',
     timerange='01:30:42.500~01:30:52.500'
     )
+
+    #some manual flaggings
 
 #-------------------------------------------------------------------
 elif threedigits=='970':
