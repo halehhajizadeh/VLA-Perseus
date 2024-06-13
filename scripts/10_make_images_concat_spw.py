@@ -5,7 +5,7 @@ import os
 import numpy as np
 
 thresh = '1e-4'
-pblim = -0.01
+pblim = 0.001
 nit = 6500
 spw = [
     #    2,
