@@ -4,7 +4,7 @@
 #SBATCH --chdir=/lustre/aoc/observers/nm-12934/VLA-Perseus/scripts               # Working directory
 #SBATCH --time=14-0:0:0                        # Request 8 days
 #SBATCH --mem=256G                            # Memory for the whole job
-#SBATCH --nodes=5                             # Request 3 node
+#SBATCH --nodes=8                             # Request 8 node
 #SBATCH --ntasks-per-node=16                  # Request 16 cores (adjust if necessary)
 
 
