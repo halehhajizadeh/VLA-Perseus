@@ -5,7 +5,7 @@ import os
 import numpy as np
 
 thresh = '1e-4'
-pblim = 0.001
+pblim = -0.001
 nit = 6500
 spw = [
     #    2,
@@ -53,7 +53,7 @@ for s in spw:
     tic = time.time()
     print(f"Stokes: I, s: {s} is started ...")
 
-    img_filename = base_directory + "concat/total/Images/img" + str(nit) + "/tclean/" +  "2-spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject'
+    img_filename = base_directory + "concat/total/Images/img" + str(nit) + "/tclean/" +  "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject'
 
     tclean( vis=ms_file_list,
             field="PER_FIELD_*, J0336+3218",
@@ -65,7 +65,7 @@ for s in spw:
             intent="",
             datacolumn="corrected",
             imagename=img_filename,
-            imsize=[12500],
+            imsize=[10000],
             cell="2.5arcsec",
             phasecenter=phase_center,
             stokes='I',
