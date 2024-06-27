@@ -4,7 +4,7 @@ import time
 import os
 import numpy as np
 
-thresh = '1e-4'
+# thresh = '1e-4'
 pblim = -0.001
 nit = 6500
 spw = [
@@ -18,7 +18,8 @@ spw = [
        16, 
     #    17
        ]
-phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
+# phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
+phase_center='J2000 03:28:27.7 +30.26.17'
 
 def find_calibrated_files(base_directory):
     calibrated_files = []
@@ -69,26 +70,20 @@ for s in spw:
             cell="2.5arcsec",
             phasecenter=phase_center,
             stokes='I',
-            # projection="SIN",
             specmode="mfs",
             gridder="awproject",
             mosweight=True,
             # cfcache="",
             pblimit=pblim,
-            # normtype="flatnoise",
             deconvolver="mtmfs",
-            # restoration=True,
-            # restoringbeam=[],
             pbcor=True,
-            # outlierfile="",
             weighting="briggs",
             robust=0.5,
-            # npixels=0,
             niter=nit,
             gain=0.1,
-            threshold=thresh,
-            nsigma=0,
-            cycleniter=500,
+            # threshold=thresh,
+            nsigma=3,
+            cycleniter=200,
             cyclefactor=1,
             parallel=True,
             psterm=True,
