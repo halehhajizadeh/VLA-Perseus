@@ -19,7 +19,7 @@ spw = [
     #    17
        ]
 # phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
-phase_center='J2000 03:28:27.7 +30.26.17'
+phase_center='J2000 03:28:27.7 +30.26.17.00000'
 
 def find_calibrated_files(base_directory):
     calibrated_files = []
@@ -54,7 +54,7 @@ for s in spw:
     tic = time.time()
     print(f"Stokes: I, s: {s} is started ...")
 
-    img_filename = base_directory + "concat/total/Images/img" + str(nit) + "/tclean/" +  "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-awproject'
+    img_filename = base_directory + "concat/total/Images/img" + str(nit) + "/tclean/" +  "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject'
 
     tclean( vis=ms_file_list,
             field="PER_FIELD_*, J0336+3218",
