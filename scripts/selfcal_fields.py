@@ -5,27 +5,10 @@ import os
 import numpy as np
 
 
-def find_calibrated_files(base_directory):
-    calibrated_files = []
-
-    # Traverse through all directories and subdirectories
-    for root, dirs, files in os.walk(base_directory):
-        for directory in dirs:
-            if directory.startswith('19B-053'):
-                products_path = os.path.join(root, directory, 'products')
-                if os.path.exists(products_path):
-                    for file in os.listdir(products_path):
-                        if file.startswith('19B-053') and file.endswith('_calibrated_working.ms'):
-                            calibrated_files.append(os.path.join(products_path, file))
-    return calibrated_files
-
-# Specify the base directory
-base_directory = '../data/19B-053_2020_01_21_T08_37_05.970/'
-
 # Get the list of calibrated files
-ms_file = find_calibrated_files(base_directory)
+ms_file = '../data/19B-053_2020_01_21_T08_37_05.970/products/ 19B-053.sb37659292.eb37739287.58869.013119236115_calibrated_working.ms/'
 
-for i in range (54):
+for i in range (53):
 
         tclean(vis=ms_file,
         field='PER_FIELD_'+str(i),       
@@ -109,7 +92,6 @@ for i in range (54):
 
 
 ####################################################################################
-
 
 tclean(vis=ms_file,
 field='J0336+3218',       
