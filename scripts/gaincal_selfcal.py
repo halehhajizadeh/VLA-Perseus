@@ -102,22 +102,27 @@ plotms(vis='selfcal_combine_pol_solint_48_6.tb',
 
 tclean(vis='19B-053.sb37659292.eb37739287.58869.013119236115_flagged.ms/',
        imagename='initial',
-       field='PER_FIELD_*',
+       stokes='I',
+       field='PER_FIELD_*, J0336+3218',
        phasecenter='J2000 03:36:30.200000 +32.18.28.00000',
        mosweight=True,
        specmode='mfs',
-       deconvolver='hogbom',
+       deconvolver='mtmfs',
        imsize=[5000], 
        cell= '2.5arcsec', 
        weighting='briggs', 
        robust=0.5,
-       niter=200, 
+       niter=300, 
        threshold='1e-1', 
-       interactive=True,
+       weighting="briggs",
        gridder='awproject',
-       savemodel='modelcolumn',
-       usepointing=False,
-       rotatepastep=5.0)
+       savemodel='modelcolumn',        
+       parallel=True,
+       psterm=True,
+       nterms=2,
+       rotatepastep=5.0,
+       interactive=False,
+       mask='../../masks/totat1.mask')
 
 
 tclean(vis='test.ms',
@@ -156,33 +161,25 @@ tclean(vis='19B-053.sb37659292.eb37739287.58869.013119236115_flagged.ms/',
        rotatepastep=5.0)
 
 rmtables('pcal1')
-gaincal(vis='19B-053.sb37659292.eb37739287.58869.013119236115_calibrated.ms/',
-        caltable='pcal1',
-        field='PER_FIELD_*, J0336+3218',
+gaincal(vis='19B-053.sb37659292.eb37739287.58869.013119236115_calibrated_working.ms/',
+        caltable='mpcal1',
+        field='J0336+3218, PER_FIELD_*',
         gaintype='G',
-        refant='ea16',
         calmode='p',
-        solint='inf',
-        minsnr=3.0,
-        minblperant=6)
+        solint='int')
 
 rmtables('bpcal1')
-bandpass(vis='19B-053.sb37659292.eb37739287.58869.013119236115_calibrated.ms/',
+bandpass(vis='19B-053.sb37659292.eb37739287.58869.013119236115_calibrated_working.ms/',
         caltable='bpcal1',
-        field='PER_FIELD_*, J0336+3218',
+        gaintable='pcal2'
+        field='J0336+3218, PER_FIELD_*',
         bandtype='B',
-        refant='ea16',
-        solint='inf',
-        minsnr=3.0,
-        minblperant=6,
-        solnorm=False)
+        solint='int')
 
-applycal(vis='19B-053.sb37659292.eb37739287.58869.013119236115_calibrated.ms/',
-         field='PER_FIELD_*,  J0336+3218',
-         gaintable=['bpcal1'],
-         gainfield='',
-         calwt=False,
-         flagbackup=False)
+applycal(vis='19B-053.sb37659292.eb37739287.58869.013119236115_calibrated_working.ms/',
+         field='J0336+3218, PER_FIELD_*',
+         gaintable=['mpcal1'])
+
 
 flagmanager(vis='19B-053.sb37659292.eb37739287.58869.013119236115_flagged.ms/',mode='save',versionname='after_pcal1')
 
