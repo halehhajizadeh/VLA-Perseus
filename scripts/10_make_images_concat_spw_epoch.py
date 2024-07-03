@@ -109,14 +109,14 @@ print(ms_file_list)
 # ############################################################################################
 
 
-for ms in ms_file_list:
-    print('================================================================')
-    print(ms)
+# for ms in ms_file_list:
+#     print('================================================================')
+#     print(ms)
  
-    tic = time.time()
-    print(f"Stokes: I, folder: {ms} is started ...")
-    digits=ms.split('/')[-1]
-    exportfits(
-        imagename =  path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image',
-        fitsimage =  path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/fits/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
-    )
+#     tic = time.time()
+#     print(f"Stokes: I, folder: {ms} is started ...")
+#     digits=ms.split('/')[-1]
+#     exportfits(
+#         imagename =  path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/tclean/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image',
+#         fitsimage =  path + '/concat/' + threedigits + "/Images/img" + str(nit) + "/fits/" +  "4-" + digits + "-spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + '-mosaic' + '.image.fits'           
+#     )
