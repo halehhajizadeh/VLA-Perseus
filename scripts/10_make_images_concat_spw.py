@@ -18,7 +18,7 @@ spw = [
        16, 
        17
        ]
-phase_center = 'J2000 03:23:30.000001 +31.30.00.00000'
+phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
 
 def find_calibrated_files(base_directory):
     calibrated_files = []
@@ -36,7 +36,7 @@ def find_calibrated_files(base_directory):
     return calibrated_files
 
 # Specify the base directory
-mosaic_name = '03:23:30.000001_+31.30.00.00000/'
+mosaic_name = '03:25:30.000000_+29.29.59.99999/'
 base_directory = '../data/' + mosaic_name
 
 # Get the list of calibrated files
