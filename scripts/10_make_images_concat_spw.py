@@ -83,7 +83,7 @@ for s in spw:
             niter=nit,
             gain=0.1,
             threshold=thresh,
-            nsigma=3,
+            # nsigma=3,
             # cycleniter=200,
             cyclefactor=1,
             parallel=True,
