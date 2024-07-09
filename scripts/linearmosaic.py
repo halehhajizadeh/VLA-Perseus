@@ -1,21 +1,27 @@
 import os
 import glob
 
-spw = [2, 3, 4, 5, 6, 8, 15, 16, 17]
+spw = [
+       2,
+       3 , 
+       4, 
+       5, 
+       6, 
+       8, 
+       15, 
+       16, 
+       17
+       ]
 
-base_directory = '../data/concat/total/'
+base_directory = '../data/concat/total/' 
 
 specific_dirs = [
-    '03:23:30.000001_+31.30.00.00000/tclean/',
-    '03:32:04.530001_+31.05.04.00000/tclean/',
-    '03:36:00.000000_+30.30.00.00001/tclean/',
+    '03:23:30.000001_+31.30.00.00000/tclean/',  
+    '03:32:04.530001_+31.05.04.00000/tclean/',  
+    '03:36:00.000000_+30.30.00.00001/tclean/',  
     '03:25:30.000000_+29.29.59.99999/tclean/',
-    # '03:34:30.000000_+31.59.59.99999/tclean/'
+#     '03:34:30.000000_+31.59.59.99999/tclean/'
 ]
-
-# Ensure the output directory exists
-output_directory = os.path.join(base_directory, 'bigmosaic/mosaic/')
-os.makedirs(output_directory, exist_ok=True)
 
 # Iterate through each specific directory
 for dir_path in specific_dirs:
@@ -24,8 +30,8 @@ for dir_path in specific_dirs:
     
     # Ensure the directory exists
     if os.path.isdir(full_path):
-        # Iterate through the specified spw values
-        for i in spw:
+        # Iterate through potential spw(i) values (assuming i ranges from 0 to some max value)
+        for i in spw:  # Adjust the range as needed
             pattern_image = os.path.join(full_path, f'spw{i}*.image.tt0')
             pattern_pb = os.path.join(full_path, f'spw{i}*.pb.tt0')
             
@@ -33,23 +39,22 @@ for dir_path in specific_dirs:
             images_list = glob.glob(pattern_image)
             pb_list = glob.glob(pattern_pb)
             
-            # Ensure that there are matching images and primary beams
-            if images_list and pb_list:
-                # Regrid images to the same coordinate system
-                regridded_images = []
-                for image in images_list:
-                    regridded_image = image.replace('.image.tt0', '_regrid.image.tt0')
-                    imregrid(imagename=image, template=images_list[0], output=regridded_image)
-                    regridded_images.append(regridded_image)
-                
-                # Construct the output mosaic name
-                mosaic_output = os.path.join(output_directory, f'mosaic_spw{i}.image')
-                
-                # Run the linmos task
-                linmos(imagename=regridded_images, outfile=mosaic_output)
-                
-                print(f"Created mosaic for SPW {i}: {mosaic_output}")
-            else:
-                print(f"No matching images or primary beams found for SPW {i} in {full_path}")
+            # Print or process the found files
+            for file in images_list:
+                print(file)
+
+            for file in pb_list:
+                print(file)    
+                # Additional processing can be done here
+
+              im.linearmosaic(imagename=images_list,
+              mosaic=base_directory + 'bigmosaic/mosaic/' + f'mosaic_spw{i}',
+              pbimage=pb_list,
+              regrid=False,
+              interpolation='linear',
+              imoutput='mosaic')
+
+
     else:
         print(f"Directory does not exist: {full_path}")
+
