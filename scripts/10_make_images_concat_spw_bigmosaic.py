@@ -79,7 +79,7 @@ for s in spw:
             intent="",
             datacolumn="corrected",
             imagename=img_filename,
-            imsize=[4096],
+            imsize=[8000],
             cell="2.5arcsec",
             phasecenter=phase_center,
             stokes='I',
