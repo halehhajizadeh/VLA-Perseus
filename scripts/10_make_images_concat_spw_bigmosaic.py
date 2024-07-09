@@ -27,11 +27,13 @@ def find_calibrated_files(base_directory, specific_dirs):
     for directory in specific_dirs:
         full_path = os.path.join(base_directory, directory)
         if os.path.exists(full_path) and os.path.isdir(full_path):
-            products_path = os.path.join(full_path, 'products')
-            if os.path.exists(products_path):
-                for file in os.listdir(products_path):
-                    if file.startswith('19B-053') and file.endswith('_calibrated.ms'):
-                        calibrated_files.append(os.path.join(products_path, file))
+            # Traverse all subdirectories within each specific directory
+            for root, dirs, files in os.walk(full_path):
+                products_path = os.path.join(root, 'products')
+                if os.path.exists(products_path) and os.path.isdir(products_path):
+                    for file in os.listdir(products_path):
+                        if file.startswith('19B-053') and file.endswith('_calibrated.ms'):
+                            calibrated_files.append(os.path.join(products_path, file))
 
     return calibrated_files
 
