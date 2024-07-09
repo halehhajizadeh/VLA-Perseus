@@ -47,7 +47,7 @@ specific_dirs = [
 
 # Specify the base directory
 mosaic_name = 'bigmosaic/'
-base_directory = '../data/' + mosaic_name
+base_directory = '../data/' 
 
 # Get the list of calibrated files
 ms_file_list = find_calibrated_files(base_directory, specific_dirs)
