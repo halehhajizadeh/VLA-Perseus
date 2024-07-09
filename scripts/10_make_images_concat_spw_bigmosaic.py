@@ -44,20 +44,13 @@ specific_dirs = [
     '03:25:30.000000_+29.29.59.99999/'
 ]
 
-calibrated_files = find_calibrated_files(base_directory, specific_dirs)
-
-# Print the list of calibrated files
-for file in calibrated_files:
-    print(file)
-
-
 
 # Specify the base directory
 mosaic_name = 'bigmosaic/'
 base_directory = '../data/' + mosaic_name
 
 # Get the list of calibrated files
-ms_file_list = find_calibrated_files(base_directory)
+ms_file_list = find_calibrated_files(base_directory, specific_dirs)
 
 # Print the list of calibrated files
 print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
