@@ -49,11 +49,12 @@ for i in spw:
                      print(file)    
                      # Additional processing can be done here
 
-              im.linearmosaic(imagename=images_list,
+              im.linearmosaic(images=images_list,
               mosaic=base_directory + 'bigmosaic/mosaic/' + f'mosaic_spw{i}',
-              pbimage=pb_list,
-              regrid=False,
-              interpolation='linear',
-              imoutput='mosaic')
+              # pbimage=pb_list,
+              # regrid=False,
+              # interpolation='linear',
+              # imoutput='mosaic'
+              )
 
 
