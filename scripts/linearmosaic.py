@@ -35,21 +35,21 @@ for dir_path in specific_dirs:
             
             # Ensure that there are matching images and primary beams
             if images_list and pb_list:
-                # Construct the output mosaic name
-                mosaic_output = os.path.join(output_directory, f'mosaic_spw{i}')
+                # Regrid images to the same coordinate system
+                regridded_images = []
+                for image in images_list:
+                    regridded_image = image.replace('.image.tt0', '_regrid.image.tt0')
+                    imregrid(imagename=image, template=images_list[0], output=regridded_image)
+                    regridded_images.append(regridded_image)
                 
-                # Run the linearmosaic task
-                linearmosaic(imagename=images_list,
-                             mosaic=mosaic_output,
-                             pbimage=pb_list,
-                             regrid=False,
-                             interpolation='linear',
-                             imoutput='mosaic')
+                # Construct the output mosaic name
+                mosaic_output = os.path.join(output_directory, f'mosaic_spw{i}.image')
+                
+                # Run the linmos task
+                linmos(imagename=regridded_images, outfile=mosaic_output)
                 
                 print(f"Created mosaic for SPW {i}: {mosaic_output}")
             else:
                 print(f"No matching images or primary beams found for SPW {i} in {full_path}")
     else:
         print(f"Directory does not exist: {full_path}")
-
-
