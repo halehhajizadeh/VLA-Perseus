@@ -23,29 +23,31 @@ specific_dirs = [
 #     '03:34:30.000000_+31.59.59.99999/tclean/'
 ]
 
-# Iterate through each specific directory
-for dir_path in specific_dirs:
-    # Construct the full path
-    full_path = os.path.join(base_directory, dir_path)
-    
-    # Ensure the directory exists
-    if os.path.isdir(full_path):
-        # Iterate through potential spw(i) values (assuming i ranges from 0 to some max value)
-        for i in spw:  # Adjust the range as needed
-            pattern_image = os.path.join(full_path, f'spw{i}*.image.tt0')
-            pattern_pb = os.path.join(full_path, f'spw{i}*.pb.tt0')
-            
-            # Find all files matching the pattern
-            images_list = glob.glob(pattern_image)
-            pb_list = glob.glob(pattern_pb)
-            
-            # Print or process the found files
-            for file in images_list:
-                print(file)
 
-            for file in pb_list:
-                print(file)    
-                # Additional processing can be done here
+for i in spw: 
+       # Iterate through each specific directory
+       for dir_path in specific_dirs:
+       # Construct the full path
+              full_path = os.path.join(base_directory, dir_path)
+       
+       # Ensure the directory exists
+              if os.path.isdir(full_path):
+              # Iterate through potential spw(i) values (assuming i ranges from 0 to some max value)
+                     # Adjust the range as needed
+                     pattern_image = os.path.join(full_path, f'spw{i}*.image.tt0')
+                     pattern_pb = os.path.join(full_path, f'spw{i}*.pb.tt0')
+                     
+                     # Find all files matching the pattern
+                     images_list = glob.glob(pattern_image)
+                     pb_list = glob.glob(pattern_pb)
+                     
+              # Print or process the found files
+              for file in images_list:
+                     print(file)
+
+              for file in pb_list:
+                     print(file)    
+                     # Additional processing can be done here
 
               im.linearmosaic(imagename=images_list,
               mosaic=base_directory + 'bigmosaic/mosaic/' + f'mosaic_spw{i}',
@@ -54,7 +56,4 @@ for dir_path in specific_dirs:
               interpolation='linear',
               imoutput='mosaic')
 
-
-    else:
-        print(f"Directory does not exist: {full_path}")
 
