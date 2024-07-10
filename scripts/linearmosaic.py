@@ -49,10 +49,9 @@ for i in spw:
     
     # Check if we have images to process
     if images_list:
-        im.linearmosaic(images=images_list,
+        im.linearmosaic(imagename=images_list,
                         mosaic=os.path.join(base_directory, 'bigmosaic', f'mosaic_spw{i}'),
-                        pbimage=pb_list if pb_list else None,
-                        regrid=False,
-                        interpolation='linear')
+                        interp='linear')
 
-
+        # If you have primary beam correction (PB) images, you can apply them separately if needed
+        # This may require an additional step outside of linearmosaic, depending on your processing needs.
