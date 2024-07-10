@@ -2,16 +2,16 @@ import os
 import glob
 
 spw = [
-       2,
-       3 , 
-       4, 
-       5, 
-       6, 
-       8, 
-       15, 
-       16, 
-       17
-       ]
+    2,
+    3, 
+    4, 
+    5, 
+    6, 
+    8, 
+    15, 
+    16, 
+    17
+]
 
 base_directory = '../data/concat/total/' 
 
@@ -20,41 +20,39 @@ specific_dirs = [
     '03:32:04.530001_+31.05.04.00000/tclean/',  
     '03:36:00.000000_+30.30.00.00001/tclean/',  
     '03:25:30.000000_+29.29.59.99999/tclean/',
-#     '03:34:30.000000_+31.59.59.99999/tclean/'
+    # '03:34:30.000000_+31.59.59.99999/tclean/'
 ]
 
-
 for i in spw: 
-       # Iterate through each specific directory
-       for dir_path in specific_dirs:
-       # Construct the full path
-              full_path = os.path.join(base_directory, dir_path)
-       
-       # Ensure the directory exists
-              if os.path.isdir(full_path):
-              # Iterate through potential spw(i) values (assuming i ranges from 0 to some max value)
-                     # Adjust the range as needed
-                     pattern_image = os.path.join(full_path, f'spw{i}*.image.tt0')
-                     pattern_pb = os.path.join(full_path, f'spw{i}*.pb.tt0')
-                     
-                     # Find all files matching the pattern
-                     images_list = glob.glob(pattern_image)
-                     pb_list = glob.glob(pattern_pb)
-                     
-              # Print or process the found files
-              for file in images_list:
-                     print(file)
+    images_list = []
+    pb_list = []
 
-              for file in pb_list:
-                     print(file)    
-                     # Additional processing can be done here
+    # Iterate through each specific directory
+    for dir_path in specific_dirs:
+        # Construct the full path
+        full_path = os.path.join(base_directory, dir_path)
+        
+        # Ensure the directory exists
+        if os.path.isdir(full_path):
+            # Find all files matching the pattern
+            pattern_image = os.path.join(full_path, f'spw{i}*.image.tt0')
+            pattern_pb = os.path.join(full_path, f'spw{i}*.pb.tt0')
+            images_list.extend(glob.glob(pattern_image))
+            pb_list.extend(glob.glob(pattern_pb))
+    
+    # Print or process the found files
+    for file in images_list:
+        print(file)
 
-              im.linearmosaic(images=images_list,
-              mosaic=base_directory + 'bigmosaic/mosaic/' + f'mosaic_spw{i}',
-              # pbimage=pb_list,
-              # regrid=False,
-              # interpolation='linear',
-              # imoutput='mosaic'
-              )
+    for file in pb_list:
+        print(file)
+    
+    # Check if we have images to process
+    if images_list:
+        im.linearmosaic(images=images_list,
+                        mosaic=os.path.join(base_directory, 'bigmosaic', f'mosaic_spw{i}'),
+                        pbimage=pb_list if pb_list else None,
+                        regrid=False,
+                        interpolation='linear')
 
 
