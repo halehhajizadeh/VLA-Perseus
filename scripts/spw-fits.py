@@ -28,13 +28,13 @@ for data in specific_dirs:
         fits_file = base_directory + data + subdir_f + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.fits'
         print(image_file)
 
-        # Check if smo file exists and delete if it does
-        if os.path.exists(smo_file):
+        # Check if smo path is a file and delete if it does
+        if os.path.isfile(smo_file):
             os.remove(smo_file)
             print(f"Deleted existing file: {smo_file}")
 
-        # Check if fits file exists and delete if it does
-        if os.path.exists(fits_file):
+        # Check if fits path is a file and delete if it does
+        if os.path.isfile(fits_file):
             os.remove(fits_file)
             print(f"Deleted existing file: {fits_file}")
 
