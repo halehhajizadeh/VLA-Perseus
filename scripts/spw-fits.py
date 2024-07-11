@@ -17,6 +17,7 @@ specific_dirs = [
 ]
 
 subdir_t = 'tclean/'
+subdir_s = 'smo/'
 subdir_f = 'fits/'
 
 
@@ -25,11 +26,21 @@ for data in specific_dirs:
     for s in spw: 
 
         image = base_directory + data + subdir_t + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.image.tt0'
-        print(image)
+        smo = base_directory + data + subdir_s + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.smo'
         fits= base_directory + data + subdir_f + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.fits'
+        print(image)
         
+        imsmooth(imagename = image,
+                    targetres = True,
+                    major = '60arcsec',
+                    minor ='50arcsec',
+                    pa='0.0deg',
+                    outfile = smo,
+                    overwrite=True
+                    )
+
         exportfits(
-            imagename = image,
+            imagename = smo,
             fitsimage = fits         
         )
 
