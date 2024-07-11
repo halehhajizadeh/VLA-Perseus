@@ -2,54 +2,87 @@ import sys
 sys.path.append('.')
 import time
 import os
-from configs import path, phase_center, threedigits, thresh, pblim, nit
-
-def find_ms_folder(directory, startswith='19B-053', endswith=''):
-    """
-    Finds names of ms files in a directroy.
-
-    directory (str): The directory to search
-    startswith (str): The beginning of the file to search
-    endswith (str): The end of the file to search
-
-    Returns:
-    str : An array including the name of the ms files found.
-    """
-    folders_list = []
-    for file in os.listdir(directory):
-        if file.startswith(startswith):
-            if file.endswith(endswith):
-                folders_list.append(os.path.join(directory, file))                
-    return(folders_list)
 
 
-folders_list = find_ms_folder(path + '/' + threedigits + '/data', "19B-053")
+thresh = '2e-4'
+pblim = -0.001
+nit = 5000
+spw = [
+       2,
+       3 , 
+       4, 
+       5, 
+       6, 
+       8, 
+       15, 
+       16, 
+       17
+       ]
 
-ms_list = []
-for i in folders_list:
-    ms_list.append(i+'/products/targets.ms')
+phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
+# phase_center = 'J2000 03:36:00.000000 +30.30.00.00001'
+# phase_center = 'J2000 03:34:30.000000 +31.59.59.99999'
+# phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
+# phase_center = 'J2000 03:23:30.000001 +31.30.00.00000'
 
-print(ms_list)
+
+specific_dirs =  '03:32:04.530001_+31.05.04.00000/'  
+# specific_dirs =  '03:36:00.000000_+30.30.00.00001/' 
+# specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
+# specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
+# specific_dirs =  '03:23:30.000001_+31.30.00.00000/'  
 
 
-# spw = [ 2, 3 , 4, 5, 6, 8, 15, 16, 17]
-spw=[15]
+
+def find_calibrated_files(base_directory, specific_dirs):
+    calibrated_files = []
+
+    for directory in specific_dirs:
+        full_path = os.path.join(base_directory, directory)
+        if os.path.exists(full_path) and os.path.isdir(full_path):
+            # Traverse all subdirectories within each specific directory
+            for root, dirs, files in os.walk(full_path):
+                products_path = os.path.join(root, 'products')
+                if os.path.exists(products_path) and os.path.isdir(products_path):
+                    for file in os.listdir(products_path):
+                        if file.startswith('19B-053') and file.endswith('_calibrated.ms'):
+                            calibrated_files.append(os.path.join(products_path, file))
+
+    return calibrated_files
+
+# Specify the base directory
+mosaic_name = specific_dirs
+
+base_directory = '../data/' + mosaic_name
+
+# Get the list of calibrated files
+ms_file_list = find_calibrated_files(base_directory)
+
+# Print the list of calibrated files
+print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+for file in ms_file_list:
+    print(file)
+print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+
+
+
+
 
 stokes1 = [
-        # 'I',
+        'I',
         'Q',
-        # 'U'
+        'U'
           ]
 
 channels = [
     '00~07',
-    # '08~15', 
-    # '16~23',
-    # '24~31', 
-    # '32~39', 
-    # '40~47', 
-    # '48~55', 
-    # '56~63'
+    '08~15', 
+    '16~23',
+    '24~31', 
+    '32~39', 
+    '40~47', 
+    '48~55', 
+    '56~63'
     ]
 
 for stok in stokes1:
@@ -58,46 +91,44 @@ for stok in stokes1:
             tic = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
 
-            # img_filename = path + "/concat/"+str(threedigits)+"/Images/img" + str(nit) + "/tclean/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)
-            img_filename = path + "/concat/test/test7"
+            img_filename =   "../data/concat/" + specific_dirs + "/Images/img" + str(nit) + "/tclean/" + "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)
 
-            tclean( vis=ms_list,
+            tclean( vis=ms_file_list,
                     field="PER_FIELD_*",
                     spw=str(s) + ':' + channel,
                     timerange="",
-                    uvrange=">85m",
+                    uvrange="",
                     antenna="",
                     observation="",
                     intent="",
                     datacolumn="corrected",
                     imagename=img_filename,
-                    imsize=[4320],
-                    cell=2.5,
+                    imsize=[4096],
+                    cell="2.5arcsec",
                     phasecenter=phase_center,
                     stokes=stok,
-                    projection="SIN",
                     specmode="mfs",
-                    gridder="mosaic",
+                    gridder="awproject",
                     mosweight=True,
-                    cfcache="",
+                    # cfcache="",
                     pblimit=pblim,
-                    normtype="flatnoise",
-                    deconvolver="hogbom",
-                    restoration=True,
-                    restoringbeam=[],
-                    pbcor=True, #default is True
-                    outlierfile="",
-                    weighting="briggs",  #default is briggs
+                    deconvolver="mtmfs",
+                    pbcor=True,
+                    weighting="briggs",
                     robust=0.5,
-                    npixels=0,
                     niter=nit,
                     gain=0.1,
                     threshold=thresh,
-                    nsigma=0,
-                    cycleniter=500,
+                    # nsigma=3,
+                    # cycleniter=200,
                     cyclefactor=1,
-                    parallel=False)
-        
+                    parallel=True,
+                    # psterm=True,
+                    nterms=2,
+                    rotatepastep=5.0,
+                    interactive=False,
+                    )
+
             toc = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is finished!")
             print(f"Finshed the process in {round((toc-tic)/60)} minutes")

@@ -53,5 +53,3 @@ for i in spw:
                         mosaic=os.path.join(base_directory, 'bigmosaic', f'mosaic_spw{i}'),
                         interp='linear')
 
-        # If you have primary beam correction (PB) images, you can apply them separately if needed
-        # This may require an additional step outside of linearmosaic, depending on your processing needs.
