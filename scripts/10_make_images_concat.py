@@ -56,7 +56,7 @@ mosaic_name = specific_dirs
 base_directory = '../data/' + mosaic_name
 
 # Get the list of calibrated files
-ms_file_list = find_calibrated_files(base_directory)
+ms_file_list = find_calibrated_files(base_directory, specific_dirs)
 
 # Print the list of calibrated files
 print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
