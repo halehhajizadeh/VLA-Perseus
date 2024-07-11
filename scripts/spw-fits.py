@@ -23,31 +23,31 @@ subdir_f = 'fits/'
 for data in specific_dirs:
     for s in spw:
 
-        image = base_directory + data + subdir_t + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.image.tt0'
-        smo = base_directory + data + subdir_s + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.smo'
-        fits = base_directory + data + subdir_f + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.fits'
-        print(image)
+        image_file = base_directory + data + subdir_t + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.image.tt0'
+        smo_file = base_directory + data + subdir_s + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.smo'
+        fits_file = base_directory + data + subdir_f + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.fits'
+        print(image_file)
 
         # Check if smo file exists and delete if it does
-        if os.path.exists(smo):
-            os.remove(smo)
-            print(f"Deleted existing file: {smo}")
+        if os.path.exists(smo_file):
+            os.remove(smo_file)
+            print(f"Deleted existing file: {smo_file}")
 
         # Check if fits file exists and delete if it does
-        if os.path.exists(fits):
-            os.remove(fits)
-            print(f"Deleted existing file: {fits}")
+        if os.path.exists(fits_file):
+            os.remove(fits_file)
+            print(f"Deleted existing file: {fits_file}")
 
-        imsmooth(imagename=image,
+        imsmooth(imagename=image_file,
                  targetres=True,
                  major='55arcsec',
                  minor='43arcsec',
                  pa='0.0deg',
-                 outfile=smo,
+                 outfile=smo_file,
                  overwrite=True
                  )
 
         exportfits(
-            imagename=smo,
-            fitsimage=fits
+            imagename=smo_file,
+            fitsimage=fits_file
         )
