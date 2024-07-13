@@ -21,25 +21,24 @@ spw = [
 
 phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
 
-specific_dirs = ['03:32:04.530001_+31.05.04.00000/']
-# specific_dirs =  ['03:36:00.000000_+30.30.00.00001/'] 
-# specific_dirs =  ['03:34:30.000000_+31.59.59.99999/']
-# specific_dirs =  ['03:25:30.000000_+29.29.59.99999/']
-# specific_dirs =  ['03:23:30.000001_+31.30.00.00000/']
+specific_dirs = '03:32:04.530001_+31.05.04.00000/'
+# specific_dirs =  '03:36:00.000000_+30.30.00.00001/' 
+# specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
+# specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
+# specific_dirs =  '03:23:30.000001_+31.30.00.00000/'
 
 def find_calibrated_files(base_directory, specific_dirs):
     calibrated_files = []
 
-    for directory in specific_dirs:
-        full_path = os.path.join(base_directory, directory)
-        if os.path.exists(full_path) and os.path.isdir(full_path):
-            # Traverse all subdirectories within each specific directory
-            for root, dirs, files in os.walk(full_path):
-                products_path = os.path.join(root, 'products')
-                if os.path.exists(products_path) and os.path.isdir(products_path):
-                    for file in os.listdir(products_path):
-                        if file.startswith('19B-053') and file.endswith('_calibrated.ms'):
-                            calibrated_files.append(os.path.join(products_path, file))
+    full_path = os.path.join(base_directory, specific_dirs)
+    if os.path.exists(full_path) and os.path.isdir(full_path):
+        # Traverse all subdirectories within each specific directory
+        for root, dirs, files in os.walk(full_path):
+            products_path = os.path.join(root, 'products')
+            if os.path.exists(products_path) and os.path.isdir(products_path):
+                for file in os.listdir(products_path):
+                    if file.startswith('19B-053') and file.endswith('_calibrated.ms'):
+                        calibrated_files.append(os.path.join(products_path, file))
 
     return calibrated_files
 
