@@ -1,8 +1,8 @@
 import sys
-sys.path.append('.')
 import time
 import os
 
+sys.path.append('.')
 
 thresh = '2e-4'
 pblim = -0.001
@@ -20,19 +20,12 @@ spw = [
        ]
 
 phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
-# phase_center = 'J2000 03:36:00.000000 +30.30.00.00001'
-# phase_center = 'J2000 03:34:30.000000 +31.59.59.99999'
-# phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
-# phase_center = 'J2000 03:23:30.000001 +31.30.00.00000'
 
-
-specific_dirs =  '03:32:04.530001_+31.05.04.00000/'  
-# specific_dirs =  '03:36:00.000000_+30.30.00.00001/' 
-# specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
-# specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
-# specific_dirs =  '03:23:30.000001_+31.30.00.00000/'  
-
-
+specific_dirs = ['03:32:04.530001_+31.05.04.00000/']
+# specific_dirs =  ['03:36:00.000000_+30.30.00.00001/'] 
+# specific_dirs =  ['03:34:30.000000_+31.59.59.99999/']
+# specific_dirs =  ['03:25:30.000000_+29.29.59.99999/']
+# specific_dirs =  ['03:23:30.000001_+31.30.00.00000/']
 
 def find_calibrated_files(base_directory, specific_dirs):
     calibrated_files = []
@@ -62,10 +55,6 @@ for file in ms_file_list:
     print(file)
 print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
-
-
-
-
 stokes1 = [
         'I',
         'Q',
@@ -89,7 +78,7 @@ for stok in stokes1:
             tic = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is started ...")
 
-            img_filename =   "../data/concat/" + specific_dirs + "/Images/img" + str(nit) + "/tclean/" + "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)
+            img_filename = os.path.join("../data/concat/", specific_dirs[0], "Images/img" + str(nit) + "/tclean/", "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok))
 
             tclean( vis=ms_file_list,
                     field="PER_FIELD_*",
