@@ -38,16 +38,16 @@ for data in specific_dirs:
             os.remove(fits_file)
             print(f"Deleted existing file: {fits_file}")
 
-        imsmooth(imagename=image_file,
-                 targetres=True,
-                 major='60arcsec',
-                 minor='60arcsec',
-                 pa='0.0deg',
-                 outfile=smo_file,
-                 overwrite=True
-                 )
+        # imsmooth(imagename=image_file,
+        #          targetres=True,
+        #          major='60arcsec',
+        #          minor='60arcsec',
+        #          pa='0.0deg',
+        #          outfile=smo_file,
+        #          overwrite=True
+        #          )
 
         exportfits(
-            imagename=smo_file,
+            imagename=image_file,
             fitsimage=fits_file
         )
