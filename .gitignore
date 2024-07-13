@@ -18,3 +18,4 @@ scripts/nohup.out
 scripts/print.pdf
 server/
 *.fits
+paper1/
