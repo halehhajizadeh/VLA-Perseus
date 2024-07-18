@@ -73,7 +73,7 @@ for s in spw:
             phasecenter=phase_center,
             stokes='I',
             specmode="mfs",
-            gridder="single",
+            gridder="standard",
             mosweight=True,
             # cfcache="",
             pblimit=pblim,
