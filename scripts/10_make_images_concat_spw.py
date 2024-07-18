@@ -5,7 +5,7 @@ import os
 import numpy as np
 
 thresh = '2e-4'
-pblim = 0.01
+pblim = -0.01
 nit = 5000
 spw = [
        2,
@@ -77,7 +77,7 @@ for s in spw:
             mosweight=True,
             # cfcache="",
             pblimit=pblim,
-            deconvolver="mtmfs",
+            deconvolver="multiscale",
             pbcor=True,
             weighting="briggs",
             robust=0.5,
@@ -89,7 +89,7 @@ for s in spw:
             cyclefactor=1,
             parallel=True,
             # psterm=True,
-            nterms=2,
+            # nterms=2,
             rotatepastep=5.0,
             interactive=False,
             )
