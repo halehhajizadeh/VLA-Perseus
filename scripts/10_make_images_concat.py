@@ -92,7 +92,7 @@ for stok in stokes1:
                     mosweight=True,
                     # cfcache="",
                     pblimit=pblim,
-                    deconvolver="mtmfs",
+                    deconvolver="hogbom",
                     pbcor=True,
                     weighting="briggs",
                     robust=0.5,
@@ -104,7 +104,7 @@ for stok in stokes1:
                     cyclefactor=1,
                     parallel=True,
                     # psterm=True,
-                    # nterms=2,
+                    nterms=2,
                     rotatepastep=5.0,
                     interactive=False,
                     )
