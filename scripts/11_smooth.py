@@ -1,7 +1,10 @@
 import sys
 sys.path.append('.')
-from configs import path, thresh, nit, threedigits
 import time
+import os
+
+nit=5000
+thresh = '2e-4'
 
 spw = [2, 3 , 4, 5, 6, 8, 15, 16, 17]
 
@@ -21,16 +24,20 @@ channels = [
     '56~63'
     ]
 
+# specific_dirs = '03:32:04.530001_+31.05.04.00000/'
+# specific_dirs =  '03:36:00.000000_+30.30.00.00001/' 
+# specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
+# specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
+specific_dirs =  '03:23:30.000001_+31.30.00.00000/'
+
 
 tic = time.time()
 for stok in stokes:
     for s in spw:
         for channel in channels:  
 
-            # image_name = path+"/Images/img"+str(nit)+"/tclean/"+threedigits+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image',
-            image_name =  path + "/concat/"+str(threedigits)+"/Images/img" + str(nit) + "/tclean/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)+'.image'
-            # smo_image_name = path+"/Images/img"+str(nit)+"/smo/"+threedigits+"-spw"+str(s)+'-'+ str(channel)+"-2.5arcsec-nit"+str(nit)+"-"+str(thresh)+"-"+str(stok)+'.image.smo',
-            smo_image_name =  path + "/concat/"+str(threedigits)+"/Images/img" + str(nit) + "/smo/" + str(threedigits) + "-spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)+'.image.smo'
+            image_name =  os.path.join("../data/concat/", specific_dirs, "Images/img" + str(nit) + "/tclean/", "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)) + ".image"
+            smo_image_name =  os.path.join("../data/concat/", specific_dirs, "Images/img" + str(nit) + "/tclean/", "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)) +'.image.smo'
 
             imsmooth(imagename = image_name,
                     targetres = True,

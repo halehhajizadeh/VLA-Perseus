@@ -1,6 +1,5 @@
 import sys
 sys.path.append('.')
-from configs import path, thresh, nit, threedigits
 import numpy as np
 import os 
 
