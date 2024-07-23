@@ -78,7 +78,13 @@ for ms in ms_file_list:
     tic = time.time()
     print(f"Stokes: I, folder: {ms} is started ...")
 
-    img_filename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", f"{ms}-2.5arcsec-nit{nit}-awproject")
+        # Split the string by '/'
+    parts = ms.split('/')
+
+    # Extract the part that contains the desired substring
+    extracted_part = parts[4]
+
+    img_filename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", extracted_part, f"-2.5arcsec-nit{nit}-awproject")
 
     tclean(vis=ms,
            field="PER_FIELD_*",
@@ -127,8 +133,8 @@ for ms in ms_file_list:
     tic = time.time()
     print(f"Stokes: I, folder: {ms} is started ...")
     
-    imagename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", f"{ms}-2.5arcsec-nit{nit}-awproject.image")
-    fitsimage = os.path.join("..", "data", "epoch", specific_dirs, "fits", f"{ms}-2.5arcsec-nit{nit}-awproject.image.fits")
+    imagename = os.path.join("..", "data", "epoch", specific_dirs, "tclean",  extracted_part, f"-2.5arcsec-nit{nit}-awproject.image")
+    fitsimage = os.path.join("..", "data", "epoch", specific_dirs, "fits",  extracted_part, f"-2.5arcsec-nit{nit}-awproject.image.fits")
 
     exportfits(imagename=imagename, fitsimage=fitsimage)
 
