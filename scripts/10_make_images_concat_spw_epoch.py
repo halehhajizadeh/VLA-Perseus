@@ -78,7 +78,7 @@ for ms in ms_file_list:
     tic = time.time()
     print(f"Stokes: I, folder: {ms} is started ...")
 
-    img_filename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", f"ms-2.5arcsec-nit{nit}-awproject")
+    img_filename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", f"{ms}-2.5arcsec-nit{nit}-awproject")
 
     tclean(vis=ms,
            field="PER_FIELD_*",
@@ -127,8 +127,8 @@ for ms in ms_file_list:
     tic = time.time()
     print(f"Stokes: I, folder: {ms} is started ...")
     
-    imagename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", f"ms-2.5arcsec-nit{nit}-awproject.image")
-    fitsimage = os.path.join("..", "data", "epoch", specific_dirs, "fits", f"ms-2.5arcsec-nit{nit}-awproject.image.fits")
+    imagename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", f"{ms}-2.5arcsec-nit{nit}-awproject.image")
+    fitsimage = os.path.join("..", "data", "epoch", specific_dirs, "fits", f"{ms}-2.5arcsec-nit{nit}-awproject.image.fits")
 
     exportfits(imagename=imagename, fitsimage=fitsimage)
 
