@@ -6,7 +6,7 @@ import numpy as np
 
 path = '../data'
 thresh = '2e-4'
-pblim = -0.01  # Ensure pblim is positive
+pblim = 0.001  # Ensure pblim is positive
 nit = 5000
 
 phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
@@ -86,40 +86,37 @@ for ms in ms_file_list:
 
     img_filename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", f"{extracted_part}2.5arcsec-nit{nit}-awproject")
 
-    tclean(vis=ms,
-           field="PER_FIELD_*",
-           timerange="",
-           uvrange="",
-           antenna="",
-           observation="",
-           intent="",
-           datacolumn="corrected",
-           imagename=img_filename,
-           imsize=[4096],
-           cell="2.5arcsec",
-           phasecenter=phase_center,
-           stokes='I',
-           specmode="mfs",
-           gridder="awproject",
-           mosweight=True,
-           # cfcache="",
-           pblimit=pblim,
-           deconvolver="mtmfs",
-           pbcor=True,
-           weighting="briggs",
-           robust=0.5,
-           niter=nit,
-           gain=0.1,
-           threshold=thresh,
-           # nsigma=3,
-           # cycleniter=200,
-           cyclefactor=1,
-           parallel=True,
-           # psterm=True,
-           nterms=2,
-           rotatepastep=5.0,
-           interactive=False,
-           )
+    tclean( vis=ms,
+            field="JPER_FIELD_*",
+            timerange="",
+            uvrange="",
+            antenna="",
+            observation="",
+            intent="",
+            datacolumn="corrected",
+            imagename=img_filename,
+            imsize=[4096],
+            cell="2.5arcsec",
+            phasecenter=phase_center,
+            stokes='I',
+            specmode="mfs",
+            gridder="awproject",
+            mosweight=True,
+            # cfcache="",
+            pblimit=pblim,
+            deconvolver="mtmfs",
+            pbcor=True,
+            weighting="briggs",
+            robust=0.5,
+            niter=nit,
+            gain=0.1,
+            threshold=thresh,
+            cyclefactor=1,
+            parallel=True,
+            nterms=2,
+            rotatepastep=5.0,
+            interactive=False,
+            )
 
     toc = time.time()
     print(f"Finished the process in {round((toc-tic)/60)} minutes")
