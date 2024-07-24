@@ -87,7 +87,7 @@ for ms in ms_file_list:
     img_filename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", f"{extracted_part}2.5arcsec-nit{nit}-awproject")
 
     tclean( vis=ms,
-            field="JPER_FIELD_*",
+            field="PER_FIELD_*",
             timerange="",
             uvrange="",
             antenna="",
