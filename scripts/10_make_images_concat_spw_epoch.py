@@ -6,7 +6,7 @@ import numpy as np
 
 path = '../data'
 thresh = '2e-4'
-pblim = 0.001  # Ensure pblim is positive
+pblim = -0.001  # Ensure pblim is positive
 nit = 5000
 
 # phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
@@ -113,7 +113,7 @@ for ms in ms_file_list:
             threshold=thresh,
             cyclefactor=1,
             parallel=True,
-            nterms=2,
+            # nterms=2,
             rotatepastep=5.0,
             interactive=False,
             )
