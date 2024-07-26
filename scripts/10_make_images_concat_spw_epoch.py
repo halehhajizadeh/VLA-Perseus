@@ -102,7 +102,7 @@ for ms in ms_file_list:
             specmode="mfs",
             gridder="awproject",
             mosweight=True,
-            cfcache='/dev/shm/haleh/'+ str(extracted_part) + '.cf',
+            cfcache='/dev/shm/'+ str(extracted_part) + '.cf',
             pblimit=pblim,
             deconvolver="mtmfs",
             pbcor=True,
