@@ -49,8 +49,8 @@ for file in ms_file_list:
 print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
 stokes1 = [
-        'I',
-        'Q',
+        # 'I',
+        # 'Q',
         'U'
           ]
 
@@ -90,7 +90,7 @@ for stok in stokes1:
                     specmode="mfs",
                     gridder="awproject",
                     mosweight=True,
-                    # cfcache="",
+                    cfcache='/dev/shm/U.cf',
                     pblimit=pblim,
                     deconvolver="hogbom",
                     pbcor=True,
