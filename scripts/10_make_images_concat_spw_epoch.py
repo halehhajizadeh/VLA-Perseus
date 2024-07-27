@@ -113,6 +113,7 @@ for ms in ms_file_list:
             threshold=thresh,
             cyclefactor=1,
             parallel=True,
+            psterm=True,
             nterms=2,
             rotatepastep=5.0,
             interactive=False,
