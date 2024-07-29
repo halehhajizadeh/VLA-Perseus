@@ -19,13 +19,13 @@ spw = [
        17
        ]
 
-phase_center = 'J2000 03:23:30.000001 +31.30.00.00000'
+phase_center = 'J2000 03:36:00.000000 +30.30.00.00001'
 
 # specific_dirs = '03:32:04.530001_+31.05.04.00000/data/'
-# specific_dirs =  '03:36:00.000000_+30.30.00.00001/data/' 
+specific_dirs =  '03:36:00.000000_+30.30.00.00001/data/' 
 # specific_dirs =  '03:34:30.000000_+31.59.59.99999/data/'
 # specific_dirs =  '03:25:30.000000_+29.29.59.99999/data/'
-specific_dirs =  '03:23:30.000001_+31.30.00.00000/data/'
+# specific_dirs =  '03:23:30.000001_+31.30.00.00000/data/'
 
 def find_calibrated_files(base_directory, specific_dirs):
     calibrated_files = []
@@ -49,8 +49,8 @@ for file in ms_file_list:
 print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
 stokes1 = [
-        # 'I',
-        # 'Q',
+        'I',
+        'Q',
         'U'
           ]
 
@@ -88,9 +88,9 @@ for stok in stokes1:
                     phasecenter=phase_center,
                     stokes=stok,
                     specmode="mfs",
-                    gridder="awproject",
+                    gridder="mosaic",
                     mosweight=True,
-                    cfcache='/dev/shm/U.cf',
+                    cfcache=f'/dev/shm/U{s}{channel}.cf',
                     pblimit=pblim,
                     deconvolver="hogbom",
                     pbcor=True,
@@ -102,7 +102,7 @@ for stok in stokes1:
                     # nsigma=3,
                     # cycleniter=200,
                     cyclefactor=1,
-                    parallel=True,
+                    # parallel=True,
                     # psterm=True,
                     nterms=2,
                     rotatepastep=5.0,
