@@ -75,7 +75,7 @@ for s in spw:
             specmode="mfs",
             gridder="standard",
             mosweight=True,
-            # cfcache="",
+            cfcache='/dev/shm/U.cf',
             pblimit=pblim,
             deconvolver="mtmfs",
             pbcor=True,
