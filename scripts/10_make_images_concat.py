@@ -5,7 +5,7 @@ import os
 sys.path.append('.')
 
 thresh = '2e-4'
-pblim = -0.001
+pblim = 0.001
 nit = 5000
 spw = [
        2,
@@ -90,7 +90,7 @@ for stok in stokes1:
                     specmode="mfs",
                     gridder="mosaic",
                     mosweight=True,
-                    cfcache=f'/dev/shm/U{s}{channel}.cf',
+                    # cfcache=f'/dev/shm/U{s}{channel}.cf',
                     pblimit=pblim,
                     deconvolver="hogbom",
                     pbcor=True,
@@ -103,9 +103,9 @@ for stok in stokes1:
                     cycleniter=200,
                     cyclefactor=1,
                     # parallel=True,
-                    psterm=True,
+                    # psterm=True,
                     # nterms=2,
-                    rotatepastep=5.0,
+                    # rotatepastep=5.0,
                     interactive=False,
                     )
 
