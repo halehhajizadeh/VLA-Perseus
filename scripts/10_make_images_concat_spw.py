@@ -5,7 +5,7 @@ import os
 import numpy as np
 
 thresh = '2e-4'
-pblim = -0.01
+pblim = -0.001
 nit = 5000
 spw = [
        2,
@@ -59,7 +59,7 @@ for s in spw:
     img_filename =  "../data/concat/total/" + mosaic_name + "tclean/" +  "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject'
 
     tclean( vis=ms_file_list,
-            field="J0336+3218",
+            field="PER_FIELD_*",
             spw=str(s),
             timerange="",
             uvrange="",
@@ -73,9 +73,9 @@ for s in spw:
             phasecenter=phase_center,
             stokes='I',
             specmode="mfs",
-            gridder="standard",
+            gridder="awproject",
             mosweight=True,
-            cfcache='/dev/shm/U.cf',
+            cfcache=f'/dev/shm/{s}.cf',
             pblimit=pblim,
             deconvolver="mtmfs",
             pbcor=True,
@@ -85,10 +85,10 @@ for s in spw:
             gain=0.1,
             threshold=thresh,
             # nsigma=3,
-            # cycleniter=200,
+            cycleniter=200,
             cyclefactor=1,
-            # parallel=True,
-            # psterm=True,
+            parallel=True,
+            psterm=True,
             nterms=2,
             rotatepastep=5.0,
             interactive=False,
