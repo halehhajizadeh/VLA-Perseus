@@ -19,7 +19,7 @@ spw = [
        17
        ]
 
-# phase_center = 'J2000 03:23:30.000001 +31.30.00.00000'
+phase_center = 'J2000 03:23:30.000001 +31.30.00.00000'
 
 # specific_dirs = '03:32:04.530001_+31.05.04.00000/data/'
 # specific_dirs =  '03:36:00.000000_+30.30.00.00001/data/' 
@@ -88,9 +88,9 @@ for stok in stokes1:
                     phasecenter=phase_center,
                     stokes=stok,
                     specmode="mfs",
-                    gridder="mosaic",
+                    gridder="awproject",
                     mosweight=True,
-                    cfcache=f'/dev/shm/U{s}{channel}.cf',
+                    cfcache=f'/dev/shm/{stok}{s}{channel}.cf',
                     pblimit=pblim,
                     deconvolver="hogbom",
                     pbcor=True,
@@ -102,10 +102,10 @@ for stok in stokes1:
                     # nsigma=3,
                     cycleniter=200,
                     cyclefactor=1,
-                    # parallel=True,
+                    parallel=True,
                     psterm=True,
                     nterms=2,
-                    # rotatepastep=5.0,
+                    rotatepastep=5.0,
                     interactive=False,
                     )
 
