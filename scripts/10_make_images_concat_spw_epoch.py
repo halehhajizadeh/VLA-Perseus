@@ -69,6 +69,10 @@ for file in ms_file_list:
     print(file)
 print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
+
+
+ms_file_list = ['']
+
 #----------------------------------------------------------------
 
 for ms in ms_file_list:
@@ -132,8 +136,8 @@ for ms in ms_file_list:
     tic = time.time()
     print(f"Stokes: I, folder: {ms} is started ...")
     
-    imagename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", f"{extracted_part}-2.5arcsec-nit{nit}-awproject.image")
-    fitsimage = os.path.join("..", "data", "epoch", specific_dirs, "fits",  f"{extracted_part}-2.5arcsec-nit{nit}-awproject.image.fits")
+    imagename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", f"{extracted_part}-2.5arcsec-nit{nit}-awproject.image.tt0")
+    fitsimage = os.path.join("..", "data", "epoch", specific_dirs, "fits",  f"{extracted_part}-2.5arcsec-nit{nit}-awproject.image.tt0.fits")
 
     exportfits(imagename=imagename, fitsimage=fitsimage)
 
