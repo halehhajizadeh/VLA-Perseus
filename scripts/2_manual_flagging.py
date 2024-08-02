@@ -445,3 +445,13 @@ elif threedigits=='010':
     mode='manual',
     timerange='22:41:52.500~22:41:57.500'
     )
+
+#-------------------------------------------------------------------
+elif threedigits=='998':
+
+    flagdata(
+    vis=msfilename, 
+    mode='manual',
+    spw='1,7,9,10,11,12,13,14'
+    ) 
+
