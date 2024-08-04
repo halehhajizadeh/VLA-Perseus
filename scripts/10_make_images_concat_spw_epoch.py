@@ -129,17 +129,17 @@ for ms in ms_file_list:
 
 ############################################################################################
 
-for ms in ms_file_list:
-    print('================================================================')
-    print(ms)
+# for ms in ms_file_list:
+#     print('================================================================')
+#     print(ms)
  
-    tic = time.time()
-    print(f"Stokes: I, folder: {ms} is started ...")
+#     tic = time.time()
+#     print(f"Stokes: I, folder: {ms} is started ...")
     
-    imagename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", f"{extracted_part}-2.5arcsec-nit{nit}-awproject.image.tt0")
-    fitsimage = os.path.join("..", "data", "epoch", specific_dirs, "fits",  f"{extracted_part}-2.5arcsec-nit{nit}-awproject.image.tt0.fits")
+#     imagename = os.path.join("..", "data", "epoch", specific_dirs, "tclean", f"{extracted_part}-2.5arcsec-nit{nit}-awproject.image.tt0")
+#     fitsimage = os.path.join("..", "data", "epoch", specific_dirs, "fits",  f"{extracted_part}-2.5arcsec-nit{nit}-awproject.image.tt0.fits")
 
-    exportfits(imagename=imagename, fitsimage=fitsimage)
+#     exportfits(imagename=imagename, fitsimage=fitsimage)
 
-    toc = time.time()
-    print(f"Finished the export in {round((toc-tic)/60)} minutes")
+#     toc = time.time()
+#     print(f"Finished the export in {round((toc-tic)/60)} minutes")

@@ -6,7 +6,7 @@ import time
 spw = [2, 3, 4, 5, 6, 8, 15, 16, 17]
 nit = 5000
 
-base_directory = '../data/concat/total/'
+base_directory = '../data/epoch/'
 
 specific_dirs = [
     '03:23:30.000001_+31.30.00.00000/',
@@ -38,16 +38,16 @@ for data in specific_dirs:
             os.remove(fits_file)
             print(f"Deleted existing file: {fits_file}")
 
-        # imsmooth(imagename=image_file,
-        #          targetres=True,
-        #          major='60arcsec',
-        #          minor='60arcsec',
-        #          pa='0.0deg',
-        #          outfile=smo_file,
-        #          overwrite=True
-        #          )
+        imsmooth(imagename=image_file,
+                 targetres=True,
+                 major='60arcsec',
+                 minor='60arcsec',
+                 pa='0.0deg',
+                 outfile=smo_file,
+                 overwrite=True
+                 )
 
         exportfits(
-            imagename=image_file,
+            imagename=smo_file,
             fitsimage=fits_file
         )
