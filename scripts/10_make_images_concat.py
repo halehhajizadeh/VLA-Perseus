@@ -5,7 +5,7 @@ import os
 sys.path.append('.')
 
 thresh = '2e-4'
-pblim = -0.01
+pblim = -0.001
 nit = 5000
 spw = [
        2,
@@ -51,8 +51,8 @@ for file in ms_file_list:
 print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
 stokes1 = [
-        'I',
-        'Q',
+        # 'I',
+        # 'Q',
         'U'
           ]
 
@@ -90,7 +90,7 @@ for stok in stokes1:
                     phasecenter=phase_center,
                     stokes=stok,
                     specmode="mfs",
-                    gridder="mosaic",
+                    gridder="awproject",
                     mosweight=True,
                     cfcache=f'/dev/shm/{stok}{s}{channel}.cf',
                     pblimit=pblim,
@@ -104,10 +104,10 @@ for stok in stokes1:
                     # nsigma=3,
                     cycleniter=200,
                     cyclefactor=1,
-                    # parallel=True,
+                    parallel=True,
                     psterm=True,
                     nterms=2,
-                    # rotatepastep=5.0,
+                    rotatepastep=5.0,
                     interactive=False,
                     )
 
