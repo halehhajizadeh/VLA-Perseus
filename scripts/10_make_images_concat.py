@@ -5,7 +5,7 @@ import os
 sys.path.append('.')
 
 thresh = '2e-4'
-pblim = -0.001
+pblim = 0.001
 nit = 5000
 spw = [
        2,
