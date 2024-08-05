@@ -105,7 +105,7 @@ for stok in stokes1:
                     cycleniter=200,
                     cyclefactor=1,
                     # parallel=True,
-                    psterm=True,
+                    # psterm=True,
                     nterms=2,
                     rotatepastep=5.0,
                     interactive=False,
