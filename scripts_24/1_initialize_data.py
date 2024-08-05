@@ -29,8 +29,6 @@ def find_ms_folder(directory, startswith='24A-376', endswith=''):
 
 
 
-
-
 def find_tables(table_kind: str, directory="."):
     """
     finds tables.
@@ -76,9 +74,9 @@ print(folders_list)
 ms_file_name = input('Which file do you want to continue with?\n')
 
 #------------------------------------------------------------------------------------------
+os.chdir(ms_file_name)
 
-
-filename = find_ms_folder('.', '24', '.ms')
+filename = find_ms_folder('.', '24A-376', '.ms')
 filename = filename[0]
 
 
