@@ -24,9 +24,9 @@ for data in SPECIFIC_DIRS:
     smo_pattern = os.path.join(BASE_DIRECTORY, data, SUBDIR_S, '*.image.tt0.smo')
     fits_pattern = os.path.join(BASE_DIRECTORY, data, SUBDIR_F, '*.image.tt0.smo.fits')
 
-    # image_files = glob.glob(image_pattern)
-    # smo_files = glob.glob(smo_pattern)
-    # fits_files = glob.glob(fits_pattern)
+    image_files = glob.glob(image_pattern)
+    smo_files = glob.glob(smo_pattern)
+    fits_files = glob.glob(fits_pattern)
 
     # for image_file in image_files:
     #     smo_file = image_file 
@@ -44,17 +44,16 @@ for data in SPECIFIC_DIRS:
 
         # Perform image smoothing
     imsmooth(
-        imagename=image_pattern,
+        imagename=image_files,
         targetres=True,
         major='67arcsec',
         minor='67arcsec',
         pa='0.0deg',
-        outfile=smo_pattern,
-        overwrite=True
+        outfile=smo_files,
     )
 
     # Export to FITS format
     exportfits(
-        imagename=smo_pattern,
-        fitsimage=fits_pattern
+        imagename=smo_files,
+        fitsimage=fits_files
     )
