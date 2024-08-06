@@ -47,7 +47,7 @@ for data in SPECIFIC_DIRS:
             imagename=image_file,
             targetres=True,
             major='66arcsec',
-            minor='66arcsec',
+            minor='30arcsec',
             pa='0.0deg',
             outfile=smo_file,
             overwrite=True
