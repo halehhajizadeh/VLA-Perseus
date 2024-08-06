@@ -32,15 +32,15 @@ for data in SPECIFIC_DIRS:
         smo_file = image_file 
         fits_file = smo_file 
 
-        # Delete existing smo file if it exists
-        if os.path.isfile(smo_file):
-            os.remove(smo_file)
-            print(f"Deleted existing file: {smo_file}")
+        # # Delete existing smo file if it exists
+        # if os.path.isfile(smo_file):
+        #     os.remove(smo_file)
+        #     print(f"Deleted existing file: {smo_file}")
 
-        # Delete existing fits file if it exists
-        if os.path.isfile(fits_file):
-            os.remove(fits_file)
-            print(f"Deleted existing file: {fits_file}")
+        # # Delete existing fits file if it exists
+        # if os.path.isfile(fits_file):
+        #     os.remove(fits_file)
+        #     print(f"Deleted existing file: {fits_file}")
 
         # Perform image smoothing
         imsmooth(
