@@ -42,7 +42,6 @@ def find_calibrated_files(base_directory, specific_dirs):
     return calibrated_files
 
 base_directory = '../data/'
-
 ms_file_list = find_calibrated_files(base_directory, specific_dirs)
 
 print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
