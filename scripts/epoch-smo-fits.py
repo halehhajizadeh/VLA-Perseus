@@ -51,6 +51,7 @@ for data in SPECIFIC_DIRS:
             minor='67arcsec',
             pa='0.0deg',
             outfile=smo_file,
+            overwrite=True 
         )
 
         # Export to FITS format
