@@ -29,8 +29,8 @@ for data in SPECIFIC_DIRS:
     fits_files = glob.glob(fits_pattern)
 
     for image_file in image_files:
-        smo_file = image_file + '.smo'
-        fits_file = smo_file + '.fits'
+        smo_file = image_file 
+        fits_file = smo_file 
 
         # Delete existing smo file if it exists
         if os.path.isfile(smo_file):
@@ -47,7 +47,7 @@ for data in SPECIFIC_DIRS:
             imagename=image_file,
             targetres=True,
             major='66arcsec',
-            minor='30arcsec',
+            minor='36arcsec',
             pa='0.0deg',
             outfile=smo_file,
             overwrite=True
