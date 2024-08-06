@@ -42,6 +42,7 @@ def find_calibrated_files(base_directory, specific_dirs):
     return calibrated_files
 
 base_directory = '../data/'
+
 ms_file_list = find_calibrated_files(base_directory, specific_dirs)
 
 print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
@@ -101,17 +102,16 @@ for stok in stokes1:
                     gain=0.1,
                     threshold=thresh,
                     # nsigma=3,
-                    cycleniter=200,
+                    cycleniter=500,
                     cyclefactor=1,
                     # parallel=True,
-                    # psterm=True,
+                    psterm=True,
                     nterms=2,
                     rotatepastep=5.0,
                     interactive=False,
-                    cyclefactor=1,
-                    # restart=True,
-                    # calcres=True,
-                    # calcpsf=True,
+                    restart=True,
+                    calcres=True,
+                    calcpsf=True,
                     )
 
             toc = time.time()
