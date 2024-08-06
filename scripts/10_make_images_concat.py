@@ -5,7 +5,7 @@ import os
 sys.path.append('.')
 
 thresh = '2e-4'
-pblim = 0.005
+pblim = -0.001
 nit = 5000
 spw = [
        2,
@@ -109,6 +109,10 @@ for stok in stokes1:
                     nterms=2,
                     rotatepastep=5.0,
                     interactive=False,
+                    cyclefactor=1,
+                    restart=True,
+                    calcres=True,
+                    calcpsf=True,
                     )
 
             toc = time.time()
