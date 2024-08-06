@@ -24,13 +24,13 @@ for data in SPECIFIC_DIRS:
     smo_pattern = os.path.join(BASE_DIRECTORY, data, SUBDIR_S, '*.image.tt0.smo')
     fits_pattern = os.path.join(BASE_DIRECTORY, data, SUBDIR_F, '*.image.tt0.smo.fits')
 
-    image_files = glob.glob(image_pattern)
-    smo_files = glob.glob(smo_pattern)
-    fits_files = glob.glob(fits_pattern)
+    # image_files = glob.glob(image_pattern)
+    # smo_files = glob.glob(smo_pattern)
+    # fits_files = glob.glob(fits_pattern)
 
-    for image_file in image_files:
-        smo_file = image_file 
-        fits_file = smo_file 
+    # for image_file in image_files:
+    #     smo_file = image_file 
+    #     fits_file = smo_file 
 
         # # Delete existing smo file if it exists
         # if os.path.isfile(smo_file):
@@ -43,18 +43,18 @@ for data in SPECIFIC_DIRS:
         #     print(f"Deleted existing file: {fits_file}")
 
         # Perform image smoothing
-        imsmooth(
-            imagename=image_file,
-            targetres=True,
-            major='67arcsec',
-            minor='67arcsec',
-            pa='0.0deg',
-            outfile=smo_file,
-            overwrite=True
-        )
+    imsmooth(
+        imagename=image_pattern,
+        targetres=True,
+        major='67arcsec',
+        minor='67arcsec',
+        pa='0.0deg',
+        outfile=smo_pattern,
+        overwrite=True
+    )
 
-        # Export to FITS format
-        exportfits(
-            imagename=smo_file,
-            fitsimage=fits_file
-        )
+    # Export to FITS format
+    exportfits(
+        imagename=smo_pattern,
+        fitsimage=fits_pattern
+    )
