@@ -110,9 +110,9 @@ for stok in stokes1:
                     rotatepastep=5.0,
                     interactive=False,
                     cyclefactor=1,
-                    restart=True,
-                    calcres=True,
-                    calcpsf=True,
+                    # restart=True,
+                    # calcres=True,
+                    # calcpsf=True,
                     )
 
             toc = time.time()
