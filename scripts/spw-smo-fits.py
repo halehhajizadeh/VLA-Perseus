@@ -26,7 +26,7 @@ SUBDIR_F = 'fits/'
 for data in SPECIFIC_DIRS:
     for s in SPW:
         # Generate file paths
-        image_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_T, f"spw{s}-2.5arcsec-nit{NIT}-awproject.image.tt0")
+        image_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_T, f"spw{s}-2.5arcsec-nit{NIT}--awproject.image.tt0")
         smo_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_S, f"spw{s}-2.5arcsec-nit{NIT}-awproject.smo")
         fits_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_F, f"spw{s}-2.5arcsec-nit{NIT}-awproject.fits")
         
