@@ -46,8 +46,8 @@ for data in SPECIFIC_DIRS:
         imsmooth(
             imagename=image_file,
             targetres=True,
-            major='60arcsec',
-            minor='60arcsec',
+            major='61arcsec',
+            minor='61arcsec',
             pa='0.0deg',
             outfile=smo_file,
             overwrite=True
