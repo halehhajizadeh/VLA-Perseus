@@ -1,52 +1,59 @@
 import sys
-sys.path.append('.')
 import os
-import time
+import glob  # For handling wildcard file paths
+import shutil  # For file operations
 
-spw = [2, 3, 4, 5, 6, 8, 15, 16, 17]
-nit = 5000
+# Append current directory to system path
+sys.path.append('.')
 
-base_directory = '../data/concat/total/'
+# Constants
+SPW = [2, 3, 4, 5, 6, 8, 15, 16, 17]
+NIT = 5000
+BASE_DIRECTORY = '../data/concat/total/'
 
-specific_dirs = [
+SPECIFIC_DIRS = [
     '03:23:30.000001_+31.30.00.00000/',
     '03:32:04.530001_+31.05.04.00000/',
     '03:36:00.000000_+30.30.00.00001/',
     '03:25:30.000000_+29.29.59.99999/',
-    # '03:34:30.000000_+31.59.59.99999/'
+    # '03:34:30.000000_+31.59.59.99999/'  # Uncomment if needed
 ]
 
-subdir_t = 'tclean/'
-subdir_s = 'smo/'
-subdir_f = 'fits/'
+SUBDIR_T = 'tclean/'
+SUBDIR_S = 'smo/'
+SUBDIR_F = 'fits/'
 
-for data in specific_dirs:
-    for s in spw:
+for data in SPECIFIC_DIRS:
+    for s in SPW:
+        # Generate file paths
+        image_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_T, f"spw{s}-2.5arcsec-nit{NIT}-awproject.image.tt0")
+        smo_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_S, f"spw{s}-2.5arcsec-nit{NIT}-awproject.smo")
+        fits_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_F, f"spw{s}-2.5arcsec-nit{NIT}-awproject.fits")
+        
+        print(f"Processing {image_file}")
 
-        image_file = base_directory + data + subdir_t + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.image.tt0'
-        smo_file = base_directory + data + subdir_s + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.smo'
-        fits_file = base_directory + data + subdir_f + "spw" + str(s) + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject.fits'
-        print(image_file)
-
-        # Check if smo path is a file and delete if it does
+        # Delete existing smo file if it exists
         if os.path.isfile(smo_file):
             os.remove(smo_file)
             print(f"Deleted existing file: {smo_file}")
 
-        # Check if fits path is a file and delete if it does
+        # Delete existing fits file if it exists
         if os.path.isfile(fits_file):
             os.remove(fits_file)
             print(f"Deleted existing file: {fits_file}")
 
-        imsmooth(imagename=image_file,
-                 targetres=True,
-                 major='60arcsec',
-                 minor='60arcsec',
-                 pa='0.0deg',
-                 outfile=smo_file,
-                 overwrite=True
-                 )
+        # Perform image smoothing
+        imsmooth(
+            imagename=image_file,
+            targetres=True,
+            major='60arcsec',
+            minor='60arcsec',
+            pa='0.0deg',
+            outfile=smo_file,
+            overwrite=True
+        )
 
+        # Export to FITS format
         exportfits(
             imagename=smo_file,
             fitsimage=fits_file
