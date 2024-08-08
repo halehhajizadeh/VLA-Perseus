@@ -21,13 +21,14 @@ spw = [
 
 # phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
 # phase_center = 'J2000 03:36:00.000000 +30.30.00.00001'
-phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
+# phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
+phase_center = 'J2000 03:23:30.000001 +31.30.00.00000'
 
 # specific_dirs = '03:32:04.530001_+31.05.04.00000/data/'
 # specific_dirs =  '03:36:00.000000_+30.30.00.00001/data/' 
 # specific_dirs =  '03:34:30.000000_+31.59.59.99999/data/'
-specific_dirs =  '03:25:30.000000_+29.29.59.99999/data/'
-# specific_dirs =  '03:23:30.000001_+31.30.00.00000/data/'
+# specific_dirs =  '03:25:30.000000_+29.29.59.99999/data/'
+specific_dirs =  '03:23:30.000001_+31.30.00.00000/data/'
 
 def find_calibrated_files(base_directory, specific_dirs):
     calibrated_files = []
