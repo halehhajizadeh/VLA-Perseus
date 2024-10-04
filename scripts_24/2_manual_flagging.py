@@ -1,17 +1,20 @@
 
-if threedigits=='546':
+if threedigits=='972':
 
     flagdata(
     vis=msfilename, 
     mode='manual',
-    spw='0:0~8;19~32'
+    spw='9,10,11,12,13'
     )
 
-#----------------------------------------------------------------
-elif threedigits=='775':
+#------------------------------------------------------------------
+if threedigits=='5694':
+
     flagdata(
     vis=msfilename, 
     mode='manual',
-    spw='1,7,9,11,12,13,14'
+    spw='1,9,10,11,12,13'
     )
+
+
 
