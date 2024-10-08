@@ -51,9 +51,6 @@ print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
 
 
-tic = time.time()
-print(f"Stokes: I, s: {s} is started ...")
-
 img_filename =  "../data/concat/total/ALL/ tclean/" + str(mosaic_name) +  "spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject'
 
 tclean( vis=ms_file_list,
@@ -90,11 +87,6 @@ tclean( vis=ms_file_list,
         rotatepastep=5.0,
         interactive=False,
         )
-
-    toc = time.time()
-    print(f"stokesI, s: {s} is finished!")
-    print(f"Finshed the process in {round((toc-tic)/60)} minutes")
-
 
 ############################################################################################
 
