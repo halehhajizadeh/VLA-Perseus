@@ -50,46 +50,46 @@ print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 #----------------------------------------------------------------
 
 
-for s in spw:
-    tic = time.time()
-    print(f"Stokes: I, s: {s} is started ...")
 
-    img_filename =  "../data/concat/total/ALL/ tclean/" + str(mosaic_name) +  "spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject'
+tic = time.time()
+print(f"Stokes: I, s: {s} is started ...")
 
-    tclean( vis=ms_file_list,
-            field="PER_FIELD_*",
-            timerange="",
-            uvrange="",
-            antenna="",
-            observation="",
-            intent="",
-            datacolumn="corrected",
-            imagename=img_filename,
-            imsize=[4096],
-            cell="2.5arcsec",
-            phasecenter=phase_center,
-            stokes='I',
-            specmode="mfs",
-            gridder="awproject",
-            mosweight=True,
-            cfcache=f'/dev/shm/{s}.cf',
-            pblimit=pblim,
-            deconvolver="mtmfs",
-            pbcor=True,
-            weighting="briggs",
-            robust=0.5,
-            niter=nit,
-            gain=0.1,
-            threshold=thresh,
-            # nsigma=3,
-            cycleniter=200,
-            cyclefactor=1,
-            parallel=True,
-            psterm=True,
-            nterms=2,
-            rotatepastep=5.0,
-            interactive=False,
-            )
+img_filename =  "../data/concat/total/ALL/ tclean/" + str(mosaic_name) +  "spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject'
+
+tclean( vis=ms_file_list,
+        field="PER_FIELD_*",
+        timerange="",
+        uvrange="",
+        antenna="",
+        observation="",
+        intent="",
+        datacolumn="corrected",
+        imagename=img_filename,
+        imsize=[4096],
+        cell="2.5arcsec",
+        phasecenter=phase_center,
+        stokes='I',
+        specmode="mfs",
+        gridder="awproject",
+        mosweight=True,
+        cfcache=f'/dev/shm/{s}.cf',
+        pblimit=pblim,
+        deconvolver="mtmfs",
+        pbcor=True,
+        weighting="briggs",
+        robust=0.5,
+        niter=nit,
+        gain=0.1,
+        threshold=thresh,
+        # nsigma=3,
+        cycleniter=200,
+        cyclefactor=1,
+        parallel=True,
+        psterm=True,
+        nterms=2,
+        rotatepastep=5.0,
+        interactive=False,
+        )
 
     toc = time.time()
     print(f"stokesI, s: {s} is finished!")
