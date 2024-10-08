@@ -20,7 +20,7 @@ for images in flist:
 print('nint is ' + str(nit))
 
 tclean(vis=filename,
-       field="",
+       field="PER_FIELD_*",
        spw="16:5~60",
        timerange="",
        uvrange="",
