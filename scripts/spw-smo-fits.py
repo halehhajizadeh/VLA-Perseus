@@ -14,9 +14,8 @@ BASE_DIRECTORY = '../data/concat/total/'
 SPECIFIC_DIRS = [
     '03:23:30.000001_+31.30.00.00000/',
     '03:32:04.530001_+31.05.04.00000/',
-    '03:36:00.000000_+30.30.00.00001/',
-    '03:25:30.000000_+29.29.59.99999/',
-    # '03:34:30.000000_+31.59.59.99999/'  # Uncomment if needed
+    # '03:36:00.000000_+30.30.00.00001/',
+    # '03:25:30.000000_+29.29.59.99999/',
 ]
 
 SUBDIR_T = 'tclean/'
@@ -26,9 +25,9 @@ SUBDIR_F = 'fits/'
 for data in SPECIFIC_DIRS:
     for s in SPW:
         # Generate file paths
-        image_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_T, f"spw{s}-2.5arcsec-nit{NIT}--awproject.image.tt0")
-        smo_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_S, f"spw{s}-2.5arcsec-nit{NIT}-awproject.smo")
-        fits_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_F, f"spw{s}-2.5arcsec-nit{NIT}-awproject.fits")
+        image_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_T, f"spw{s}-2.5arcsec-nit{NIT}--awproject.image.tt0.pbcor")
+        smo_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_S, f"spw{s}-2.5arcsec-nit{NIT}-awproject.pbcor.smo")
+        fits_file = os.path.join(BASE_DIRECTORY, data, SUBDIR_F, f"spw{s}-2.5arcsec-nit{NIT}-awproject.pbcor.fits")
         
         print(f"Processing {image_file}")
 
