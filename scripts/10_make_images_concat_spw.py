@@ -81,7 +81,7 @@ for s in spw:
             specmode="mfs",
             gridder="awproject",
             mosweight=True,
-            cfcache=f'/dev/shm/{s}.cf',
+            # cfcache=f'/dev/shm/{s}.cf',
             pblimit=pblim,
             deconvolver="mtmfs",
             pbcor=True,
