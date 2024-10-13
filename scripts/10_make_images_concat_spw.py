@@ -41,7 +41,7 @@ def find_calibrated_files(base_directory):
 # Specify the base directory
 mosaic_name = '03:23:30.000001_+31.30.00.00000/'
 # mosaic_name = '03:36:00.000000_+30.30.00.00001/'
-# mosaic_name = '03:25:30.000000_+29.29.59.99999/'
+# mosaic_name  = '03:25:30.000000_+29.29.59.99999/'
 
 
 base_directory = '../data/' + mosaic_name
