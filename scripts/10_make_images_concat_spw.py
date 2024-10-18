@@ -8,11 +8,11 @@ thresh = '2e-4'
 pblim = -0.001
 nit = 5000
 spw = [
-    #    2,
-    #    3 , 
-    #    4, 
-    #    5, 
-    #    6, 
+       2,
+       3 , 
+       4, 
+       5, 
+       6, 
        8, 
        15, 
        16, 
@@ -20,7 +20,8 @@ spw = [
        ]
 # phase_center = 'J2000 03:36:00.000000 +30.30.00.00001'
 # phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
-phase_center = 'J2000 03:23:30.000001 +31.30.00.00000'
+# phase_center = 'J2000 03:23:30.000001 +31.30.00.00000'
+phase_center = 'J2000 03:34:30.000000 +31.59.59.99999'
 
 
 def find_calibrated_files(base_directory):
@@ -39,9 +40,10 @@ def find_calibrated_files(base_directory):
     return calibrated_files
 
 # Specify the base directory
-mosaic_name = '03:23:30.000001_+31.30.00.00000/'
+# mosaic_name = '03:23:30.000001_+31.30.00.00000/'
 # mosaic_name = '03:36:00.000000_+30.30.00.00001/'
 # mosaic_name  = '03:25:30.000000_+29.29.59.99999/'
+mosaic_name  = '03:34:30.000000_+31.59.59.99999/'
 
 
 base_directory = '../data/' + mosaic_name
