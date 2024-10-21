@@ -271,12 +271,6 @@ flagdata(vis= filename,
          flagbackup=True, 
          savepars=True)
 
-flagdata(
-    vis=filename, 
-    mode='manual',
-    spw='0,1,7,9,10,11,12,13,14',
-    flagbackup=True, 
-    )
 
 
 statwt(vis=filename, 
