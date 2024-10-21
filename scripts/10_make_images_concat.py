@@ -67,6 +67,10 @@ channels = [
     '56~63'
     ]
 
+# Ensure ms_file_list is not empty before proceeding
+if not ms_file_list:
+    raise ValueError("No calibrated .ms files found! Please check the directory path.")
+
 for stok in stokes1:
     for s in spw:
         for channel in channels:
@@ -75,50 +79,47 @@ for stok in stokes1:
 
             img_filename = os.path.join("../data/concat/", "03:32:04.530001_+31.05.04.00000/", "Images/img" + str(nit) + "/tclean/", "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok))
 
+            spw_param = str(s) + ':' + channel  # Construct SPW parameter
+
             try:
-                tclean( vis=ms_file_list,
-                        field="PER_FIELD_*",
-                        spw=str(s) + ':' + channel,
-                        timerange="",
-                        uvrange="",
-                        antenna="",
-                        observation="",
-                        intent="",
-                        datacolumn="corrected",
-                        imagename=img_filename,
-                        imsize=[4096],
-                        cell="2.5arcsec",
-                        phasecenter=phase_center,
-                        stokes=stok,
-                        specmode="mfs",
-                        gridder="mosaic",
-                        mosweight=True,
-                        # cfcache=f'/dev/shm/{stok}{s}{channel}.cf',
-                        pblimit=pblim,
-                        deconvolver="hogbom",
-                        pbcor=True,
-                        weighting="briggs",
-                        robust=0.5,
-                        niter=nit,
-                        gain=0.1,
-                        threshold=thresh,
-                        # nsigma=3,
-                        cycleniter=500,
-                        cyclefactor=1,
-                        # parallel=True,
-                        # psterm=True,
-                        nterms=2,
-                        rotatepastep=5.0,
-                        interactive=False,
-                        restart=True,
-                        calcres=True,
-                        calcpsf=True,
-                        )
+                tclean(vis=ms_file_list,
+                       field="PER_FIELD_*",
+                       spw=spw_param,
+                       timerange="",
+                       uvrange="",
+                       antenna="",
+                       observation="",
+                       intent="",
+                       datacolumn="corrected",
+                       imagename=img_filename,
+                       imsize=[4096],
+                       cell="2.5arcsec",
+                       phasecenter=phase_center,
+                       stokes=stok,
+                       specmode="mfs",
+                       gridder="mosaic",
+                       mosweight=True,
+                       pblimit=pblim,
+                       deconvolver="hogbom",
+                       pbcor=True,
+                       weighting="briggs",
+                       robust=0.5,
+                       niter=nit,
+                       gain=0.1,
+                       threshold=thresh,
+                       cycleniter=500,
+                       cyclefactor=1,
+                       nterms=2,
+                       rotatepastep=5.0,
+                       interactive=False,
+                       restart=True,
+                       calcres=True,
+                       calcpsf=True,
+                       )
             except Exception as e:
-                print(str(e))
-                print(f"SPW: {str(s) + ':' + channel} ------> cause error")
-                raise e
+                print(f"Error processing SPW {spw_param}: {e}")
+                raise
 
             toc = time.time()
             print(f"stokes: {stok}, s: {s}, channel: {channel} is finished!")
-            print(f"Finshed the process in {round((toc-tic)/60)} minutes")
+            print(f"Finished the process in {round((toc-tic)/60)} minutes")
