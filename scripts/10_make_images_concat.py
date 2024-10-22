@@ -109,12 +109,12 @@ for stok in stokes1:
                        threshold=thresh,
                        cycleniter=500,
                        cyclefactor=1,
-                       nterms=2,
-                       rotatepastep=5.0,
+                    #    nterms=2,
+                    #    rotatepastep=5.0,
                        interactive=False,
-                       restart=True,
-                       calcres=True,
-                       calcpsf=True,
+                    #    restart=True,
+                    #    calcres=True,
+                    #    calcpsf=True,
                        )
             except Exception as e:
                 print(f"Error processing SPW {spw_param}: {e}")
