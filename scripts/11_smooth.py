@@ -44,8 +44,8 @@ for stok in stokes:
 
             imsmooth(imagename = image_name,
                     targetres = True,
-                    major = '70arcsec',
-                    minor ='50arcsec',
+                    major = '80arcsec',
+                    minor ='70arcsec',
                     pa='0.0deg',
                     outfile = smo_image_name,
                     overwrite=True
