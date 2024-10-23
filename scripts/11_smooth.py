@@ -41,11 +41,11 @@ for stok in stokes:
 
             print(smo_image_name)
 
-            
+
             imsmooth(imagename = image_name,
                     targetres = True,
-                    major = '60arcsec',
-                    minor ='55arcsec',
+                    major = '70arcsec',
+                    minor ='60arcsec',
                     pa='0.0deg',
                     outfile = smo_image_name,
                     overwrite=True
