@@ -37,12 +37,15 @@ for stok in stokes:
         for channel in channels:  
 
             image_name =  os.path.join("../data/concat/", specific_dirs, "Images/img" + str(nit) + "/tclean/", "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)) + ".image"
-            smo_image_name =  os.path.join("../data/concat/", specific_dirs, "Images/img" + str(nit) + "/tclean/", "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)) +'.image.smo'
+            smo_image_name =  os.path.join("../data/concat/", specific_dirs, "Images/img" + str(nit) + "/smo", "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)) +'.image.smo'
 
+            print(smo_image_name)
+
+            
             imsmooth(imagename = image_name,
                     targetres = True,
                     major = '60arcsec',
-                    minor ='60arcsec',
+                    minor ='55arcsec',
                     pa='0.0deg',
                     outfile = smo_image_name,
                     overwrite=True
