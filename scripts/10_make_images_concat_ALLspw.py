@@ -51,7 +51,7 @@ print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
 
 
-img_filename =  "../data/concat/total/ALL/ tclean/" + str(mosaic_name) +  "spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject'
+img_filename =  "../data/concat/total/ALL/tclean/" + str(mosaic_name) +  "spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + '-awproject'
 
 tclean( vis=ms_file_list,
         field="PER_FIELD_*",
