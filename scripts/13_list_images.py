@@ -50,10 +50,33 @@ file_list = [file for file in os.listdir(fits_path) if os.path.isfile(os.path.jo
 file_list_total = [os.path.join(fits_path, file) for file in file_list]
 print(file_list_total)
 
+# Function to remove initial empty channels
+# This function scans through the file list and counts how many non-empty channels there are
+# before starting to replace the files with empty channels.
+def remove_initial_empty_channels(filelist):
+    count_non_empty = 0  # This variable will count the number of non-empty channels
+    updated_list = []  # This will store the updated list of files with non-empty channels
+
+    for file_name in filelist:
+        # If the file is not an empty channel, start counting and add it to the list
+        if "empty_channel.fits" not in file_name:
+            updated_list.append(file_name)
+            count_non_empty += 1
+        else:
+            # Add empty channel files without incrementing the count
+            updated_list.append(file_name)
+    
+    # Return the updated file list and the count of non-empty channels
+    return updated_list, count_non_empty
+
 # Loop over stokes, SPWs, and channels
 for stok in stokes:
     files_list = []
     file_index = 0  # Keep track of the current index across all files
+
+    # Remove initial empty channels and get count of non-empty ones
+    non_empty_files_list, non_empty_count = remove_initial_empty_channels(file_list_total)
+
     for s in spw:
         for channel in channels:
             # Build expected file name based on previous script's format
@@ -72,3 +95,7 @@ for stok in stokes:
     
     # Save the list of files for the current Stokes parameter
     np.savetxt(os.path.join(path, f"Images/img{nit}/", f"Stokes{stok}.txt"), files_list, fmt='%s')
+
+    # Print debugging information: the number of non-empty channels before replacement started
+    print(f"File list for Stokes {stok} saved with the appropriate empty channel replacements.")
+    print(f"Number of non-empty channels before replacement starts: {non_empty_count}")
