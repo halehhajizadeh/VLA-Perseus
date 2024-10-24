@@ -2,6 +2,7 @@ import os
 from casatasks import listobs
 import matplotlib.pyplot as plt
 
+
 # Define the base path where your MS files are located
 base_path = "/data/new/data/"
 
@@ -34,7 +35,6 @@ with open('ms_phase_centers.txt', 'w') as f:
     for ms_file, phase_center in ms_phase_centers:
         f.write(f"{ms_file}: RA = {phase_center[0]}, DEC = {phase_center[1]}\n")
 
-import matplotlib.pyplot as plt
 
 # Function to plot phase center of each MS
 def plot_phase_center(ms_file, phase_center, fig_num):
@@ -50,6 +50,7 @@ def plot_phase_center(ms_file, phase_center, fig_num):
 # Loop through each MS and plot the phase center
 for i, (ms_file, phase_center) in enumerate(ms_phase_centers):
     plot_phase_center(ms_file, phase_center, i)
+
 
 # Function to plot all phase centers together
 def plot_all_phase_centers(ms_phase_centers):
