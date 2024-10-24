@@ -4,26 +4,16 @@ import numpy as np
 import os
 from casatools import msmetadata as msmdtool
 
-# Use LaTeX for text rendering in plots
+# Disable LaTeX rendering for Matplotlib to avoid errors
 from matplotlib import rc
 rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-rc('text', usetex=True)
+rc('text', usetex=False)  # Set usetex to False
 
 # Define working directory where your MS files are located
 working_directory = '/data/new/data'
 
 # Function to find MS folders in the directory
-def find_ms_folder(directory, startswith='24A-', endswith='_calibrated.ms'):
-    """
-    Finds names of ms files in a directory.
-
-    directory (str): The directory to search
-    startswith (str): The beginning of the file to search
-    endswith (str): The end of the file to search
-
-    Returns:
-    list : An array including the name of the ms files found.
-    """
+def find_ms_folder(directory, startswith='24A-', endswith='.ms'):
     folders_list = []
     for root, dirs, files in os.walk(directory):
         for file in files:
@@ -71,8 +61,8 @@ for ms_folder in mslist:
     # Plot individual MS phase centers
     plt.figure(figsize=(8, 6))
     plt.plot(ra_deg, dec_deg, 'b.')
-    plt.xlabel(r'RA (deg)', fontsize=15)
-    plt.ylabel(r'DEC (deg)', fontsize=15)
+    plt.xlabel('RA (deg)', fontsize=15)
+    plt.ylabel('DEC (deg)', fontsize=15)
     plt.title(f'Phase Center of {ms_name}', fontsize=15)
     plt.tick_params(axis='x', labelsize=14)
     plt.tick_params(axis='y', labelsize=14)
@@ -84,8 +74,8 @@ for ms_folder in mslist:
 # Plot all phase centers together
 plt.figure(figsize=(10, 8))
 plt.plot(all_ra_deg, all_dec_deg, 'b.')
-plt.xlabel(r'RA (deg)', fontsize=15)
-plt.ylabel(r'DEC (deg)', fontsize=15)
+plt.xlabel('RA (deg)', fontsize=15)
+plt.ylabel('DEC (deg)', fontsize=15)
 plt.title('Phase Centers of All Measurement Sets', fontsize=15)
 plt.tick_params(axis='x', labelsize=14)
 plt.tick_params(axis='y', labelsize=14)
