@@ -58,7 +58,7 @@ for stokes in stokes_list:
     os.system(syscommand)
 
     # Read the list of FITS files for the current Stokes parameter
-    with open(os.path.join(path, f'Images/img{nit}/stokes{stokes}.txt'), 'r') as f:
+    with open(os.path.join(path, f'Images/img{nit}/Stokes{stokes}.txt'), 'r') as f:
         file_list = f.read().splitlines()
 
     # Remove any leading empty channel files from the list
