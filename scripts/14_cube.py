@@ -4,19 +4,20 @@
 # Fourth index is RA
 import sys
 sys.path.append('.')
-from configs import path, nit
 import os
 import numpy as np
 from casatools import image as ia  # CASA's image tool
 
-# Updated path with mosaic name (specific_dirs)
-specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # As used in your previous scripts
+# Parameters (define them directly instead of importing)
+nit = 5000
+specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # Example specific directory; update as needed
 # specific_dirs =  '03:36:00.000000_+30.30.00.00001/' 
 # specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
 # specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
 # specific_dirs =  '03:23:30.000001_+31.30.00.00000/'
 
-path = os.path.join(path, "concat", specific_dirs)
+# Construct the working path based on the mosaic name
+path = os.path.join("../data", "concat", specific_dirs)
 
 stokes_list = ['I', 'Q', 'U']
 
@@ -57,7 +58,7 @@ for stokes in stokes_list:
     os.system(syscommand)
 
     # Read the list of FITS files for the current Stokes parameter
-    with open(os.path.join(path, f'Images/img{nit}/Stokes{stokes}.txt'), 'r') as f:
+    with open(os.path.join(path, f'Images/img{nit}/stokes{stokes}.txt'), 'r') as f:
         file_list = f.read().splitlines()
 
     # Remove any leading empty channel files from the list
