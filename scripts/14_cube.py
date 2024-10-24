@@ -6,7 +6,7 @@ import sys
 sys.path.append('.')
 import os
 import numpy as np
-from casatools import image as ia  # CASA's image tool
+from casatools import image  # Importing the image tool correctly
 
 # Parameters (define them directly instead of importing)
 nit = 5000
@@ -22,6 +22,9 @@ specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # Example specific directory
 path = os.path.join("../data", "concat", specific_dirs)
 
 stokes_list = ['I', 'Q', 'U']
+
+# Initialize the CASA image tool object
+ia = image()
 
 # Function to create an empty channel FITS file using CASA tools
 def create_empty_channel(fitsname):
@@ -69,7 +72,7 @@ for stokes in stokes_list:
     # Adding the first channel to the list and initializing the cube
     inputfile = file_list[0]
     full_inputfile_path = os.path.join(path, f'Images/img{nit}/fits/', inputfile)  # Ensure correct path
-    ia.open(full_inputfile_path)
+    ia.open(full_inputfile_path)  # Ensure correct usage of image tool object
     img = ia.getchunk()  # Get the data for the first channel
     cube = np.copy(img[:, :, :, :])  # Copy it to initialize the cube
 
