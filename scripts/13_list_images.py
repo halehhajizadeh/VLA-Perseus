@@ -11,15 +11,30 @@ channels = ['00~07', '08~15', '16~23', '24~31', '32~39', '40~47', '48~55', '56~6
 stokes = ['I', 'Q', 'U']
 
 # Indices to replace with "empty_channel.fits" for each Stokes parameter
+#32
+# drop_indices = {
+#     'I': [41, 53, 80],
+#     'Q': [41, 45, 49, 80],
+#     'U': [41, 48, 49, 80, 95]
+# }
+
+#36
 drop_indices = {
-    'I': [41, 53, 80],
-    'Q': [41, 45, 49, 80],
-    'U': [41, 48, 49, 80, 95]
+    'I': [41, 48, 80],
+    'Q': [41, 42, 48, 49],
+    'U': [41, 48, 49]
 }
 
+# #25
+# drop_indices = {
+#     'I': [41, 80],
+#     'Q': [41, 48, 49, 79, 80],
+#     'U': [41, 48, 49, 79, 80]
+# }
+
 # Define the specific directory you're using
-specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # As used in your previous scripts
-# specific_dirs =  '03:36:00.000000_+30.30.00.00001/'
+# specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # As used in your previous scripts
+specific_dirs =  '03:36:00.000000_+30.30.00.00001/'
 # specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
 # specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
 # specific_dirs =  '03:23:30.000001_+31.30.00.00000/'
