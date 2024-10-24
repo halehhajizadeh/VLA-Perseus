@@ -6,7 +6,7 @@ import sys
 sys.path.append('.')
 import os
 import numpy as np
-from casatools import image  # CASA's image tool
+from astropy.io import fits
 
 # Parameters (define them directly instead of importing)
 nit = 5000
@@ -18,34 +18,23 @@ path = os.path.join(base_path, "concat", specific_dirs)
 
 stokes_list = ['I', 'Q', 'U']
 
-# Initialize the CASA image tool object
-ia = image()
-
-# Function to create an empty channel CASA image and then convert to FITS
+# Function to create an empty channel FITS file using astropy
 def create_empty_channel(fitsname):
-    flagged_channel_image = os.path.join(path, f'Images/img{nit}/fits/empty_channel.image')
-    flagged_channel_fits = os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits')
+    flagged_channel = os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits')
 
     # Remove existing empty channel file if it exists
-    syscommand = f'rm -rf {flagged_channel_image} {flagged_channel_fits}'
+    syscommand = f'rm -rf {flagged_channel}'
     os.system(syscommand)
 
-    # Open the FITS file and create a CASA .image file
-    ia.open(fitsname)
-    img_fits = ia.getchunk()  # Retrieve the image data
-    img_fits[:] = np.nan  # Set all data to NaN
+    # Open the FITS file, set the data to NaN, and save as a new file
+    with fits.open(fitsname) as hdul:
+        img_fits = hdul[0].data
+        img_fits[:] = np.nan  # Set all data to NaN
 
-    # Create an empty CASA .image file
-    ia.newimagefromimage(infile=fitsname, outfile=flagged_channel_image)
-    ia.open(flagged_channel_image)
-    ia.putchunk(img_fits)  # Set all data to NaN in CASA .image format
-    ia.close()
+        # Create an empty FITS file
+        hdul.writeto(flagged_channel, overwrite=True)
 
-    # Convert the CASA .image file to a FITS file
-    ia.open(flagged_channel_image)
-    ia.tofits(flagged_channel_fits, overwrite=True)
-    ia.close()
-    return flagged_channel_fits
+    return flagged_channel
 
 # Function to remove empty channels from the start of the file list
 def remove_empty_channel_from_start(filelist):
@@ -81,38 +70,35 @@ for stokes in stokes_list:
     if not os.path.exists(full_inputfile_path):
         raise FileNotFoundError(f"File {full_inputfile_path} does not exist")
 
-    ia.open(full_inputfile_path)  # Ensure correct usage of image tool object
-    img = ia.getchunk()  # Get the data for the first channel
-    cube = np.copy(img[:, :, :, :])  # Copy it to initialize the cube
+    # Open the FITS file using astropy
+    with fits.open(full_inputfile_path) as hdul:
+        img = hdul[0].data  # Get the data for the first channel
+        cube = np.copy(img)  # Copy it to initialize the cube
 
-    # Create an empty channel CASA image and FITS file
+    # Create an empty channel FITS file
     create_empty_channel(full_inputfile_path)
     print('Empty channel is produced!')
 
     # Loop through the file list, appending data to the cube
     for filename in file_list:
-        # Assuming paths in the file list are already correct
         full_filename_path = filename
 
         if not os.path.exists(full_filename_path):
             print(f"Warning: File {full_filename_path} does not exist, skipping")
             continue
 
-        ia.open(full_filename_path)
-        imgCP = ia.getchunk()
-        if filename == os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits'):
-            # Replace NaN values with 1e30 to avoid issues
-            imgCP[np.isnan(imgCP)] = 1e30
-        img2cube = np.copy(imgCP[:, :, :, :])
-        cube = np.append(cube, img2cube, axis=0)
-        ia.close()
+        with fits.open(full_filename_path) as hdul:
+            imgCP = hdul[0].data
+            if filename == os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits'):
+                # Replace NaN values with 1e30 to avoid issues
+                imgCP[np.isnan(imgCP)] = 1e30
+            img2cube = np.copy(imgCP)
+            cube = np.append(cube, img2cube, axis=0)
 
     print('For loop completed!')
 
     # Save the completed cube to the output FITS file
-    ia.open(full_inputfile_path)
-    ia.putchunk(cube)
-    ia.tofits(cubename, overwrite=True)
-    ia.close()
+    hdu = fits.PrimaryHDU(cube)
+    hdu.writeto(cubename, overwrite=True)
 
     print(f'Making cube for Stokes {stokes} is done!')
