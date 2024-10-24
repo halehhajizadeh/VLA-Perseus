@@ -12,12 +12,6 @@ from casatools import image  # CASA's image tool
 nit = 5000
 specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # Example specific directory; update as needed
 
-# Available alternative mosaic names (comment out the others as needed)
-# specific_dirs =  '03:36:00.000000_+30.30.00.00001/' 
-# specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
-# specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
-# specific_dirs =  '03:23:30.000001_+31.30.00.00000/'
-
 # Construct the working path based on the mosaic name
 base_path = "../data"  # Base directory for data
 path = os.path.join(base_path, "concat", specific_dirs)
@@ -73,7 +67,13 @@ for stokes in stokes_list:
 
     # Adding the first channel to the list and initializing the cube
     inputfile = file_list[0]
-    full_inputfile_path = os.path.join(path, 'Images', f'img{nit}', 'fits', inputfile)  # Correct path handling
+    
+    # Check if the file paths in file_list are relative or absolute
+    if not os.path.isabs(inputfile):
+        full_inputfile_path = os.path.join(path, 'Images', f'img{nit}', 'fits', inputfile)  # Ensure correct path
+    else:
+        full_inputfile_path = inputfile  # If the path is already absolute, use it directly
+
     if not os.path.exists(full_inputfile_path):
         raise FileNotFoundError(f"File {full_inputfile_path} does not exist")
 
@@ -87,7 +87,12 @@ for stokes in stokes_list:
 
     # Loop through the file list, appending data to the cube
     for filename in file_list:
-        full_filename_path = os.path.join(path, 'Images', f'img{nit}', 'fits', filename)  # Ensure correct path
+        # Ensure correct path handling for each file
+        if not os.path.isabs(filename):
+            full_filename_path = os.path.join(path, 'Images', f'img{nit}', 'fits', filename)  # Ensure correct path
+        else:
+            full_filename_path = filename  # Use absolute path if already given
+
         if not os.path.exists(full_filename_path):
             print(f"Warning: File {full_filename_path} does not exist, skipping")
             continue
