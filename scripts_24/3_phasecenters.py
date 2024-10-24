@@ -1,7 +1,7 @@
 import os
-from casatasks import listobs
+from casatasks import tclean, listobs
+from casatools import msmetadata as msmdtool
 import matplotlib.pyplot as plt
-
 
 # Define the base path where your MS files are located
 base_path = "/data/new/data/"
@@ -9,32 +9,17 @@ base_path = "/data/new/data/"
 # List to store MS files and their phase centers
 ms_phase_centers = []
 
-# Function to extract phase center using listobs
-def get_phase_center(ms_file):
-    output = listobs(ms_file, listfile=f'{ms_file}_listobs.txt', verbose=True)
-    
-    with open(f'{ms_file}_listobs.txt') as f:
-        lines = f.readlines()
-        for line in lines:
-            if "Phase center" in line:
-                ra_dec = line.split(":")[1].strip().split()
-                ra, dec = ra_dec[0], ra_dec[1]
-                return ra, dec
-
-# Loop through the directories and find the MS files
-for root, dirs, files in os.walk(base_path):
-    for file in files:
-        if file.endswith(".ms"):
-            ms_file = os.path.join(root, file)
-            phase_center = get_phase_center(ms_file)
-            if phase_center:
-                ms_phase_centers.append((ms_file, phase_center))
-
-# Save the list of MS files and their phase centers
-with open('ms_phase_centers.txt', 'w') as f:
-    for ms_file, phase_center in ms_phase_centers:
-        f.write(f"{ms_file}: RA = {phase_center[0]}, DEC = {phase_center[1]}\n")
-
+# Function to extract phase center using msmetadata tool
+def get_phase_center_from_ms(ms_file):
+    msmd = msmdtool()
+    msmd.open(ms_file)
+    # Get the phase center of the first field (you can adjust the index if necessary)
+    phase_center = msmd.phasecenter(0)  # Use field index 0 (first field)
+    msmd.close()
+    # Return RA and DEC values from the phase center
+    ra = phase_center['m0']['value']  # RA value
+    dec = phase_center['m1']['value']  # DEC value
+    return ra, dec
 
 # Function to plot phase center of each MS
 def plot_phase_center(ms_file, phase_center, fig_num):
@@ -47,18 +32,13 @@ def plot_phase_center(ms_file, phase_center, fig_num):
     plt.savefig(f'phase_center_{fig_num}.png')
     plt.close()
 
-# Loop through each MS and plot the phase center
-for i, (ms_file, phase_center) in enumerate(ms_phase_centers):
-    plot_phase_center(ms_file, phase_center, i)
-
-
 # Function to plot all phase centers together
 def plot_all_phase_centers(ms_phase_centers):
     plt.figure(figsize=(8, 6))
     
     for ms_file, phase_center in ms_phase_centers:
         ra, dec = phase_center
-        plt.scatter(float(ra), float(dec), color='blue', label=ms_file)
+        plt.scatter(float(ra), float(dec), color='blue', label=os.path.basename(ms_file))
     
     plt.xlabel('RA (deg)')
     plt.ylabel('DEC (deg)')
@@ -66,5 +46,28 @@ def plot_all_phase_centers(ms_phase_centers):
     plt.savefig('all_phase_centers.png')
     plt.show()
 
-# Call the function to plot all phase centers
-plot_all_phase_centers(ms_phase_centers)
+# Main function to process all MS files
+def process_all_ms_files(base_path):
+    # Walk through the directories to find all MS files
+    for root, dirs, files in os.walk(base_path):
+        for file in files:
+            if file.endswith(".ms"):  # Identify calibrated MS files
+                ms_file = os.path.join(root, file)
+                
+                # Get the phase center (RA, DEC)
+                phase_center = get_phase_center_from_ms(ms_file)
+                ms_phase_centers.append((ms_file, phase_center))
+                
+                # Plot the phase center for this MS
+                plot_phase_center(ms_file, phase_center, len(ms_phase_centers))
+
+    # Save the list of MS files and their phase centers
+    with open('ms_phase_centers.txt', 'w') as f:
+        for ms_file, phase_center in ms_phase_centers:
+            f.write(f"{ms_file}: RA = {phase_center[0]}, DEC = {phase_center[1]}\n")
+
+    # Plot all phase centers together
+    plot_all_phase_centers(ms_phase_centers)
+
+# Execute the function
+process_all_ms_files(base_path)
