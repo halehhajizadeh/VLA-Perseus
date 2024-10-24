@@ -6,15 +6,25 @@ import sys
 sys.path.append('.')
 import os
 import numpy as np
-from astropy.io import fits
+from astropy.io import fits  # Keep astropy for handling FITS files
 
-# Parameters (define them directly instead of importing)
-nit = 5000
-specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # Example specific directory; update as needed
 
-# Base path for data
-base_path = "../data"  # Base directory for data
-path = os.path.join(base_path, "concat", specific_dirs)
+nit=5000
+
+# Updated path with mosaic name (specific_dirs)
+specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # As used in your previous scripts
+# You can uncomment and change to another specific_dirs if needed
+# specific_dirs =  '03:36:00.000000_+30.30.00.00001/'
+# specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
+# specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
+# specific_dirs =  '03:23:30.000001_+31.30.00.00000/'
+
+# Update path to use mosaic name and concat directory
+base_path = '../data/concat/'  # Assuming this is the base path as used before
+path = os.path.join(base_path, specific_dirs)
+
+# Modify niter as per request (change this to your desired value)
+nit = 6000  # Example new niter value, adjust as per your needs
 
 stokes_list = ['I', 'Q', 'U']
 
@@ -23,15 +33,13 @@ def create_empty_channel(fitsname):
     flagged_channel = os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits')
 
     # Remove existing empty channel file if it exists
-    syscommand = f'rm -rf {flagged_channel}'
-    os.system(syscommand)
+    if os.path.exists(flagged_channel):
+        os.remove(flagged_channel)
 
-    # Open the FITS file, set the data to NaN, and save as a new file
+    # Open the FITS file, set all data to NaN, and create the empty channel
     with fits.open(fitsname) as hdul:
         img_fits = hdul[0].data
         img_fits[:] = np.nan  # Set all data to NaN
-
-        # Create an empty FITS file
         hdul.writeto(flagged_channel, overwrite=True)
 
     return flagged_channel
@@ -50,12 +58,11 @@ for stokes in stokes_list:
     cubename = os.path.join(path, f'Images/img{nit}/Stokes{stokes}.fits')
 
     # Remove any existing cube file
-    syscommand = f'rm -rf {cubename}'
-    os.system(syscommand)
+    if os.path.exists(cubename):
+        os.remove(cubename)
 
     # Read the list of FITS files for the current Stokes parameter
-    stokes_file = os.path.join(path, f'Images/img{nit}/Stokes{stokes}.txt')
-    with open(stokes_file, 'r') as f:
+    with open(os.path.join(path, f'Images/img{nit}/stokes{stokes}.txt'), 'r') as f:
         file_list = f.read().splitlines()
 
     # Remove any leading empty channel files from the list
@@ -63,42 +70,28 @@ for stokes in stokes_list:
 
     # Adding the first channel to the list and initializing the cube
     inputfile = file_list[0]
-
-    # Assuming paths in the file are already correct, no need to modify them
-    full_inputfile_path = inputfile
-
-    if not os.path.exists(full_inputfile_path):
-        raise FileNotFoundError(f"File {full_inputfile_path} does not exist")
-
-    # Open the FITS file using astropy
-    with fits.open(full_inputfile_path) as hdul:
-        img = hdul[0].data  # Get the data for the first channel
-        cube = np.copy(img)  # Copy it to initialize the cube
+    with fits.open(inputfile) as hdulist:
+        img = hdulist[0].data
+        cube = np.copy(img[0, :, :, :])  # Copy it to initialize the cube
 
     # Create an empty channel FITS file
-    create_empty_channel(full_inputfile_path)
+    create_empty_channel(inputfile)
     print('Empty channel is produced!')
 
     # Loop through the file list, appending data to the cube
     for filename in file_list:
-        full_filename_path = filename
-
-        if not os.path.exists(full_filename_path):
-            print(f"Warning: File {full_filename_path} does not exist, skipping")
-            continue
-
-        with fits.open(full_filename_path) as hdul:
-            imgCP = hdul[0].data
+        with fits.open(filename) as hdulistCP:
+            imgCP = hdulistCP[0].data
             if filename == os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits'):
                 # Replace NaN values with 1e30 to avoid issues
                 imgCP[np.isnan(imgCP)] = 1e30
-            img2cube = np.copy(imgCP)
+            img2cube = np.copy(imgCP[0, :, :, :])
             cube = np.append(cube, img2cube, axis=0)
 
     print('For loop completed!')
 
     # Save the completed cube to the output FITS file
-    hdu = fits.PrimaryHDU(cube)
-    hdu.writeto(cubename, overwrite=True)
+    hdulist[0].data = cube
+    hdulist.writeto(cubename, overwrite=True)
 
     print(f'Making cube for Stokes {stokes} is done!')
