@@ -4,23 +4,23 @@ import numpy as np
 import os
 
 # Define parameters
-nit = 5000  # Number of iterations
-thresh = '2e-4'  # Threshold for the fits image
-spw = [15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8]  # Spectral windows
-channels = ['00~07', '08~15', '16~23', '24~31', '32~39', '40~47', '48~55', '56~63']  # Channels within each SPW
+nit = 5000  # Number of iterations (nit parameter)
+thresh = '2e-4'  # Threshold for the FITS images
+spw = [15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8]  # Spectral windows (SPWs)
+channels = ['00~07', '08~15', '16~23', '24~31', '32~39', '40~47', '48~55', '56~63']  # Channels
 stokes = ['I', 'Q', 'U']  # Stokes parameters
 
 # Indices to replace with "empty_channel.fits" for each Stokes parameter after removing initial empty channels
 drop_indices = {
-    'I': [41, 53, 80],  # Indices for Stokes I to replace with "empty_channel.fits"
-    'Q': [41, 45, 49, 80],  # Indices for Stokes Q to replace with "empty_channel.fits"
-    'U': [41, 48, 49, 80, 95]  # Indices for Stokes U to replace with "empty_channel.fits"
+    'I': [41, 53, 80],  # For Stokes I
+    'Q': [41, 45, 49, 80],  # For Stokes Q
+    'U': [41, 48, 49, 80, 95]  # For Stokes U
 }
 
-# Define the specific directory you're using
-specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # Adjust this directory as needed
+# Define the specific directory you're using for concatenation
+specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # Update the directory as needed
 
-# Define the path for concatenation task
+# Define the base path for concatenation task
 path = f"../data/concat/{specific_dirs}"
 
 # Path to the FITS files
@@ -48,13 +48,13 @@ def build_image_list():
 
 # Step 2: Remove empty channels from the beginning of the list
 def remove_initial_empty_channels(files_list):
-    # Remove all initial "empty_channel.fits" from the beginning of the list
+    # Find the first non-empty channel in the list
     non_empty_start = 0
     for file_name in files_list:
         if "empty_channel.fits" not in file_name:
             break
         non_empty_start += 1
-    # Return the updated list without the initial empty channels
+    # Return the updated list starting from the first non-empty channel
     return files_list[non_empty_start:], non_empty_start
 
 # Step 3: Replace images at specified indices after removing empty channels from the beginning
