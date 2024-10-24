@@ -21,24 +21,31 @@ stokes_list = ['I', 'Q', 'U']
 # Initialize the CASA image tool object
 ia = image()
 
-# Function to create an empty channel FITS file using CASA tools
+# Function to create an empty channel CASA image and then convert to FITS
 def create_empty_channel(fitsname):
-    flagged_channel = os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits')
+    flagged_channel_image = os.path.join(path, f'Images/img{nit}/fits/empty_channel.image')
+    flagged_channel_fits = os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits')
 
     # Remove existing empty channel file if it exists
-    syscommand = f'rm -rf {flagged_channel}'
+    syscommand = f'rm -rf {flagged_channel_image} {flagged_channel_fits}'
     os.system(syscommand)
 
-    # Open the image using CASA's image tool
+    # Open the FITS file and create a CASA .image file
     ia.open(fitsname)
     img_fits = ia.getchunk()  # Retrieve the image data
     img_fits[:] = np.nan  # Set all data to NaN
 
-    # Create the empty channel FITS file
-    ia.putchunk(img_fits)
-    ia.tofits(flagged_channel, overwrite=True)
+    # Create an empty CASA .image file
+    ia.newimagefromimage(infile=fitsname, outfile=flagged_channel_image)
+    ia.open(flagged_channel_image)
+    ia.putchunk(img_fits)  # Set all data to NaN in CASA .image format
     ia.close()
-    return flagged_channel
+
+    # Convert the CASA .image file to a FITS file
+    ia.open(flagged_channel_image)
+    ia.tofits(flagged_channel_fits, overwrite=True)
+    ia.close()
+    return flagged_channel_fits
 
 # Function to remove empty channels from the start of the file list
 def remove_empty_channel_from_start(filelist):
@@ -78,7 +85,7 @@ for stokes in stokes_list:
     img = ia.getchunk()  # Get the data for the first channel
     cube = np.copy(img[:, :, :, :])  # Copy it to initialize the cube
 
-    # Create an empty channel FITS file
+    # Create an empty channel CASA image and FITS file
     create_empty_channel(full_inputfile_path)
     print('Empty channel is produced!')
 
