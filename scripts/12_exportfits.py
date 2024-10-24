@@ -36,8 +36,8 @@ for stok in stokes:
         for channel in channels:
             exportfits(
 
-                imagename =  os.path.join("../data/concat/", specific_dirs, "Images/img" + str(nit) + "/tclean/", "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)) +'.image.smo',
-                fitsimage =  os.path.join("../data/concat/", specific_dirs, "Images/img" + str(nit) + "/tclean/", "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)) +'.image.smo.fits'            
+                imagename =  os.path.join("../data/concat/", specific_dirs, "Images/img" + str(nit) + "/smo/", "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)) +'.image.smo',
+                fitsimage =  os.path.join("../data/concat/", specific_dirs, "Images/img" + str(nit) + "/fits/", "spw" + str(s) + '-' + str(channel) + "-2.5arcsec-nit" + str(nit) + "-" + str(thresh) + "-" + str(stok)) +'.image.smo.fits'            
             )
 
 toc = time.time()
