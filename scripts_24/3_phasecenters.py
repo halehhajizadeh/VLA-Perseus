@@ -1,93 +1,104 @@
-import os
-from casatasks import listobs
-from casatools import msmetadata as msmdtool
+import sys
 import matplotlib.pyplot as plt
+import numpy as np
+import os
+from casatools import msmetadata as msmdtool
 
-# Define the base path where your MS files are located
-base_path = "/data/new/data/"
+# Use LaTeX for text rendering in plots
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+rc('text', usetex=True)
 
-# List to store MS files and their phase centers
-ms_phase_centers = []
+# Define working directory where your MS files are located
+working_directory = '/data/new/data'
 
-# Function to extract phase center using msmetadata tool
-def get_phase_center_from_ms(ms_file):
+# Function to find MS folders in the directory
+def find_ms_folder(directory, startswith='24A-', endswith='_calibrated.ms'):
+    """
+    Finds names of ms files in a directory.
+
+    directory (str): The directory to search
+    startswith (str): The beginning of the file to search
+    endswith (str): The end of the file to search
+
+    Returns:
+    list : An array including the name of the ms files found.
+    """
+    folders_list = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.startswith(startswith) and file.endswith(endswith):
+                folders_list.append(os.path.join(root, file))                
+    return folders_list
+
+# Extract the phase center from the measurement set using msmetadata
+def get_phase_center(ms_file):
     msmd = msmdtool()
     try:
         msmd.open(ms_file)
-        # Get the phase center of the first field (you can adjust the index if necessary)
-        if msmd.nfields() > 0:
-            phase_center = msmd.phasecenter(0)  # Use field index 0 (first field)
-            ra = phase_center['m0']['value']  # RA value
-            dec = phase_center['m1']['value']  # DEC value
-            msmd.close()
-            return ra, dec
-        else:
-            print(f"No fields found in {ms_file}")
-            msmd.close()
-            return None
+        ra_deg = msmd.phasecenter(0)['m0']['value']  # RA in degrees
+        dec_deg = msmd.phasecenter(0)['m1']['value']  # DEC in degrees
+        msmd.close()
+        return ra_deg, dec_deg
     except Exception as e:
-        print(f"Error accessing {ms_file}: {e}")
+        print(f"Error reading phase center from {ms_file}: {e}")
         return None
 
-# Function to plot phase center of each MS
-def plot_phase_center(ms_file, phase_center, fig_num):
-    ra, dec = phase_center
-    plt.figure(fig_num)
-    plt.scatter(float(ra), float(dec), color='blue')
-    plt.xlabel('RA (deg)')
-    plt.ylabel('DEC (deg)')
-    plt.title(f'Phase Center of {os.path.basename(ms_file)}')
-    plt.savefig(f'phase_center_{fig_num}.png')
+# Find all MS files
+mslist = find_ms_folder(working_directory)
+
+# Initialize lists for storing all phase centers
+all_ra_deg = []
+all_dec_deg = []
+all_IDs = []
+
+# Process each MS file, extract phase center, and generate plots
+for ms_folder in mslist:
+    print(f"Processing {ms_folder}...")
+
+    # Get phase center (RA, Dec in degrees)
+    phase_center = get_phase_center(ms_folder)
+    
+    if phase_center is None:
+        continue  # Skip this MS file if phase center couldn't be read
+    
+    ra_deg, dec_deg = phase_center
+    all_ra_deg.append(ra_deg)
+    all_dec_deg.append(dec_deg)
+    ms_name = os.path.basename(ms_folder)
+    all_IDs.append(ms_name)
+
+    # Plot individual MS phase centers
+    plt.figure(figsize=(8, 6))
+    plt.plot(ra_deg, dec_deg, 'b.')
+    plt.xlabel(r'RA (deg)', fontsize=15)
+    plt.ylabel(r'DEC (deg)', fontsize=15)
+    plt.title(f'Phase Center of {ms_name}', fontsize=15)
+    plt.tick_params(axis='x', labelsize=14)
+    plt.tick_params(axis='y', labelsize=14)
+    
+    # Save individual plot for the MS
+    plt.savefig(f'./phasecenter/{ms_name}_phase_center.png')
     plt.close()
 
-# Function to plot all phase centers together
-def plot_all_phase_centers(ms_phase_centers):
-    plt.figure(figsize=(8, 6))
-    
-    for ms_file, phase_center in ms_phase_centers:
-        ra, dec = phase_center
-        plt.scatter(float(ra), float(dec), color='blue', label=os.path.basename(ms_file))
-    
-    plt.xlabel('RA (deg)')
-    plt.ylabel('DEC (deg)')
-    plt.title('Phase Centers of All Measurement Sets')
-    plt.legend(loc='upper right')
-    plt.savefig('all_phase_centers.png')
-    plt.show()
+# Plot all phase centers together
+plt.figure(figsize=(10, 8))
+plt.plot(all_ra_deg, all_dec_deg, 'b.')
+plt.xlabel(r'RA (deg)', fontsize=15)
+plt.ylabel(r'DEC (deg)', fontsize=15)
+plt.title('Phase Centers of All Measurement Sets', fontsize=15)
+plt.tick_params(axis='x', labelsize=14)
+plt.tick_params(axis='y', labelsize=14)
 
-# Main function to process all MS files
-def process_all_ms_files(base_path):
-    # Walk through the directories to find all MS files
-    for root, dirs, files in os.walk(base_path):
-        for file in files:
-            if file.endswith("_calibrated.ms"):  # Identify calibrated MS files
-                ms_file = os.path.join(root, file)
-                
-                # Debugging print statement
-                print(f"Processing {ms_file}...")
-                
-                # Get the phase center (RA, DEC)
-                phase_center = get_phase_center_from_ms(ms_file)
-                
-                if phase_center is not None:
-                    print(f"Phase Center for {ms_file}: RA = {phase_center[0]}, DEC = {phase_center[1]}")
-                    ms_phase_centers.append((ms_file, phase_center))
-                    
-                    # Plot the phase center for this MS
-                    plot_phase_center(ms_file, phase_center, len(ms_phase_centers))
-                else:
-                    print(f"Could not find phase center for {ms_file}")
+# Annotate all points with their IDs
+for i, ms_name in enumerate(all_IDs):
+    plt.annotate(ms_name, (all_ra_deg[i], all_dec_deg[i]))
 
-    # Save the list of MS files and their phase centers
-    if ms_phase_centers:
-        with open('ms_phase_centers.txt', 'w') as f:
-            for ms_file, phase_center in ms_phase_centers:
-                f.write(f"{ms_file}: RA = {phase_center[0]}, DEC = {phase_center[1]}\n")
+# Save the combined plot of all phase centers
+plt.savefig('./phasecenter/all_phase_centers.png')
+plt.show()
 
-        # Plot all phase centers together
-        plot_all_phase_centers(ms_phase_centers)
-    else:
-        print("No phase centers found in any measurement set.")
-
-# Execute the function
-process_all_ms_files(base_path)
+# Save phase center data to a file
+with open('./phasecenter/phase_centers.txt', 'w') as f:
+    for ms_name, ra_deg, dec_deg in zip(all_IDs, all_ra_deg, all_dec_deg):
+        f.write(f"{ms_name}: RA = {ra_deg}, DEC = {dec_deg}\n")
