@@ -24,7 +24,7 @@ base_path = '../data/concat/'  # Assuming this is the base path as used before
 path = os.path.join(base_path, specific_dirs)
 
 # Modify niter as per request (change this to your desired value)
-nit = 6000  # Example new niter value, adjust as per your needs
+nit = 5000  # Example new niter value, adjust as per your needs
 
 stokes_list = ['I', 'Q', 'U']
 
