@@ -25,9 +25,9 @@ channels = [
     ]
 
 # specific_dirs = '03:32:04.530001_+31.05.04.00000/'
-specific_dirs =  '03:36:00.000000_+30.30.00.00001/' 
+# specific_dirs =  '03:36:00.000000_+30.30.00.00001/' 
 # specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
-# specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
+specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
 # specific_dirs =  '03:23:30.000001_+31.30.00.00000/'
 
 
@@ -44,8 +44,8 @@ for stok in stokes:
 
             imsmooth(imagename = image_name,
                     targetres = True,
-                    major = '75arcsec',
-                    minor ='75arcsec',
+                    major = '55arcsec',
+                    minor ='50arcsec',
                     pa='0.0deg',
                     outfile = smo_image_name,
                     overwrite=True
@@ -53,3 +53,4 @@ for stok in stokes:
 toc = time.time()
 print(f"Finshed the smoothing process in {round((toc-tic)/60)} minutes")                
 
+#For 36: 75, 75
