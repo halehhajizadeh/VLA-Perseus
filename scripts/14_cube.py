@@ -6,7 +6,7 @@ import sys
 sys.path.append('.')
 import os
 import numpy as np
-from casatools import image  # Importing the image tool correctly
+from casatools import image  # CASA's image tool
 
 # Parameters (define them directly instead of importing)
 nit = 5000
@@ -19,7 +19,8 @@ specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # Example specific directory
 # specific_dirs =  '03:23:30.000001_+31.30.00.00000/'
 
 # Construct the working path based on the mosaic name
-path = os.path.join("../data", "concat", specific_dirs)
+base_path = "../data"  # Base directory for data
+path = os.path.join(base_path, "concat", specific_dirs)
 
 stokes_list = ['I', 'Q', 'U']
 
@@ -63,7 +64,8 @@ for stokes in stokes_list:
     os.system(syscommand)
 
     # Read the list of FITS files for the current Stokes parameter
-    with open(os.path.join(path, f'Images/img{nit}/Stokes{stokes}.txt'), 'r') as f:
+    stokes_file = os.path.join(path, f'Images/img{nit}/Stokes{stokes}.txt')
+    with open(stokes_file, 'r') as f:
         file_list = f.read().splitlines()
 
     # Remove any leading empty channel files from the list
@@ -71,7 +73,10 @@ for stokes in stokes_list:
 
     # Adding the first channel to the list and initializing the cube
     inputfile = file_list[0]
-    full_inputfile_path = os.path.join(path, f'Images/img{nit}/fits/', inputfile)  # Ensure correct path
+    full_inputfile_path = os.path.join(path, 'Images', f'img{nit}', 'fits', inputfile)  # Correct path handling
+    if not os.path.exists(full_inputfile_path):
+        raise FileNotFoundError(f"File {full_inputfile_path} does not exist")
+
     ia.open(full_inputfile_path)  # Ensure correct usage of image tool object
     img = ia.getchunk()  # Get the data for the first channel
     cube = np.copy(img[:, :, :, :])  # Copy it to initialize the cube
@@ -82,7 +87,11 @@ for stokes in stokes_list:
 
     # Loop through the file list, appending data to the cube
     for filename in file_list:
-        full_filename_path = os.path.join(path, f'Images/img{nit}/fits/', filename)  # Ensure correct path
+        full_filename_path = os.path.join(path, 'Images', f'img{nit}', 'fits', filename)  # Ensure correct path
+        if not os.path.exists(full_filename_path):
+            print(f"Warning: File {full_filename_path} does not exist, skipping")
+            continue
+
         ia.open(full_filename_path)
         imgCP = ia.getchunk()
         if filename == os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits'):
