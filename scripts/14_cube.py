@@ -11,6 +11,8 @@ from casatools import image as ia  # CASA's image tool
 # Parameters (define them directly instead of importing)
 nit = 5000
 specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # Example specific directory; update as needed
+
+# Available alternative mosaic names (comment out the others as needed)
 # specific_dirs =  '03:36:00.000000_+30.30.00.00001/' 
 # specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
 # specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
@@ -58,7 +60,7 @@ for stokes in stokes_list:
     os.system(syscommand)
 
     # Read the list of FITS files for the current Stokes parameter
-    with open(os.path.join(path, f'Images/img{nit}/Stokes{stokes}.txt'), 'r') as f:
+    with open(os.path.join(path, f'Images/img{nit}/stokes{stokes}.txt'), 'r') as f:
         file_list = f.read().splitlines()
 
     # Remove any leading empty channel files from the list
@@ -66,17 +68,19 @@ for stokes in stokes_list:
 
     # Adding the first channel to the list and initializing the cube
     inputfile = file_list[0]
-    ia.open(inputfile)
+    full_inputfile_path = os.path.join(path, f'Images/img{nit}/fits/', inputfile)  # Ensure correct path
+    ia.open(full_inputfile_path)
     img = ia.getchunk()  # Get the data for the first channel
     cube = np.copy(img[:, :, :, :])  # Copy it to initialize the cube
 
     # Create an empty channel FITS file
-    create_empty_channel(inputfile)
+    create_empty_channel(full_inputfile_path)
     print('Empty channel is produced!')
 
     # Loop through the file list, appending data to the cube
     for filename in file_list:
-        ia.open(filename)
+        full_filename_path = os.path.join(path, f'Images/img{nit}/fits/', filename)  # Ensure correct path
+        ia.open(full_filename_path)
         imgCP = ia.getchunk()
         if filename == os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits'):
             # Replace NaN values with 1e30 to avoid issues
@@ -88,7 +92,7 @@ for stokes in stokes_list:
     print('For loop completed!')
 
     # Save the completed cube to the output FITS file
-    ia.open(inputfile)
+    ia.open(full_inputfile_path)
     ia.putchunk(cube)
     ia.tofits(cubename, overwrite=True)
     ia.close()
