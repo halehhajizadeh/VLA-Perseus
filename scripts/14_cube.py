@@ -1,98 +1,110 @@
-#!!!!!!!!!!!!!!!!!!!!!!!!!!RUN IT IN NMPOST_MASTER AND OUT OF CASA!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-# First index is Stokes
-# Second index is frequency
-# Third index is DEC
-# Fourth index is RA
 import sys
 sys.path.append('.')
-import os
 import numpy as np
-from astropy.io import fits  # Keep astropy for handling FITS files
+import os
 
+# Define parameters
+nit = 5000
+thresh = '2e-4'
+spw = [15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8]
+channels = ['00~07', '08~15', '16~23', '24~31', '32~39', '40~47', '48~55', '56~63']
+stokes = ['I', 'Q', 'U']
 
-nit=5000
+# Indices to replace with "empty_channel.fits" for each Stokes parameter
+#32
+drop_indices = {
+    'I': [41, 53, 80],
+    'Q': [41, 45, 49, 80],
+    'U': [41, 48, 49, 80, 95]
+}
 
-# Updated path with mosaic name (specific_dirs)
+# #36
+# drop_indices = {
+#     'I': [41, 48, 80],
+#     'Q': [41, 42, 48, 49],
+#     'U': [41, 48, 49]
+# }
+
+# #25
+# drop_indices = {
+#     'I': [41, 80],
+#     'Q': [41, 48, 49, 79, 80],
+#     'U': [41, 48, 49, 79, 80]
+# }
+
+# Define the specific directory you're using
 specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # As used in your previous scripts
 # specific_dirs =  '03:36:00.000000_+30.30.00.00001/'
-# # specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
+# specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
 # specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
-# # specific_dirs =  '03:23:30.000001_+31.30.00.00000/'
+# specific_dirs =  '03:23:30.000001_+31.30.00.00000/'
 
-# Update path to use mosaic name and concat directory
-base_path = '../data/concat/'  # Assuming this is the base path as used before
-path = os.path.join(base_path, specific_dirs)
+# Define the path for concatenation task
+path = f"../data/concat/{specific_dirs}"
 
-# Modify niter as per request (change this to your desired value)
-nit = 5000  # Example new niter value, adjust as per your needs
+# Get list of FITS files in the directory
+fits_path = os.path.join(path, f"Images/img{nit}/fits/")
+file_list = [file for file in os.listdir(fits_path) if os.path.isfile(os.path.join(fits_path, file))]
 
-stokes_list = ['I', 'Q', 'U']
+# Create a complete list of file paths
+file_list_total = [os.path.join(fits_path, file) for file in file_list]
+print(file_list_total)
 
-# Function to create an empty channel FITS file using astropy
-def create_empty_channel(fitsname):
-    flagged_channel = os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits')
+# Function to remove initial empty channels
+# This function scans through the file list and removes the initial empty channels
+# It also returns a new list of files and the index shift after empty channels are removed.
+def remove_initial_empty_channels(filelist):
+    count_non_empty = 0  # Count how many non-empty channels there are after the initial empty ones are removed
+    updated_list = []  # Store the updated list with non-empty channels
 
-    # Remove existing empty channel file if it exists
-    if os.path.exists(flagged_channel):
-        os.remove(flagged_channel)
+    # Loop through the file list to remove leading empty channels
+    for file_name in filelist:
+        if "empty_channel.fits" not in file_name:
+            # Start counting after the first non-empty file is found
+            updated_list.append(file_name)
+            count_non_empty += 1
+        else:
+            # Stop removing when you reach non-empty files
+            if count_non_empty > 0:
+                updated_list.append(file_name)
+    
+    return updated_list, count_non_empty  # Return the updated list and the index shift
 
-    # Open the FITS file, set all data to NaN, and create the empty channel
-    with fits.open(fitsname) as hdul:
-        img_fits = hdul[0].data
-        img_fits[:] = np.nan  # Set all data to NaN
-        hdul.writeto(flagged_channel, overwrite=True)
+# Loop over stokes, SPWs, and channels
+for stok in stokes:
+    files_list = []
+    file_index = 0  # Keep track of the current index across all files
 
-    return flagged_channel
+    # Remove initial empty channels and get count of non-empty ones
+    non_empty_files_list, index_shift = remove_initial_empty_channels(file_list_total)
 
-# Function to remove empty channels from the start of the file list
-def remove_empty_channel_from_start(filelist):
-    if not filelist:
-        return []
-    if "empty_channel.fits" not in filelist[0]:
-        return filelist
-    else:
-        return remove_empty_channel_from_start(filelist[1:])
+    # Loop through each SPW and channel
+    for s in spw:
+        for channel in channels:
+            # Build expected file name based on the SPW, channel, and Stokes
+            file_name = os.path.join(fits_path, f"spw{s}-{channel}-2.5arcsec-nit{nit}-{thresh}-{stok}.image.smo.fits")
+            
+            # Adjust file_index by the index shift after empty channels have been removed
+            adjusted_index = file_index + index_shift
 
-# Process for each Stokes parameter
-for stokes in stokes_list:
-    cubename = os.path.join(path, f'Images/img{nit}/Stokes{stokes}.fits')
+            # Check if the current adjusted index is in the drop list for the current stokes
+            if adjusted_index in drop_indices.get(stok, []):
+                # Replace with empty channel if the index is in the drop list
+                files_list.append(os.path.join(fits_path, "empty_channel.fits"))
+                print(f"Replacing adjusted index {adjusted_index} for Stokes {stok} with empty channel.")
+            elif file_name in file_list_total:
+                # If the file exists, add it to the list
+                files_list.append(file_name)
+            else:
+                # Otherwise, add an empty channel if the file is missing
+                files_list.append(os.path.join(fits_path, "empty_channel.fits"))
+            
+            file_index += 1  # Increment the file index
+    
+    # Save the updated list of files for the current Stokes parameter
+    np.savetxt(os.path.join(path, f"Images/img{nit}/", f"Stokes{stok}.txt"), files_list, fmt='%s')
 
-    # Remove any existing cube file
-    if os.path.exists(cubename):
-        os.remove(cubename)
+    # Print the number of non-empty channels before replacements
+    print(f"File list for Stokes {stok} saved with the appropriate empty channel replacements.")
+    print(f"Number of non-empty channels before replacement starts: {index_shift}")
 
-    # Read the list of FITS files for the current Stokes parameter
-    with open(os.path.join(path, f'Images/img{nit}/Stokes{stokes}.txt'), 'r') as f:
-        file_list = f.read().splitlines()
-
-    # Remove any leading empty channel files from the list
-    file_list = remove_empty_channel_from_start(file_list)
-
-    # Adding the first channel to the list and initializing the cube
-    inputfile = file_list[0]
-    with fits.open(inputfile) as hdulist:
-        img = hdulist[0].data
-        cube = np.copy(img[0, :, :, :])  # Copy it to initialize the cube
-
-    # Create an empty channel FITS file
-    create_empty_channel(inputfile)
-    print('Empty channel is produced!')
-
-    # Loop through the file list, appending data to the cube
-    for filename in file_list:
-        with fits.open(filename) as hdulistCP:
-            imgCP = hdulistCP[0].data
-            if filename == os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits'):
-                # Replace NaN values with 1e30 to avoid issues
-                imgCP[np.isnan(imgCP)] = 1e30
-            img2cube = np.copy(imgCP[0, :, :, :])
-            cube = np.append(cube, img2cube, axis=0)
-
-    print('For loop completed!')
-
-    # Save the completed cube to the output FITS file
-    hdulist[0].data = cube
-    hdulist.writeto(cubename, overwrite=True)
-
-    print(f'Making cube for Stokes {stokes} is done!')
