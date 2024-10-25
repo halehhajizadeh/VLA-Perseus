@@ -54,7 +54,7 @@ def get_phase_center(ms_file):
         return None
 
 # Define working directory where your directories containing .ms files are located
-working_directory = '/data/new/data'
+working_directory = '../data/new/data'
 
 # Debug: Print working directory
 print(f"Looking for .ms files in directories inside: {working_directory}")
