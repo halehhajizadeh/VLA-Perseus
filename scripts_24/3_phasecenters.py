@@ -9,14 +9,17 @@ output_dir = './phasecenter'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)  # Create directory if it doesn't exist
 
-# Function to find .ms files inside subdirectories
-def find_ms_files(directory, startswith='24A-', endswith='.ms'):
+# Function to find directories and search for .ms files inside
+def find_ms_file_in_directories(base_directory, startswith='24A-', endswith='.ms'):
     ms_files = []
-    # Traverse through each directory and find files starting with 24A and ending with .ms
-    for root, dirs, files in os.walk(directory):
-        for file in files:
-            if file.startswith(startswith) and file.endswith(endswith):
-                ms_files.append(os.path.join(root, file))  # Store full path to the .ms file
+    # Loop through the directories in the base directory
+    for directory in os.listdir(base_directory):
+        full_path = os.path.join(base_directory, directory)
+        if os.path.isdir(full_path):  # Ensure it's a directory
+            # Search for the .ms file inside the directory
+            for file in os.listdir(full_path):
+                if file.startswith(startswith) and file.endswith(endswith):
+                    ms_files.append(os.path.join(full_path, file))  # Store the full path to the .ms file
     return ms_files
 
 # Extract the phase center from the measurement set using msmetadata
@@ -32,18 +35,18 @@ def get_phase_center(ms_file):
         print(f"Error reading phase center from {ms_file}: {e}")
         return None
 
-# Define working directory where your MS directories are located
-working_directory = '/data/new/data'
+# Define working directory where your directories containing .ms files are located
+working_directory = '../data/new/data'
 
 # Debug: Print working directory
-print(f"Looking for .ms files in: {working_directory}")
+print(f"Looking for .ms files in directories inside: {working_directory}")
 
-# Find all .ms files inside the subdirectories
-mslist = find_ms_files(working_directory)
+# Find all .ms files inside the directories
+mslist = find_ms_file_in_directories(working_directory)
 
 # Debug: Check if MS files were found
 if not mslist:
-    print("No .ms files found in the specified directory.")
+    print("No .ms files found in the specified directories.")
 else:
     print(f"Found {len(mslist)} .ms files.")
 
