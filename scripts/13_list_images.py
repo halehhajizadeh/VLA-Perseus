@@ -11,7 +11,13 @@ channels = ['00~07', '08~15', '16~23', '24~31', '32~39', '40~47', '48~55', '56~6
 stokes = ['I', 'Q', 'U']
 
 # Define the specific directory you're using for concatenation
-specific_dirs = '03:32:04.530001_+31.05.04.00000/'
+# specific_dirs = '03:32:04.530001_+31.05.04.00000/'
+specific_dirs = '03:36:00.000000_+30.30.00.00001/'
+# specific_dirs = '03:25:30.000000_+29.29.59.99999/'
+# specific_dirs = '03:23:30.000001_+31.30.00.00000/'
+
+
+
 path = f"../data/concat/{specific_dirs}"
 fits_path = os.path.join(path, f"Images/img{nit}/fits/")
 file_list_total = [os.path.join(fits_path, file) for file in os.listdir(fits_path) if os.path.isfile(os.path.join(fits_path, file))]
