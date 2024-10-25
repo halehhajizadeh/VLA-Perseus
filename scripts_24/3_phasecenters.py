@@ -1,8 +1,8 @@
 import matplotlib
-matplotlib.use('Agg')  # Force matplotlib to use a non-interactive backend
+matplotlib.use('Agg')  # Use a non-interactive backend to avoid OpenGL issues
 import matplotlib.pyplot as plt
 import os
-from casatools import msmetadata as msmdtool  # CASA tool for metadata access
+from casatools import msmetadata as msmdtool
 
 # Ensure the phasecenter directory exists
 output_dir = './phasecenter'
@@ -34,8 +34,17 @@ def get_phase_center(ms_file):
 # Define working directory where your MS files are located
 working_directory = '/data/new/data'
 
+# Debug: Print working directory
+print(f"Looking for measurement sets in: {working_directory}")
+
 # Find all MS files
 mslist = find_ms_folder(working_directory)
+
+# Debug: Check if MS files were found
+if not mslist:
+    print("No measurement sets found in the specified directory.")
+else:
+    print(f"Found {len(mslist)} measurement sets.")
 
 # Initialize lists for storing all phase centers
 all_ra_deg = []
@@ -50,9 +59,11 @@ for ms_folder in mslist:
     phase_center = get_phase_center(ms_folder)
     
     if phase_center is None:
+        print(f"Skipping {ms_folder} due to missing phase center.")
         continue  # Skip this MS file if phase center couldn't be read
     
     ra_deg, dec_deg = phase_center
+    print(f"Extracted phase center for {ms_folder}: RA = {ra_deg}, DEC = {dec_deg}")
     all_ra_deg.append(ra_deg)
     all_dec_deg.append(dec_deg)
     ms_name = os.path.basename(ms_folder)
@@ -69,24 +80,28 @@ for ms_folder in mslist:
     plt.savefig(f'./phasecenter/{ms_name}_phase_center.png', dpi=150)
     plt.close()
 
-# Plot all phase centers together
-plt.figure(figsize=(10, 8))
-plt.plot(all_ra_deg, all_dec_deg, 'bo')
-plt.xlabel('RA (deg)', fontsize=12)
-plt.ylabel('DEC (deg)', fontsize=12)
-plt.title('Phase Centers of All Measurement Sets', fontsize=12)
+# Check if we have valid phase centers to plot
+if all_ra_deg:
+    # Plot all phase centers together
+    plt.figure(figsize=(10, 8))
+    plt.plot(all_ra_deg, all_dec_deg, 'bo')
+    plt.xlabel('RA (deg)', fontsize=12)
+    plt.ylabel('DEC (deg)', fontsize=12)
+    plt.title('Phase Centers of All Measurement Sets', fontsize=12)
 
-# Annotate all points with their IDs
-for i, ms_name in enumerate(all_IDs):
-    plt.annotate(ms_name, (all_ra_deg[i], all_dec_deg[i]), fontsize=8)
+    # Annotate all points with their IDs
+    for i, ms_name in enumerate(all_IDs):
+        plt.annotate(ms_name, (all_ra_deg[i], all_dec_deg[i]), fontsize=8)
 
-# Save the combined plot of all phase centers
-plt.savefig('./phasecenter/all_phase_centers.png', dpi=150)
-plt.close()
+    # Save the combined plot of all phase centers
+    plt.savefig('./phasecenter/all_phase_centers.png', dpi=150)
+    plt.close()
 
-# Save phase center data to a file
-with open('./phasecenter/phase_centers.txt', 'w') as f:
-    for ms_name, ra_deg, dec_deg in zip(all_IDs, all_ra_deg, all_dec_deg):
-        f.write(f"{ms_name}: RA = {ra_deg}, DEC = {dec_deg}\n")
+    # Save phase center data to a file
+    with open('./phasecenter/phase_centers.txt', 'w') as f:
+        for ms_name, ra_deg, dec_deg in zip(all_IDs, all_ra_deg, all_dec_deg):
+            f.write(f"{ms_name}: RA = {ra_deg}, DEC = {dec_deg}\n")
 
-print("Phase centers plotted and saved successfully.")
+    print("Phase centers plotted and saved successfully.")
+else:
+    print("No phase centers found to plot.")
