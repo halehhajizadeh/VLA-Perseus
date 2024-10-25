@@ -36,6 +36,16 @@ def degrees_to_dms(dec_deg):
     arcseconds = abs(((dec_deg - degrees) * 60 - arcminutes) * 60)
     return f"{degrees:+03d}:{arcminutes:02d}:{arcseconds:05.2f}"
 
+# Function to convert RA/Dec from J2000 (HMS/DMS) back to degrees
+def hms_to_degrees(ra_hms):
+    h, m, s = [float(x) for x in ra_hms.split(":")]
+    return (h + m / 60 + s / 3600) * 15
+
+def dms_to_degrees(dec_dms):
+    d, m, s = [float(x) for x in dec_dms.split(":")]
+    sign = -1 if d < 0 else 1
+    return sign * (abs(d) + m / 60 + s / 3600)
+
 # Extract the phase center from the measurement set using msmetadata
 def get_phase_center(ms_file):
     msmd = msmdtool()
@@ -54,7 +64,7 @@ def get_phase_center(ms_file):
         return None
 
 # Define working directory where your directories containing .ms files are located
-working_directory = '../data/new/data'
+working_directory = '/data/new/data'
 
 # Debug: Print working directory
 print(f"Looking for .ms files in directories inside: {working_directory}")
@@ -86,16 +96,16 @@ for ms_file in mslist:
     
     ra_j2000, dec_j2000 = phase_center
     print(f"Extracted phase center for {ms_file}: RA = {ra_j2000}, DEC = {dec_j2000}")
-    all_ra_deg.append(ra_j2000)
-    all_dec_deg.append(dec_j2000)
+    all_ra_deg.append(hms_to_degrees(ra_j2000))  # Convert back to degrees for plotting
+    all_dec_deg.append(dms_to_degrees(dec_j2000))  # Convert back to degrees for plotting
     ms_name = os.path.basename(ms_file)
     all_IDs.append(ms_name)
 
     # Plot individual MS phase centers
     plt.figure(figsize=(8, 6))
-    plt.plot(float(ra_j2000.replace(":", ".")), float(dec_j2000.replace(":", ".")), 'bo')
-    plt.xlabel('RA (J2000)', fontsize=12)
-    plt.ylabel('DEC (J2000)', fontsize=12)
+    plt.plot(all_ra_deg[-1], all_dec_deg[-1], 'bo')
+    plt.xlabel('RA (deg)', fontsize=12)
+    plt.ylabel('DEC (deg)', fontsize=12)
     plt.title(f'Phase Center of {ms_name}', fontsize=12)
     
     # Save individual plot for the MS
@@ -106,14 +116,14 @@ for ms_file in mslist:
 if all_ra_deg:
     # Plot all phase centers together
     plt.figure(figsize=(10, 8))
-    plt.plot([float(ra.replace(":", ".")) for ra in all_ra_deg], [float(dec.replace(":", ".")) for dec in all_dec_deg], 'bo')
-    plt.xlabel('RA (J2000)', fontsize=12)
-    plt.ylabel('DEC (J2000)', fontsize=12)
+    plt.plot(all_ra_deg, all_dec_deg, 'bo')
+    plt.xlabel('RA (deg)', fontsize=12)
+    plt.ylabel('DEC (deg)', fontsize=12)
     plt.title('Phase Centers of All Measurement Sets (J2000)', fontsize=12)
 
     # Annotate all points with their IDs
     for i, ms_name in enumerate(all_IDs):
-        plt.annotate(ms_name, (float(all_ra_deg[i].replace(":", ".")), float(all_dec_deg[i].replace(":", "."))), fontsize=8)
+        plt.annotate(ms_name, (all_ra_deg[i], all_dec_deg[i]), fontsize=8)
 
     # Save the combined plot of all phase centers
     plt.savefig('./phasecenter/all_phase_centers.png', dpi=150)
