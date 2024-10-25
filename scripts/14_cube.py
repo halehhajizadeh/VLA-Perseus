@@ -39,13 +39,6 @@ def create_empty_channel(fitsname):
 
     return flagged_channel
 
-# Function to sremove empty channels from the start of the file list
-def remove_empty_channel_from_start(filelist):
-    non_empty_start = 0
-    while non_empty_start < len(filelist) and "empty_channel.fits" in filelist[non_empty_start]:
-        non_empty_start += 1
-    return filelist[non_empty_start:], non_empty_start  # Return the list and the number of removed empty channels
-
 # Process for each Stokes parameter
 for stokes in stokes_list:
     cubename = os.path.join(path, f'Images/img{nit}/Stokes{stokes}.fits')
@@ -58,9 +51,6 @@ for stokes in stokes_list:
     with open(os.path.join(path, f'Images/img{nit}/Stokes{stokes}.txt'), 'r') as f:
         file_list = f.read().splitlines()
 
-    # Remove any leading empty channel files from the list
-    file_list, empty_channel_removed = remove_empty_channel_from_start(file_list)
-
     # Adding the first channel to the list and initializing the cube
     inputfile = file_list[0]
     with fits.open(inputfile) as hdulist:
@@ -72,15 +62,12 @@ for stokes in stokes_list:
     print('Empty channel is produced!')
 
     # Loop through the file list, appending data to the cube
-    file_index = 0  # This is the actual index after removing empty channels
+    file_index = 0  # This is the actual index
     for filename in file_list:
-        # Adjust index for drop indices based on the initial removed empty channels
-        adjusted_index = file_index + empty_channel_removed
-
         # Check if the current index should be replaced with an empty channel
-        if adjusted_index in drop_indices.get(stokes, []):
+        if file_index in drop_indices.get(stokes, []):
             # Replace the file with empty_channel.fits
-            print(f"Replacing index {adjusted_index} with empty channel for Stokes {stokes}")
+            print(f"Replacing index {file_index} with empty channel for Stokes {stokes}")
             filename = empty_channel_file  # Replace with the path to the empty channel
 
         # Load the file data
