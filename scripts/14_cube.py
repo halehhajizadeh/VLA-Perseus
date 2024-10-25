@@ -10,10 +10,11 @@ base_path = '../data/concat/'
 path = os.path.join(base_path, specific_dirs)
 nit = 5000
 stokes_list = ['I', 'Q', 'U']
+# Subtract 1 from each index in drop_indices to adjust replacement positions
 drop_indices = {
-    'I': [41, 53, 80],
-    'Q': [41, 45, 49, 80],
-    'U': [41, 48, 49, 80, 95]
+    'I': [i - 1 for i in [41, 53, 80]],
+    'Q': [i - 1 for i in [41, 45, 49, 80]],
+    'U': [i - 1 for i in [41, 48, 49, 80, 95]]
 }
 
 # Function to create an empty channel FITS file
@@ -50,6 +51,7 @@ for stokes in stokes_list:
 
     # Loop through file_list and add to the cube
     for file_index, filename in enumerate(file_list):
+        # Adjust the replacement based on modified drop_indices
         if file_index in drop_indices.get(stokes, []):
             filename = empty_channel_file
             print(f"Replacing index {file_index} with empty channel for Stokes {stokes}")
@@ -71,3 +73,4 @@ for stokes in stokes_list:
         print(f"Cube saved for Stokes {stokes} at {cubename}")
     except Exception as e:
         print(f"Error saving cube for {stokes}: {e}")
+
