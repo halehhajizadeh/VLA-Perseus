@@ -27,14 +27,14 @@ def degrees_to_hms(ra_deg):
     hours = int(ra_deg // 15)
     minutes = int((ra_deg % 15) * 4)
     seconds = (((ra_deg % 15) * 4) % 1) * 60
-    return f"{hours:02d}:{minutes:02d}:{seconds:05.2f}"
+    return f"{hours:02d}:{minutes:02d}:{seconds:06.3f}"
 
 # Function to convert Dec in degrees to degrees:arcminutes:arcseconds (J2000)
 def degrees_to_dms(dec_deg):
     degrees = int(dec_deg)
     arcminutes = int(abs((dec_deg - degrees) * 60))
     arcseconds = abs(((dec_deg - degrees) * 60 - arcminutes) * 60)
-    return f"{degrees:+03d}:{arcminutes:02d}:{arcseconds:05.2f}"
+    return f"{degrees:+03d}:{arcminutes:02d}:{arcseconds:06.3f}"
 
 # Function to convert RA/Dec from J2000 (HMS/DMS) back to degrees
 def hms_to_degrees(ra_hms):
@@ -64,7 +64,7 @@ def get_phase_center(ms_file):
         return None
 
 # Define working directory where your directories containing .ms files are located
-working_directory = '../data/new/data'
+working_directory = '/data/new/data'
 
 # Debug: Print working directory
 print(f"Looking for .ms files in directories inside: {working_directory}")
@@ -129,10 +129,13 @@ if all_ra_deg:
     plt.savefig('./phasecenter/all_phase_centers.png', dpi=150)
     plt.close()
 
-    # Save phase center data to a file
+    # Save phase center data to a file in the requested format
     with open('./phasecenter/phase_centers_j2000.txt', 'w') as f:
         for ms_name, ra_j2000, dec_j2000 in zip(all_IDs, all_ra_deg, all_dec_deg):
-            f.write(f"{ms_name}: RA (J2000) = {ra_j2000}, DEC (J2000) = {dec_j2000}\n")
+            # Format: "J2000 00:00:00.000 +00.00.00.000"
+            formatted_ra = ra_j2000.replace(":", ".")
+            formatted_dec = dec_j2000.replace(":", ".")
+            f.write(f"{ms_name}: J2000 {formatted_ra} {formatted_dec}\n")
 
     print("Phase centers (J2000) plotted and saved successfully.")
 else:
