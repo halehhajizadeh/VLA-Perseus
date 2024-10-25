@@ -39,7 +39,7 @@ def create_empty_channel(fitsname):
 
     return flagged_channel
 
-# Function to remove empty channels from the start of the file list
+# Function to sremove empty channels from the start of the file list
 def remove_empty_channel_from_start(filelist):
     non_empty_start = 0
     while non_empty_start < len(filelist) and "empty_channel.fits" in filelist[non_empty_start]:
