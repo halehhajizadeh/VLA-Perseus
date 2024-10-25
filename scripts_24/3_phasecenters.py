@@ -10,7 +10,7 @@ if not os.path.exists(output_dir):
     os.makedirs(output_dir)  # Create directory if it doesn't exist
 
 # Function to find MS folders in the directory
-def find_ms_folder(directory, startswith='24A-', endswith='_calibrated.ms'):
+def find_ms_folder(directory, startswith='24A-', endswith='.ms'):
     folders_list = []
     for root, dirs, files in os.walk(directory):
         for file in files:
