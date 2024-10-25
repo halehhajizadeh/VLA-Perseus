@@ -32,7 +32,7 @@ def get_phase_center(ms_file):
         return None
 
 # Define working directory where your MS files are located
-working_directory = '/data/new/data'
+working_directory = '../data/new/data'
 
 # Debug: Print working directory
 print(f"Looking for measurement sets in: {working_directory}")
