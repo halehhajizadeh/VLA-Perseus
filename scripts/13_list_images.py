@@ -25,18 +25,17 @@ file_list_total = [os.path.join(fits_path, file) for file in file_list]
 print(f"Total files found: {len(file_list_total)}")
 
 # Step 1: Build the list of images for each Stokes parameter
-def build_image_list():
+def build_image_list(stok):
     files_list = []
-    for stok in stokes:
-        for s in spw:
-            for channel in channels:
-                # Construct the expected file name
-                file_name = os.path.join(fits_path, f"spw{s}-{channel}-2.5arcsec-nit{nit}-{thresh}-{stok}.image.smo.fits")
-                # Append to the list (empty channel if file does not exist)
-                if file_name in file_list_total:
-                    files_list.append(file_name)
-                else:
-                    files_list.append(os.path.join(fits_path, "empty_channel.fits"))
+    for s in spw:
+        for channel in channels:
+            # Construct the expected file name
+            file_name = os.path.join(fits_path, f"spw{s}-{channel}-2.5arcsec-nit{nit}-{thresh}-{stok}.image.smo.fits")
+            # Append to the list (empty channel if file does not exist)
+            if file_name in file_list_total:
+                files_list.append(file_name)
+            else:
+                files_list.append(os.path.join(fits_path, "empty_channel.fits"))
     return files_list
 
 # Step 2: Remove empty channels from the beginning of the list
@@ -50,25 +49,19 @@ def remove_initial_empty_channels(files_list):
     # Return the updated list starting from the first non-empty channel
     return files_list[non_empty_start:], non_empty_start
 
-# Step 3: Process and save the list without replacing any indices
-def process_images(files_list, non_empty_start):
-    # Loop through stokes and process the images based on the adjusted indices
-    for stok in stokes:
-        final_list = []
-        file_index = 0  # Keep track of the current index after removing initial empty channels
-        for file in files_list:
-            final_list.append(file)  # Just append the file without any replacements
-            file_index += 1  # Increment the file index
+# Step 3: Process and save the list for each Stokes parameter
+def process_images(files_list, stok):
+    # Save the list of files for the current Stokes parameter
+    np.savetxt(os.path.join(path, f"Images/img{nit}/", f"Stokes{stok}.txt"), files_list, fmt='%s')
+    print(f"File list for Stokes {stok} saved.")
 
-        # Save the list of files for the current Stokes parameter
-        np.savetxt(os.path.join(path, f"Images/img{nit}/", f"Stokes{stok}.txt"), final_list, fmt='%s')
-        print(f"File list for Stokes {stok} saved.")
-
-# Step 1: Build the list of images
-files_list = build_image_list()
-
-# Step 2: Remove the empty channels from the beginning of the cube
-non_empty_files_list, non_empty_start = remove_initial_empty_channels(files_list)
-
-# Step 3: Process the images without replacing any indices
-process_images(non_empty_files_list, non_empty_start)
+# Main loop to process each Stokes parameter
+for stok in stokes:
+    # Step 1: Build the list of images for the current Stokes parameter
+    files_list = build_image_list(stok)
+    
+    # Step 2: Remove the empty channels from the beginning of the cube
+    non_empty_files_list, non_empty_start = remove_initial_empty_channels(files_list)
+    
+    # Step 3: Process and save the list for the current Stokes parameter
+    process_images(non_empty_files_list, stok)
