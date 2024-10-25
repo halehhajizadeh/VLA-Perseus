@@ -22,21 +22,39 @@ def find_ms_file_in_directories(base_directory, startswith='24A-', endswith='.ms
                     ms_files.append(os.path.join(full_path, file))  # Store the full path to the .ms file
     return ms_files
 
-# Extract the phase center from the measurement set in J2000 format using msmetadata
+# Function to convert RA in degrees to hours:minutes:seconds (J2000)
+def degrees_to_hms(ra_deg):
+    hours = int(ra_deg // 15)
+    minutes = int((ra_deg % 15) * 4)
+    seconds = (((ra_deg % 15) * 4) % 1) * 60
+    return f"{hours:02d}:{minutes:02d}:{seconds:05.2f}"
+
+# Function to convert Dec in degrees to degrees:arcminutes:arcseconds (J2000)
+def degrees_to_dms(dec_deg):
+    degrees = int(dec_deg)
+    arcminutes = int(abs((dec_deg - degrees) * 60))
+    arcseconds = abs(((dec_deg - degrees) * 60 - arcminutes) * 60)
+    return f"{degrees:+03d}:{arcminutes:02d}:{arcseconds:05.2f}"
+
+# Extract the phase center from the measurement set using msmetadata
 def get_phase_center(ms_file):
     msmd = msmdtool()
     try:
         msmd.open(ms_file)
-        ra_j2000 = msmd.phasecenter(0, unit='hms')['m0']['value']  # RA in J2000 (hours:min:sec)
-        dec_j2000 = msmd.phasecenter(0, unit='dms')['m1']['value']  # DEC in J2000 (deg:arcmin:arcsec)
+        ra_deg = msmd.phasecenter(0)['m0']['value']  # RA in degrees
+        dec_deg = msmd.phasecenter(0)['m1']['value']  # DEC in degrees
         msmd.close()
+        
+        ra_j2000 = degrees_to_hms(ra_deg)  # Convert RA from degrees to J2000 format
+        dec_j2000 = degrees_to_dms(dec_deg)  # Convert DEC from degrees to J2000 format
+        
         return ra_j2000, dec_j2000
     except Exception as e:
         print(f"Error reading phase center from {ms_file}: {e}")
         return None
 
 # Define working directory where your directories containing .ms files are located
-working_directory = '../data/new/data'
+working_directory = '/data/new/data'
 
 # Debug: Print working directory
 print(f"Looking for .ms files in directories inside: {working_directory}")
@@ -75,7 +93,7 @@ for ms_file in mslist:
 
     # Plot individual MS phase centers
     plt.figure(figsize=(8, 6))
-    plt.plot(float(ra_j2000), float(dec_j2000), 'bo')
+    plt.plot(float(ra_j2000.replace(":", ".")), float(dec_j2000.replace(":", ".")), 'bo')
     plt.xlabel('RA (J2000)', fontsize=12)
     plt.ylabel('DEC (J2000)', fontsize=12)
     plt.title(f'Phase Center of {ms_name}', fontsize=12)
@@ -88,14 +106,14 @@ for ms_file in mslist:
 if all_ra_deg:
     # Plot all phase centers together
     plt.figure(figsize=(10, 8))
-    plt.plot([float(ra) for ra in all_ra_deg], [float(dec) for dec in all_dec_deg], 'bo')
+    plt.plot([float(ra.replace(":", ".")) for ra in all_ra_deg], [float(dec.replace(":", ".")) for dec in all_dec_deg], 'bo')
     plt.xlabel('RA (J2000)', fontsize=12)
     plt.ylabel('DEC (J2000)', fontsize=12)
     plt.title('Phase Centers of All Measurement Sets (J2000)', fontsize=12)
 
     # Annotate all points with their IDs
     for i, ms_name in enumerate(all_IDs):
-        plt.annotate(ms_name, (float(all_ra_deg[i]), float(all_dec_deg[i])), fontsize=8)
+        plt.annotate(ms_name, (float(all_ra_deg[i].replace(":", ".")), float(all_dec_deg[i].replace(":", "."))), fontsize=8)
 
     # Save the combined plot of all phase centers
     plt.savefig('./phasecenter/all_phase_centers.png', dpi=150)
