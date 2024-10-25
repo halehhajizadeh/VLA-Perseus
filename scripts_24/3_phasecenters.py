@@ -22,15 +22,15 @@ def find_ms_file_in_directories(base_directory, startswith='24A-', endswith='.ms
                     ms_files.append(os.path.join(full_path, file))  # Store the full path to the .ms file
     return ms_files
 
-# Extract the phase center from the measurement set using msmetadata
+# Extract the phase center from the measurement set in J2000 format using msmetadata
 def get_phase_center(ms_file):
     msmd = msmdtool()
     try:
         msmd.open(ms_file)
-        ra_deg = msmd.phasecenter(0)['m0']['value']  # RA in degrees
-        dec_deg = msmd.phasecenter(0)['m1']['value']  # DEC in degrees
+        ra_j2000 = msmd.phasecenter(0, unit='hms')['m0']['value']  # RA in J2000 (hours:min:sec)
+        dec_j2000 = msmd.phasecenter(0, unit='dms')['m1']['value']  # DEC in J2000 (deg:arcmin:arcsec)
         msmd.close()
-        return ra_deg, dec_deg
+        return ra_j2000, dec_j2000
     except Exception as e:
         print(f"Error reading phase center from {ms_file}: {e}")
         return None
@@ -59,25 +59,25 @@ all_IDs = []
 for ms_file in mslist:
     print(f"Processing {ms_file}...")
 
-    # Get phase center (RA, Dec in degrees)
+    # Get phase center (RA, Dec in J2000 format)
     phase_center = get_phase_center(ms_file)
     
     if phase_center is None:
         print(f"Skipping {ms_file} due to missing phase center.")
         continue  # Skip this MS file if phase center couldn't be read
     
-    ra_deg, dec_deg = phase_center
-    print(f"Extracted phase center for {ms_file}: RA = {ra_deg}, DEC = {dec_deg}")
-    all_ra_deg.append(ra_deg)
-    all_dec_deg.append(dec_deg)
+    ra_j2000, dec_j2000 = phase_center
+    print(f"Extracted phase center for {ms_file}: RA = {ra_j2000}, DEC = {dec_j2000}")
+    all_ra_deg.append(ra_j2000)
+    all_dec_deg.append(dec_j2000)
     ms_name = os.path.basename(ms_file)
     all_IDs.append(ms_name)
 
     # Plot individual MS phase centers
     plt.figure(figsize=(8, 6))
-    plt.plot(ra_deg, dec_deg, 'bo')
-    plt.xlabel('RA (deg)', fontsize=12)
-    plt.ylabel('DEC (deg)', fontsize=12)
+    plt.plot(float(ra_j2000), float(dec_j2000), 'bo')
+    plt.xlabel('RA (J2000)', fontsize=12)
+    plt.ylabel('DEC (J2000)', fontsize=12)
     plt.title(f'Phase Center of {ms_name}', fontsize=12)
     
     # Save individual plot for the MS
@@ -88,24 +88,24 @@ for ms_file in mslist:
 if all_ra_deg:
     # Plot all phase centers together
     plt.figure(figsize=(10, 8))
-    plt.plot(all_ra_deg, all_dec_deg, 'bo')
-    plt.xlabel('RA (deg)', fontsize=12)
-    plt.ylabel('DEC (deg)', fontsize=12)
-    plt.title('Phase Centers of All Measurement Sets', fontsize=12)
+    plt.plot([float(ra) for ra in all_ra_deg], [float(dec) for dec in all_dec_deg], 'bo')
+    plt.xlabel('RA (J2000)', fontsize=12)
+    plt.ylabel('DEC (J2000)', fontsize=12)
+    plt.title('Phase Centers of All Measurement Sets (J2000)', fontsize=12)
 
     # Annotate all points with their IDs
     for i, ms_name in enumerate(all_IDs):
-        plt.annotate(ms_name, (all_ra_deg[i], all_dec_deg[i]), fontsize=8)
+        plt.annotate(ms_name, (float(all_ra_deg[i]), float(all_dec_deg[i])), fontsize=8)
 
     # Save the combined plot of all phase centers
     plt.savefig('./phasecenter/all_phase_centers.png', dpi=150)
     plt.close()
 
     # Save phase center data to a file
-    with open('./phasecenter/phase_centers.txt', 'w') as f:
-        for ms_name, ra_deg, dec_deg in zip(all_IDs, all_ra_deg, all_dec_deg):
-            f.write(f"{ms_name}: RA = {ra_deg}, DEC = {dec_deg}\n")
+    with open('./phasecenter/phase_centers_j2000.txt', 'w') as f:
+        for ms_name, ra_j2000, dec_j2000 in zip(all_IDs, all_ra_deg, all_dec_deg):
+            f.write(f"{ms_name}: RA (J2000) = {ra_j2000}, DEC (J2000) = {dec_j2000}\n")
 
-    print("Phase centers plotted and saved successfully.")
+    print("Phase centers (J2000) plotted and saved successfully.")
 else:
     print("No phase centers found to plot.")
