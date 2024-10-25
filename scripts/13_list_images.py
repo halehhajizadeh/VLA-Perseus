@@ -10,13 +10,6 @@ spw = [15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8]  # Spectral windows (SPWs)
 channels = ['00~07', '08~15', '16~23', '24~31', '32~39', '40~47', '48~55', '56~63']  # Channels
 stokes = ['I', 'Q', 'U']  # Stokes parameters
 
-# Indices to replace with "empty_channel.fits" for each Stokes parameter after removing initial empty channels
-drop_indices = {
-    'I': [41, 53, 80],  # For Stokes I
-    'Q': [41, 45, 49, 80],  # For Stokes Q
-    'U': [41, 48, 49, 80, 95]  # For Stokes U
-}
-
 # Define the specific directory you're using for concatenation
 specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # Update the directory as needed
 
@@ -57,23 +50,14 @@ def remove_initial_empty_channels(files_list):
     # Return the updated list starting from the first non-empty channel
     return files_list[non_empty_start:], non_empty_start
 
-# Step 3: Replace images at specified indices after removing empty channels from the beginning
-def apply_replacements(files_list, non_empty_start):
-    # Loop through stokes and apply the replacements based on the adjusted indices
+# Step 3: Process and save the list without replacing any indices
+def process_images(files_list, non_empty_start):
+    # Loop through stokes and process the images based on the adjusted indices
     for stok in stokes:
         final_list = []
         file_index = 0  # Keep track of the current index after removing initial empty channels
         for file in files_list:
-            adjusted_index = file_index + non_empty_start  # Adjust the index after removing empty channels
-
-            # Check if the current adjusted index is in the drop list for the current stokes
-            if adjusted_index in drop_indices.get(stok, []):
-                # Replace with empty channel if the index is in the drop list
-                final_list.append(os.path.join(fits_path, "empty_channel.fits"))
-                print(f"Replacing index {adjusted_index} for Stokes {stok} with empty channel.")
-            else:
-                final_list.append(file)
-
+            final_list.append(file)  # Just append the file without any replacements
             file_index += 1  # Increment the file index
 
         # Save the list of files for the current Stokes parameter
@@ -86,5 +70,5 @@ files_list = build_image_list()
 # Step 2: Remove the empty channels from the beginning of the cube
 non_empty_files_list, non_empty_start = remove_initial_empty_channels(files_list)
 
-# Step 3: Apply the replacements at the specified indices
-apply_replacements(non_empty_files_list, non_empty_start)
+# Step 3: Process the images without replacing any indices
+process_images(non_empty_files_list, non_empty_start)
