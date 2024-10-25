@@ -64,29 +64,26 @@ for stokes in stokes_list:
     print('Empty channel is produced!')
 
     # Loop through the file list, appending data to the cube
-    file_index = 0  # This is the actual index
+    file_index = 0  # This is the actual index from StokesI.txt
     for filename in file_list:
-        print(f"Processing file at index {file_index}: {filename}")
-
-        # Check if the current index should be replaced with an empty channel
-        if file_index in drop_indices.get(stokes, []):
-            # Replace the file with empty_channel.fits
-            print(f"Replacing index {file_index} with empty channel for Stokes {stokes}")
-            filename = empty_channel_file  # Replace with the path to the empty channel
+        print(f"Processing file {filename} at index {file_index} (from StokesI.txt)")
+        
+        # If file is missing, use empty channel
+        if not os.path.exists(filename):
+            print(f"File {filename} is missing, replacing it with empty channel at index {file_index}")
+            filename = empty_channel_file
 
         # Load the file data
-        try:
-            with fits.open(filename) as hdulistCP:
-                imgCP = hdulistCP[0].data
-                if filename == empty_channel_file:
-                    print(f"Using empty channel for index {file_index}")
-                    # Replace NaN values with 1e30 to avoid issues
-                    imgCP[np.isnan(imgCP)] = 1e30
-                img2cube = np.copy(imgCP[0, :, :, :])
-                cube = np.append(cube, img2cube, axis=0)
-        except Exception as e:
-            print(f"Error reading file {filename}: {e}")
+        with fits.open(filename) as hdulistCP:
+            imgCP = hdulistCP[0].data
+            if filename == empty_channel_file:
+                print(f"Using empty channel for index {file_index}")
+                # Replace NaN values with 1e30 to avoid issues
+                imgCP[np.isnan(imgCP)] = 1e30
+            img2cube = np.copy(imgCP[0, :, :, :])
+            cube = np.append(cube, img2cube, axis=0)
 
+        print(f"Added file {filename} to cube at index {file_index}")
         file_index += 1  # Increment the file index
 
     print(f"For loop completed for Stokes {stokes}!")
