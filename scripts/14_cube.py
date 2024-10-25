@@ -31,13 +31,16 @@ def create_empty_channel(fitsname):
     if os.path.exists(flagged_channel):
         os.remove(flagged_channel)
 
-    # Open the FITS file, set all data to NaN, and create the empty channel
+    # Open the FITS file, set all data to NaN or 1e30, and create the empty channel
     with fits.open(fitsname) as hdul:
         img_fits = hdul[0].data
         img_fits[:] = np.nan  # Set all data to NaN
         hdul.writeto(flagged_channel, overwrite=True)
 
-    print(f'Empty channel created at: {flagged_channel}')
+    # Reopen to verify empty channel
+    with fits.open(flagged_channel) as hdul_verify:
+        print(f"Empty channel verification: {np.unique(hdul_verify[0].data)}")  # Ensure it's full of NaN
+
     return flagged_channel
 
 # Process for each Stokes parameter
@@ -74,17 +77,15 @@ for stokes in stokes_list:
             filename = empty_channel_file  # Replace with the path to the empty channel
 
         # Load the file data
-        try:
-            with fits.open(filename) as hdulistCP:
-                imgCP = hdulistCP[0].data
-                if filename == empty_channel_file:
-                    print(f"Using empty channel for index {file_index}")
-                    # Replace NaN values with 1e30 to avoid issues
-                    imgCP[np.isnan(imgCP)] = 1e30
-                img2cube = np.copy(imgCP[0, :, :, :])
-                cube = np.append(cube, img2cube, axis=0)
-        except Exception as e:
-            print(f"Error reading file {filename}: {e}")
+        with fits.open(filename) as hdulistCP:
+            imgCP = hdulistCP[0].data
+            if filename == empty_channel_file:
+                print(f"Using empty channel for index {file_index}")
+                # Replace NaN values with 1e30 to avoid issues
+                imgCP[np.isnan(imgCP)] = 1e30
+                print(f"Empty channel unique values: {np.unique(imgCP)}")
+            img2cube = np.copy(imgCP[0, :, :, :])
+            cube = np.append(cube, img2cube, axis=0)
 
         file_index += 1  # Increment the file index
 
