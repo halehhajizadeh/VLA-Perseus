@@ -37,10 +37,6 @@ def create_empty_channel(fitsname):
         img_fits[:] = np.nan  # Set all data to NaN
         hdul.writeto(flagged_channel, overwrite=True)
 
-    # Reopen to verify empty channel
-    with fits.open(flagged_channel) as hdul_verify:
-        print(f"Empty channel verification: {np.unique(hdul_verify[0].data)}")  # Ensure it's full of NaN
-
     return flagged_channel
 
 # Process for each Stokes parameter
@@ -70,6 +66,8 @@ for stokes in stokes_list:
     # Loop through the file list, appending data to the cube
     file_index = 0  # This is the actual index
     for filename in file_list:
+        print(f"Processing file at index {file_index}: {filename}")
+
         # Check if the current index should be replaced with an empty channel
         if file_index in drop_indices.get(stokes, []):
             # Replace the file with empty_channel.fits
@@ -77,15 +75,17 @@ for stokes in stokes_list:
             filename = empty_channel_file  # Replace with the path to the empty channel
 
         # Load the file data
-        with fits.open(filename) as hdulistCP:
-            imgCP = hdulistCP[0].data
-            if filename == empty_channel_file:
-                print(f"Using empty channel for index {file_index}")
-                # Replace NaN values with 1e30 to avoid issues
-                imgCP[np.isnan(imgCP)] = 1e30
-                print(f"Empty channel unique values: {np.unique(imgCP)}")
-            img2cube = np.copy(imgCP[0, :, :, :])
-            cube = np.append(cube, img2cube, axis=0)
+        try:
+            with fits.open(filename) as hdulistCP:
+                imgCP = hdulistCP[0].data
+                if filename == empty_channel_file:
+                    print(f"Using empty channel for index {file_index}")
+                    # Replace NaN values with 1e30 to avoid issues
+                    imgCP[np.isnan(imgCP)] = 1e30
+                img2cube = np.copy(imgCP[0, :, :, :])
+                cube = np.append(cube, img2cube, axis=0)
+        except Exception as e:
+            print(f"Error reading file {filename}: {e}")
 
         file_index += 1  # Increment the file index
 
