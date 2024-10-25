@@ -1,24 +1,11 @@
-#!!!!!!!!!!!!!!!!!!!!!!!!!!RUN IT IN NMPOST_MASTER AND OUT OF CASA!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-# First index is Stokes
-# Second index is frequency
-# Third index is DEC
-# Fourth index is RA
 import sys
 sys.path.append('.')
 import os
 import numpy as np
 from astropy.io import fits  # Keep astropy for handling FITS files
 
-
-nit=5000
-
 # Updated path with mosaic name (specific_dirs)
 specific_dirs = '03:32:04.530001_+31.05.04.00000/'  # As used in your previous scripts
-# specific_dirs =  '03:36:00.000000_+30.30.00.00001/'
-# # specific_dirs =  '03:34:30.000000_+31.59.59.99999/'
-# specific_dirs =  '03:25:30.000000_+29.29.59.99999/'
-# # specific_dirs =  '03:23:30.000001_+31.30.00.00000/'
 
 # Update path to use mosaic name and concat directory
 base_path = '../data/concat/'  # Assuming this is the base path as used before
@@ -28,6 +15,13 @@ path = os.path.join(base_path, specific_dirs)
 nit = 5000  # Example new niter value, adjust as per your needs
 
 stokes_list = ['I', 'Q', 'U']
+
+# Indices to replace with "empty_channel.fits" for each Stokes parameter
+drop_indices = {
+    'I': [41, 53, 80],  # Indices for Stokes I
+    'Q': [41, 45, 49, 80],  # Indices for Stokes Q
+    'U': [41, 48, 49, 80, 95]  # Indices for Stokes U
+}
 
 # Function to create an empty channel FITS file using astropy
 def create_empty_channel(fitsname):
@@ -47,12 +41,10 @@ def create_empty_channel(fitsname):
 
 # Function to remove empty channels from the start of the file list
 def remove_empty_channel_from_start(filelist):
-    if not filelist:
-        return []
-    if "empty_channel.fits" not in filelist[0]:
-        return filelist
-    else:
-        return remove_empty_channel_from_start(filelist[1:])
+    non_empty_start = 0
+    while non_empty_start < len(filelist) and "empty_channel.fits" in filelist[non_empty_start]:
+        non_empty_start += 1
+    return filelist[non_empty_start:], non_empty_start  # Return the list and the number of removed empty channels
 
 # Process for each Stokes parameter
 for stokes in stokes_list:
@@ -67,7 +59,7 @@ for stokes in stokes_list:
         file_list = f.read().splitlines()
 
     # Remove any leading empty channel files from the list
-    file_list = remove_empty_channel_from_start(file_list)
+    file_list, empty_channel_removed = remove_empty_channel_from_start(file_list)
 
     # Adding the first channel to the list and initializing the cube
     inputfile = file_list[0]
@@ -76,20 +68,33 @@ for stokes in stokes_list:
         cube = np.copy(img[0, :, :, :])  # Copy it to initialize the cube
 
     # Create an empty channel FITS file
-    create_empty_channel(inputfile)
+    empty_channel_file = create_empty_channel(inputfile)
     print('Empty channel is produced!')
 
     # Loop through the file list, appending data to the cube
+    file_index = 0  # This is the actual index after removing empty channels
     for filename in file_list:
+        # Adjust index for drop indices based on the initial removed empty channels
+        adjusted_index = file_index + empty_channel_removed
+
+        # Check if the current index should be replaced with an empty channel
+        if adjusted_index in drop_indices.get(stokes, []):
+            # Replace the file with empty_channel.fits
+            print(f"Replacing index {adjusted_index} with empty channel for Stokes {stokes}")
+            filename = empty_channel_file  # Replace with the path to the empty channel
+
+        # Load the file data
         with fits.open(filename) as hdulistCP:
             imgCP = hdulistCP[0].data
-            if filename == os.path.join(path, f'Images/img{nit}/fits/empty_channel.fits'):
+            if filename == empty_channel_file:
                 # Replace NaN values with 1e30 to avoid issues
                 imgCP[np.isnan(imgCP)] = 1e30
             img2cube = np.copy(imgCP[0, :, :, :])
             cube = np.append(cube, img2cube, axis=0)
 
-    print('For loop completed!')
+        file_index += 1  # Increment the file index
+
+    print(f"For loop completed for Stokes {stokes}!")
 
     # Save the completed cube to the output FITS file
     hdulist[0].data = cube
