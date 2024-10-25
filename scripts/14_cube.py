@@ -37,6 +37,7 @@ def create_empty_channel(fitsname):
         img_fits[:] = np.nan  # Set all data to NaN
         hdul.writeto(flagged_channel, overwrite=True)
 
+    print(f'Empty channel created at: {flagged_channel}')
     return flagged_channel
 
 # Process for each Stokes parameter
@@ -50,6 +51,8 @@ for stokes in stokes_list:
     # Read the list of FITS files for the current Stokes parameter
     with open(os.path.join(path, f'Images/img{nit}/Stokes{stokes}.txt'), 'r') as f:
         file_list = f.read().splitlines()
+
+    print(f'Processing Stokes {stokes}: Found {len(file_list)} files.')
 
     # Adding the first channel to the list and initializing the cube
     inputfile = file_list[0]
@@ -71,20 +74,26 @@ for stokes in stokes_list:
             filename = empty_channel_file  # Replace with the path to the empty channel
 
         # Load the file data
-        with fits.open(filename) as hdulistCP:
-            imgCP = hdulistCP[0].data
-            if filename == empty_channel_file:
-                # Replace NaN values with 1e30 to avoid issues
-                imgCP[np.isnan(imgCP)] = 1e30
-            img2cube = np.copy(imgCP[0, :, :, :])
-            cube = np.append(cube, img2cube, axis=0)
+        try:
+            with fits.open(filename) as hdulistCP:
+                imgCP = hdulistCP[0].data
+                if filename == empty_channel_file:
+                    print(f"Using empty channel for index {file_index}")
+                    # Replace NaN values with 1e30 to avoid issues
+                    imgCP[np.isnan(imgCP)] = 1e30
+                img2cube = np.copy(imgCP[0, :, :, :])
+                cube = np.append(cube, img2cube, axis=0)
+        except Exception as e:
+            print(f"Error reading file {filename}: {e}")
 
         file_index += 1  # Increment the file index
 
     print(f"For loop completed for Stokes {stokes}!")
 
     # Save the completed cube to the output FITS file
-    hdulist[0].data = cube
-    hdulist.writeto(cubename, overwrite=True)
-
-    print(f'Making cube for Stokes {stokes} is done!')
+    try:
+        hdulist[0].data = cube
+        hdulist.writeto(cubename, overwrite=True)
+        print(f"Cube saved for Stokes {stokes} at {cubename}")
+    except Exception as e:
+        print(f"Error saving cube for {stokes}: {e}")
