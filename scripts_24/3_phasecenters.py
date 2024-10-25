@@ -9,14 +9,15 @@ output_dir = './phasecenter'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)  # Create directory if it doesn't exist
 
-# Function to find MS folders in the directory
-def find_ms_folder(directory, startswith='24A-', endswith='.ms'):
-    folders_list = []
+# Function to find .ms files inside subdirectories
+def find_ms_files(directory, startswith='24A-', endswith='.ms'):
+    ms_files = []
+    # Traverse through each directory and find files starting with 24A and ending with .ms
     for root, dirs, files in os.walk(directory):
         for file in files:
             if file.startswith(startswith) and file.endswith(endswith):
-                folders_list.append(os.path.join(root, file))                
-    return folders_list
+                ms_files.append(os.path.join(root, file))  # Store full path to the .ms file
+    return ms_files
 
 # Extract the phase center from the measurement set using msmetadata
 def get_phase_center(ms_file):
@@ -31,20 +32,20 @@ def get_phase_center(ms_file):
         print(f"Error reading phase center from {ms_file}: {e}")
         return None
 
-# Define working directory where your MS files are located
-working_directory = '../data/new/data'
+# Define working directory where your MS directories are located
+working_directory = '/data/new/data'
 
 # Debug: Print working directory
-print(f"Looking for measurement sets in: {working_directory}")
+print(f"Looking for .ms files in: {working_directory}")
 
-# Find all MS files
-mslist = find_ms_folder(working_directory)
+# Find all .ms files inside the subdirectories
+mslist = find_ms_files(working_directory)
 
 # Debug: Check if MS files were found
 if not mslist:
-    print("No measurement sets found in the specified directory.")
+    print("No .ms files found in the specified directory.")
 else:
-    print(f"Found {len(mslist)} measurement sets.")
+    print(f"Found {len(mslist)} .ms files.")
 
 # Initialize lists for storing all phase centers
 all_ra_deg = []
@@ -52,21 +53,21 @@ all_dec_deg = []
 all_IDs = []
 
 # Process each MS file, extract phase center, and generate plots
-for ms_folder in mslist:
-    print(f"Processing {ms_folder}...")
+for ms_file in mslist:
+    print(f"Processing {ms_file}...")
 
     # Get phase center (RA, Dec in degrees)
-    phase_center = get_phase_center(ms_folder)
+    phase_center = get_phase_center(ms_file)
     
     if phase_center is None:
-        print(f"Skipping {ms_folder} due to missing phase center.")
+        print(f"Skipping {ms_file} due to missing phase center.")
         continue  # Skip this MS file if phase center couldn't be read
     
     ra_deg, dec_deg = phase_center
-    print(f"Extracted phase center for {ms_folder}: RA = {ra_deg}, DEC = {dec_deg}")
+    print(f"Extracted phase center for {ms_file}: RA = {ra_deg}, DEC = {dec_deg}")
     all_ra_deg.append(ra_deg)
     all_dec_deg.append(dec_deg)
-    ms_name = os.path.basename(ms_folder)
+    ms_name = os.path.basename(ms_file)
     all_IDs.append(ms_name)
 
     # Plot individual MS phase centers
