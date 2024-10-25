@@ -1,19 +1,26 @@
 import sys
+import matplotlib
+matplotlib.use('Agg')  # Use a non-interactive backend to avoid OpenGL issues
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 from casatools import msmetadata as msmdtool
 
-# Disable LaTeX rendering for Matplotlib to avoid errors
+# Set font to DejaVu Sans and disable LaTeX rendering to avoid errors
 from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-rc('text', usetex=False)  # Set usetex to False
+rc('font',**{'family':'sans-serif','sans-serif':['DejaVu Sans']})
+rc('text', usetex=False)
 
 # Define working directory where your MS files are located
 working_directory = '/data/new/data'
 
+# Ensure the phasecenter directory exists
+output_dir = './phasecenter'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
 # Function to find MS folders in the directory
-def find_ms_folder(directory, startswith='24A-', endswith='.ms'):
+def find_ms_folder(directory, startswith='24A-', endswith='_calibrated.ms'):
     folders_list = []
     for root, dirs, files in os.walk(directory):
         for file in files:
@@ -86,7 +93,7 @@ for i, ms_name in enumerate(all_IDs):
 
 # Save the combined plot of all phase centers
 plt.savefig('./phasecenter/all_phase_centers.png')
-plt.show()
+plt.close()
 
 # Save phase center data to a file
 with open('./phasecenter/phase_centers.txt', 'w') as f:
