@@ -37,10 +37,10 @@ def run_tclean(ms_file, img_filename, mosaic_name, phase_center):
         niter=nit,
         gain=0.1,
         threshold=thresh,
-        cycleniter=200,
+        # cycleniter=200,
         cyclefactor=1,
         parallel=True,
-        psterm=True,
+        # psterm=True,
         nterms=2,
         rotatepastep=5.0,
         interactive=False
