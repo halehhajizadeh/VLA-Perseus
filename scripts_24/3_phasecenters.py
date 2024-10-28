@@ -10,7 +10,7 @@ if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
 # Function to find .ms files in a specified directory structure
-def find_ms_folder(directory, startswith='24A-', endswith='.ms'):
+def find_ms_folder(directory, startswith='24A-', endswith='_calibrated.ms'):
     ms_files = []
     for file in os.listdir(directory):
         full_path = os.path.join(directory, file)
@@ -29,7 +29,7 @@ def degrees_to_hms(ra_deg):
 
 # Function to convert Dec in degrees to degrees:arcminutes:arcseconds (J2000)
 def degrees_to_dms(dec_deg):
-    degrees = int(dec_deg)
+    degrees = int(dec_deg)a
     arcminutes = int(abs((dec_deg - degrees) * 60))
     arcseconds = abs(((dec_deg - degrees) * 60 - arcminutes) * 60)
     return f"{degrees:+03d}:{arcminutes:02d}:{arcseconds:06.3f}"
@@ -79,9 +79,11 @@ all_dec_deg = []
 all_IDs = []
 
 # Process each measurement set
+# Process each measurement set
 with open('./phasecenter/measurement_sets_phase_centers.txt', 'w') as summary_file:
     for ms_file in mslist:
-        ms_name = os.path.basename(ms_file)
+        # Get the base name and remove "_calibrated.ms"
+        ms_name = os.path.basename(ms_file).replace("_calibrated.ms", "")
         print(f"Processing {ms_name}...")
 
         # Extract phase centers for each field matching "PER_FIELD_*"
@@ -126,8 +128,9 @@ with open('./phasecenter/measurement_sets_phase_centers.txt', 'w') as summary_fi
         all_dec_deg.extend(dec_deg_list)
         all_IDs.extend([field_id for field_id, _, _ in phase_centers])
 
-        # Write to summary file
+        # Write to summary file with modified ms_name
         summary_file.write(f"{ms_name}: J2000 {main_ra_j2000} {main_dec_j2000}\n")
+
 
 # Plot all phase centers together (combined plot)
 if all_ra_deg:
