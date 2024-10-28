@@ -34,6 +34,18 @@ def degrees_to_dms(dec_deg):
     arcseconds = abs(((dec_deg - degrees) * 60 - arcminutes) * 60)
     return f"{degrees:+03d}:{arcminutes:02d}:{arcseconds:06.3f}"
 
+# Function to convert RA in HH:MM:SS format to degrees
+def hms_to_degrees(ra_hms):
+    h, m, s = [float(x) for x in ra_hms.split(":")]
+    return (h + m / 60 + s / 3600) * 15
+
+# Function to convert Dec in DD:MM:SS format to degrees
+def dms_to_degrees(dec_dms):
+    d, m, s = [float(x) for x in dec_dms.split(":")]
+    sign = -1 if d < 0 else 1
+    return sign * (abs(d) + m / 60 + s / 3600)
+
+
 # Function to extract phase centers of each field in a measurement set
 def get_all_phase_centers(ms_file):
     msmd = msmdtool()
