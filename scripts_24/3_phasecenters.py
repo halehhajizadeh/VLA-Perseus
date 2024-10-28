@@ -1,5 +1,3 @@
-import sys
-sys.path.append('.')
 import matplotlib
 matplotlib.use('Agg')  # Use a non-interactive backend to avoid OpenGL issues
 import matplotlib.pyplot as plt
@@ -22,101 +20,63 @@ def find_ms_folder(directory, startswith='24A-', endswith='.ms'):
                     ms_files.append(os.path.join(full_path, inner_file))
     return ms_files
 
-# Functions for RA and Dec conversions
-def degrees_to_hms(ra_deg):
-    hours = int(ra_deg // 15)
-    minutes = int((ra_deg % 15) * 4)
-    seconds = (((ra_deg % 15) * 4) % 1) * 60
-    return f"{hours:02d}:{minutes:02d}:{seconds:06.3f}"
-
-def degrees_to_dms(dec_deg):
-    degrees = int(dec_deg)
-    arcminutes = int(abs((dec_deg - degrees) * 60))
-    arcseconds = abs(((dec_deg - degrees) * 60 - arcminutes) * 60)
-    return f"{degrees:+03d}:{arcminutes:02d}:{arcseconds:06.3f}"
-
-def hms_to_degrees(ra_hms):
-    h, m, s = [float(x) for x in ra_hms.split(":")]
-    return (h + m / 60 + s / 3600) * 15
-
-def dms_to_degrees(dec_dms):
-    d, m, s = [float(x) for x in dec_dms.split(":")]
-    sign = -1 if d < 0 else 1
-    return sign * (abs(d) + m / 60 + s / 3600)
-
-# Extract the phase center from the measurement set
-def get_phase_center(ms_file):
+# Function to extract phase center for each field in the mosaic
+def get_mosaic_phase_centers(ms_file):
     msmd = msmdtool()
+    phase_centers = []
     try:
         msmd.open(ms_file)
-        ra_deg = msmd.phasecenter(0)['m0']['value']
-        dec_deg = msmd.phasecenter(0)['m1']['value']
+        fields = msmd.fieldsforname('PER_FIELD_*')  # Get all fields matching 'PER_FIELD_*'
+        for field_id in fields:
+            ra_deg = msmd.phasecenter(field_id)['m0']['value']
+            dec_deg = msmd.phasecenter(field_id)['m1']['value']
+            phase_centers.append((ra_deg, dec_deg, msmd.fieldnames()[field_id]))
         msmd.close()
-        
-        ra_j2000 = degrees_to_hms(ra_deg)
-        dec_j2000 = degrees_to_dms(dec_deg)
-        return ra_j2000, dec_j2000
     except Exception as e:
-        print(f"Error reading phase center from {ms_file}: {e}")
-        return None
+        print(f"Error reading phase centers from {ms_file}: {e}")
+    return phase_centers
 
 # Define working directory
 working_directory = '../data/new/data'
 mslist = find_ms_folder(working_directory)
 
+# Check if any .ms files are found
 if not mslist:
     print("No .ms files found.")
 else:
     print(f"Found {len(mslist)} .ms files.")
 
-all_ra_deg, all_dec_deg, all_IDs = [], [], []
+# Initialize lists for storing all phase centers
+all_ra_deg = []
+all_dec_deg = []
+all_IDs = []
 
+# Process each MS file and extract phase centers for each field
 for ms_file in mslist:
     print(f"Processing {ms_file}...")
-    phase_center = get_phase_center(ms_file)
+    phase_centers = get_mosaic_phase_centers(ms_file)
     
-    if phase_center is None:
-        print(f"Skipping {ms_file} due to missing phase center.")
-        continue
-    
-    ra_j2000, dec_j2000 = phase_center
-    all_ra_deg.append(hms_to_degrees(ra_j2000))
-    all_dec_deg.append(dms_to_degrees(dec_j2000))
-    ms_name = os.path.basename(ms_file)
-    all_IDs.append(ms_name)
-    
-    # Individual MS phase center plot
-    plt.figure(figsize=(8, 6))
-    plt.plot(all_ra_deg[-1], all_dec_deg[-1], 'bo')
-    plt.xlabel(r'RA (deg)', fontsize=15)
-    plt.ylabel(r'DEC (deg)', fontsize=15)
-    plt.title(f'Phase Center of {ms_name}', fontsize=15)
-    plt.annotate(ms_name, (all_ra_deg[-1], all_dec_deg[-1]), fontsize=8)
-    plt.savefig(f'./phasecenter/{ms_name}_phase_center.png', dpi=150)
-    plt.close()
+    for ra_deg, dec_deg, field_name in phase_centers:
+        all_ra_deg.append(ra_deg)
+        all_dec_deg.append(dec_deg)
+        all_IDs.append(field_name)
 
-# Combined plot for all MS phase centers
+# Combined plot for all phase centers in the mosaic
 if all_ra_deg:
     plt.figure(figsize=(10, 8))
-    plt.plot(all_ra_deg, all_dec_deg, 'bo')
+    plt.plot(all_ra_deg, all_dec_deg, 'bo')  # 'bo' indicates blue dots
     plt.xlabel(r'RA (deg)', fontsize=15)
     plt.ylabel(r'DEC (deg)', fontsize=15)
-    plt.title('Phase Centers of All Measurement Sets (J2000)', fontsize=15)
+    plt.title('Phase Centers of Mosaic Fields (J2000)', fontsize=15)
 
-    for i, ms_name in enumerate(all_IDs):
-        plt.annotate(ms_name, (all_ra_deg[i], all_dec_deg[i]), fontsize=8)
+    # Annotate all points with their IDs if desired
+    for i, field_name in enumerate(all_IDs):
+        plt.annotate(field_name, (all_ra_deg[i], all_dec_deg[i]), fontsize=8)
 
-    plt.savefig('./phasecenter/all_phase_centers.png', dpi=150)
+    # Save the combined plot of all phase centers
+    plt.savefig('./phasecenter/mosaic_phase_centers.png', dpi=150)
     plt.close()
 
-    # Save phase center data in the requested format
-    with open('./phasecenter/phase_centers_j2000.txt', 'w') as f:
-        for ms_name, ra_deg, dec_deg in zip(all_IDs, all_ra_deg, all_dec_deg):
-            formatted_ra = degrees_to_hms(ra_deg).replace(":", ".")
-            formatted_dec = degrees_to_dms(dec_deg).replace(":", ".")
-            f.write(f"{ms_name}: J2000 {formatted_ra} {formatted_dec}\n")
-
-
-    print("Phase centers (J2000) plotted and saved successfully.")
+    print("Mosaic phase centers plotted and saved successfully.")
 else:
     print("No phase centers found to plot.")
