@@ -35,13 +35,13 @@ def degrees_to_dms(dec_deg):
     return f"{degrees:+03d}:{arcminutes:02d}:{arcseconds:06.3f}"
 
 # Function to extract phase centers of each field in a measurement set
-def get_mosaic_phase_centers(ms_file):
+def get_all_phase_centers(ms_file):
     msmd = msmdtool()
     phase_centers = []
     try:
         msmd.open(ms_file)
-        fields = msmd.fieldsforname('PER_FIELD_*')  # Get all 'PER_FIELD_*' fields
-        for field_id in fields:
+        field_ids = msmd.fieldsforintent("*")  # Get all field IDs
+        for field_id in field_ids:
             ra_deg = msmd.phasecenter(field_id)['m0']['value']
             dec_deg = msmd.phasecenter(field_id)['m1']['value']
             phase_centers.append((field_id, degrees_to_hms(ra_deg), degrees_to_dms(dec_deg)))
@@ -72,7 +72,12 @@ with open('./phasecenter/measurement_sets_phase_centers.txt', 'w') as summary_fi
         print(f"Processing {ms_name}...")
         
         # Extract phase centers for each field in the mosaic
-        phase_centers = get_mosaic_phase_centers(ms_file)
+        phase_centers = get_all_phase_centers(ms_file)
+
+        # Check if phase centers were found
+        if not phase_centers:
+            print(f"No phase centers found for {ms_name}, skipping.")
+            continue
 
         # Write field centers to a separate file for each measurement set
         phase_center_filename = f'./phasecenter/{ms_name}_field_centers.txt'
