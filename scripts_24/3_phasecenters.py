@@ -29,7 +29,7 @@ def degrees_to_hms(ra_deg):
 
 # Function to convert Dec in degrees to degrees:arcminutes:arcseconds (J2000)
 def degrees_to_dms(dec_deg):
-    degrees = int(dec_deg)a
+    degrees = int(dec_deg)
     arcminutes = int(abs((dec_deg - degrees) * 60))
     arcseconds = abs(((dec_deg - degrees) * 60 - arcminutes) * 60)
     return f"{degrees:+03d}:{arcminutes:02d}:{arcseconds:06.3f}"
