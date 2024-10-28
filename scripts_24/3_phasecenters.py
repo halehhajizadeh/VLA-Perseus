@@ -111,10 +111,11 @@ if all_ra_deg:
 
     # Save phase center data in the requested format
     with open('./phasecenter/phase_centers_j2000.txt', 'w') as f:
-        for ms_name, ra_j2000, dec_j2000 in zip(all_IDs, all_ra_deg, all_dec_deg):
-            formatted_ra = ra_j2000.replace(":", ".")
-            formatted_dec = dec_j2000.replace(":", ".")
+        for ms_name, ra_deg, dec_deg in zip(all_IDs, all_ra_deg, all_dec_deg):
+            formatted_ra = degrees_to_hms(ra_deg).replace(":", ".")
+            formatted_dec = degrees_to_dms(dec_deg).replace(":", ".")
             f.write(f"{ms_name}: J2000 {formatted_ra} {formatted_dec}\n")
+
 
     print("Phase centers (J2000) plotted and saved successfully.")
 else:
