@@ -3,7 +3,7 @@ from glob import glob
 import shutil
 
 # Define your base path
-base_path = "/data/new/data/"
+base_path = "../data/new/data/"
 
 # Define the common parameters for tclean
 def run_tclean(ms_file, img_filename, mosaic_name, phase_center):
