@@ -40,6 +40,7 @@ def run_tclean(ms_file, img_filename, mosaic_name, phase_center):
         nsigma=3,
         threshold=thresh,
         # cycleniter=200,
+        psfcutoff=0.5,
         cyclefactor=1,
         parallel=True,
         # psterm=True,
