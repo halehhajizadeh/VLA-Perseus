@@ -15,6 +15,7 @@ def run_tclean(ms_file, img_filename, mosaic_name, phase_center):
         vis=ms_file,
         field="PER_FIELD_*",
         timerange="",
+        spw="",
         uvrange="",
         antenna="",
         observation="",
@@ -36,12 +37,13 @@ def run_tclean(ms_file, img_filename, mosaic_name, phase_center):
         robust=0.5,
         niter=nit,
         gain=0.1,
+        nsigma=3,
         threshold=thresh,
         # cycleniter=200,
         cyclefactor=1,
         parallel=True,
         # psterm=True,
-        nterms=2,
+        # nterms=2,
         rotatepastep=5.0,
         interactive=False
     )
