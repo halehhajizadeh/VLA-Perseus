@@ -6,11 +6,17 @@ import shutil
 base_path = "../data/new/data/"
 
 # Define the common parameters for tclean
-def run_tclean(ms_file, img_filename, mosaic_name, phase_center):
+def run_tclean(ms_file, img_filename, mosaic_name):
     thresh = '2e-4'
     pblim = -0.001
     nit = 5000
 
+    # Delete all files matching imagename.*
+    for file in glob(img_filename + ".*"):
+        print(f"Deleting existing file: {file}")
+        os.remove(file)
+
+    # Run tclean with specified parameters
     tclean(
         vis=ms_file,
         field="PER_FIELD_*",
@@ -24,7 +30,7 @@ def run_tclean(ms_file, img_filename, mosaic_name, phase_center):
         imagename=img_filename,
         imsize=[4096],
         cell="2.5arcsec",
-        phasecenter=phase_center,
+        phasecenter="",
         stokes='I',
         specmode="mfs",
         gridder="awproject",
@@ -44,7 +50,7 @@ def run_tclean(ms_file, img_filename, mosaic_name, phase_center):
         cyclefactor=1,
         parallel=True,
         # psterm=True,
-        # nterms=2,
+        nterms=2,
         rotatepastep=5.0,
         interactive=False
     )
@@ -63,12 +69,9 @@ def process_all_ms_files(base_path):
             img_filename = os.path.join(directory, "clean_image")  # Define a unique image name
             mosaic_name = os.path.basename(directory).split('.')[0]  # Generate mosaic name from directory name
             
-            # Set a dummy phase_center; replace this with actual phase_center if known
-            phase_center = "J2000 00:00:00.000 +00.00.00.000"
-            
             # Run tclean
             print(f"Running tclean on {ms_file}")
-            run_tclean(ms_file, img_filename, mosaic_name, phase_center)
+            run_tclean(ms_file, img_filename, mosaic_name)
 
 # Execute the function
 process_all_ms_files(base_path)
