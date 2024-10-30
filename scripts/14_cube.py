@@ -7,8 +7,8 @@ from astropy.io import fits
 # Define parameters
 # specific_dirs = '03:32:04.530001_+31.05.04.00000/'
 # specific_dirs = '03:36:00.000000_+30.30.00.00001/'
-specific_dirs = '03:25:30.000000_+29.29.59.99999/'
-# specific_dirs = '03:23:30.000001_+31.30.00.00000/'
+# specific_dirs = '03:25:30.000000_+29.29.59.99999/'
+specific_dirs = '03:23:30.000001_+31.30.00.00000/'
 
 
 
@@ -30,12 +30,20 @@ stokes_list = ['I', 'Q', 'U']
 #     'U': [i - 1 for i in [41, 48, 49]]
 # }
 
-#25
+# # 25
+# drop_indices = {
+#     'I': [i - 1 for i in [41, 80]],
+#     'Q': [i - 1 for i in [41, 48, 49, 79, 80]],
+#     'U': [i - 1 for i in [41, 48, 49, 79, 80]]
+# }
+
+# 25
 drop_indices = {
-    'I': [i - 1 for i in [41, 80]],
-    'Q': [i - 1 for i in [41, 48, 49, 79, 80]],
-    'U': [i - 1 for i in [41, 48, 49, 79, 80]]
+    'I': [],
+    'Q': [],
+    'U': []
 }
+
 
 # Function to create an empty channel FITS file
 def create_empty_channel(fitsname):

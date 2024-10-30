@@ -13,8 +13,8 @@ stokes = ['I', 'Q', 'U']
 # Define the specific directory you're using for concatenation
 # specific_dirs = '03:32:04.530001_+31.05.04.00000/'
 # specific_dirs = '03:36:00.000000_+30.30.00.00001/'
-specific_dirs = '03:25:30.000000_+29.29.59.99999/'
-# specific_dirs = '03:23:30.000001_+31.30.00.00000/'
+# specific_dirs = '03:25:30.000000_+29.29.59.99999/'
+specific_dirs = '03:23:30.000001_+31.30.00.00000/'
 
 
 
