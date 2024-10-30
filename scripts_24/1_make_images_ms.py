@@ -11,10 +11,14 @@ def run_tclean(ms_file, img_filename, mosaic_name):
     pblim = -0.001
     nit = 5000
 
-    # Delete all files matching imagename.*
-    for file in glob(img_filename + ".*"):
-        print(f"Deleting existing file: {file}")
-        os.remove(file)
+    # Delete all files and directories matching imagename.*
+    for item in glob(img_filename + ".*"):
+        if os.path.isfile(item):
+            print(f"Deleting existing file: {item}")
+            os.remove(item)
+        elif os.path.isdir(item):
+            print(f"Deleting existing directory: {item}")
+            shutil.rmtree(item)
 
     # Run tclean with specified parameters
     tclean(
