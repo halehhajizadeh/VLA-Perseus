@@ -4,7 +4,7 @@ import time
 import os
 import numpy as np
 
-thresh = '2e-4'
+thresh = '3e-4'
 pblim = -0.001
 nit = 5000
 
