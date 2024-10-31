@@ -88,6 +88,8 @@ tclean( vis=ms_file_list,
         nterms=2,
         rotatepastep=5.0,
         interactive=False,
+        calcpsf=True,
+        calcres=True,
         )
 
 ############################################################################################
