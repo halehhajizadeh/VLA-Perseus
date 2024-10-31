@@ -37,9 +37,9 @@ def run_tclean(ms_file, img_filename, mosaic_name):
         phasecenter="",
         stokes='I',
         specmode="mfs",
-        gridder="awproject",
+        gridder="mosaic",
         mosweight=True,
-        cfcache=f'/dev/shm/{mosaic_name}.cf',
+        # cfcache=f'/dev/shm/{mosaic_name}.cf',
         pblimit=pblim,
         deconvolver="mtmfs",
         pbcor=True,
@@ -50,12 +50,12 @@ def run_tclean(ms_file, img_filename, mosaic_name):
         nsigma=3,
         threshold=thresh,
         # cycleniter=200,
-        psfcutoff=0.5,
+        # psfcutoff=0.5,
         cyclefactor=1,
-        parallel=True,
+        # parallel=True,
         # psterm=True,
-        nterms=2,
-        rotatepastep=5.0,
+        # nterms=2,
+        # rotatepastep=5.0,
         interactive=False
     )
 
