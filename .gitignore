@@ -20,3 +20,5 @@ server/
 *.fits
 paper1/
 paper2/
+*.csv
+*.txt
