@@ -4,10 +4,9 @@ import time
 import os
 import numpy as np
 
-thresh = '3e-4'
+thresh = '8e-5'
 pblim = -0.001
-nit = 7000
-
+nit = 5000
 phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
 # phase_center = 'J2000 03:36:00.000000 +30.30.00.00001'
 # phase_center = 'J2000 03:25:30.000000 +29.29.59.99999'
@@ -85,7 +84,7 @@ tclean( vis=ms_file_list,
         cyclefactor=1,
         parallel=True,
         # psterm=True,
-        nterms=2,
+        nterms=3,
         rotatepastep=5.0,
         interactive=False,
         calcpsf=True,
