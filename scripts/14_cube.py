@@ -5,10 +5,10 @@ import numpy as np
 from astropy.io import fits
 
 # Define parameters
-# specific_dirs = '03:32:04.530001_+31.05.04.00000/'
+specific_dirs = '03:32:04.530001_+31.05.04.00000/'
 # specific_dirs = '03:36:00.000000_+30.30.00.00001/'
 # specific_dirs = '03:25:30.000000_+29.29.59.99999/'
-specific_dirs = '03:23:30.000001_+31.30.00.00000/'
+# specific_dirs = '03:23:30.000001_+31.30.00.00000/'
 
 
 
@@ -18,31 +18,31 @@ nit = 5000
 stokes_list = ['I', 'Q', 'U']
 # Subtract 1 from each index in drop_indices to adjust replacement positions
 # #32
-# drop_indices = {
-#     'I': [i - 1 for i in [41, 53, 80]],
-#     'Q': [i - 1 for i in [41, 45, 49, 80]],
-#     'U': [i - 1 for i in [41, 48, 49, 80, 95]]
-# }
+drop_indices = {
+    'I': [i - 1 for i in [41, 45, 48, 49, 53, 80, 95]],
+    'Q': [i - 1 for i in [41, 45, 48, 49, 53, 80, 95]],
+    'U': [i - 1 for i in [41, 45, 48, 49, 53, 80, 95]]
+}
 # #36
 # drop_indices = {
-#     'I': [i - 1 for i in [41, 48, 80]],
-#     'Q': [i - 1 for i in [41, 42, 48, 49]],
-#     'U': [i - 1 for i in [41, 48, 49]]
+#     'I': [i - 1 for i in [41, 42, 48, 49, 80]],
+#     'Q': [i - 1 for i in [41, 42, 48, 49, 80]],
+#     'U': [i - 1 for i in [41, 42, 48, 49, 80]]
 # }
 
 # # 25
 # drop_indices = {
-#     'I': [i - 1 for i in [41, 80]],
+#     'I': [i - 1 for i in [41, 48, 49, 79, 80]],
 #     'Q': [i - 1 for i in [41, 48, 49, 79, 80]],
 #     'U': [i - 1 for i in [41, 48, 49, 79, 80]]
 # }
 
-# 25
-drop_indices = {
-    'I': [i - 1 for i in [41, 48, 49, 80]],
-    'Q': [i - 1 for i in [41, 48, 49, 80]],
-    'U': [i - 1 for i in [41, 48, 49, 80]]
-}
+# # 23
+# drop_indices = {
+#     'I': [i - 1 for i in [41, 48, 49, 80]],
+#     'Q': [i - 1 for i in [41, 48, 49, 80]],
+#     'U': [i - 1 for i in [41, 48, 49, 80]]
+# }
 
 
 # Function to create an empty channel FITS file
