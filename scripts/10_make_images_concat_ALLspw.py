@@ -4,7 +4,7 @@ import time
 import os
 import numpy as np
 
-thresh = '8e-5'
+thresh = '5e-4'
 pblim = -0.001
 nit = 5000
 phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
