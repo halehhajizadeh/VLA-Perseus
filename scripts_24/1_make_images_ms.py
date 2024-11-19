@@ -9,7 +9,7 @@ base_path = "../data/new/data/"
 def run_tclean(ms_file, img_filename, mosaic_name):
     thresh = '1e-4'
     pblim = -0.001
-    nit = 2000
+    nit = 5000
 
     # Delete all files and directories matching imagename.*
     for item in glob(img_filename + ".*"):
@@ -71,7 +71,7 @@ def process_all_ms_files(base_path):
         
         if ms_files:
             ms_file = ms_files[0]  # Assuming only one .ms file in each directory
-            img_filename = os.path.join(directory, "field20")  # Define a unique image name
+            img_filename = os.path.join(directory, "field202")  # Define a unique image name
             mosaic_name = os.path.basename(directory).split('.')[0]  # Generate mosaic name from directory name
             
             # Run tclean
