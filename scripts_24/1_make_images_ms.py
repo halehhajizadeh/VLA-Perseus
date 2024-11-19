@@ -9,7 +9,7 @@ base_path = "../data/new/data/"
 def run_tclean(ms_file, img_filename, mosaic_name):
     thresh = '1e-4'
     pblim = -0.001
-    nit = 5000
+    nit = 2000
 
     # Delete all files and directories matching imagename.*
     for item in glob(img_filename + ".*"):
@@ -23,7 +23,7 @@ def run_tclean(ms_file, img_filename, mosaic_name):
     # Run tclean with specified parameters
     tclean(
         vis=ms_file,
-        field="PER_FIELD_*",
+        field="20",
         timerange="",
         spw="",
         uvrange="",
@@ -32,31 +32,31 @@ def run_tclean(ms_file, img_filename, mosaic_name):
         intent="",
         datacolumn="corrected",
         imagename=img_filename,
-        imsize=[4096],
+        imsize=[1024],
         cell="2arcsec",
         phasecenter="",
         stokes='I',
         specmode="mfs",
-        gridder="awproject",
-        mosweight=True,
-        savemodel='modelcolumn',
-        cfcache=f'/dev/shm/{mosaic_name}.cf',
-        pblimit=pblim,
-        deconvolver="mtmfs",
-        pbcor=True,
-        weighting="briggs",
-        robust=0.5,
+        gridder="standard",
+        # mosweight=True,
+        # savemodel='modelcolumn',
+        # cfcache=f'/dev/shm/{mosaic_name}.cf',
+        # pblimit=pblim,
+        # deconvolver="mtmfs",
+        # pbcor=True,
+        # weighting="briggs",
+        # robust=0.5,
         niter=nit,
-        gain=0.1,
+        # gain=0.1,
         # nsigma=3,
         threshold=thresh,
         # cycleniter=200,
         # psfcutoff=0.5,
         cyclefactor=1,
-        parallel=True,
+        # parallel=True,
         # psterm=True,
-        nterms=1,
-        rotatepastep=5.0,
+        # nterms=1,
+        # rotatepastep=5.0,
         interactive=False
     )
 
