@@ -48,7 +48,7 @@ def run_tclean(ms_file, img_filename, mosaic_name):
         # robust=0.5,
         niter=nit,
         # gain=0.1,
-        # nsigma=3,
+        nsigma=3,
         threshold=thresh,
         # cycleniter=200,
         # psfcutoff=0.5,
