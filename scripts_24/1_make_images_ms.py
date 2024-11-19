@@ -32,7 +32,7 @@ def run_tclean(ms_file, img_filename, mosaic_name):
         intent="",
         datacolumn="corrected",
         imagename=img_filename,
-        imsize=[1024],
+        imsize=[2048],
         cell="2arcsec",
         phasecenter="",
         stokes='I',
