@@ -23,7 +23,7 @@ def run_tclean(ms_file, img_filename, mosaic_name):
     # Run tclean with specified parameters
     tclean(
         vis=ms_file,
-        field="20",
+        field="*3C147",
         timerange="",
         spw="",
         uvrange="",
@@ -71,7 +71,7 @@ def process_all_ms_files(base_path):
         
         if ms_files:
             ms_file = ms_files[0]  # Assuming only one .ms file in each directory
-            img_filename = os.path.join(directory, "field202")  # Define a unique image name
+            img_filename = os.path.join(directory, "147")  # Define a unique image name
             mosaic_name = os.path.basename(directory).split('.')[0]  # Generate mosaic name from directory name
             
             # Run tclean
