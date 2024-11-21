@@ -9,8 +9,8 @@ thresh = '2e-4'
 spw = [2, 3 , 4, 5, 6, 8, 15, 16, 17]
 
 stokes = [
-        'I',
-        'Q',
+        # 'I',
+        # 'Q',
         'U'
           ]
 channels = [
