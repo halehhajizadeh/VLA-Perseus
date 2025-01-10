@@ -22,3 +22,5 @@ paper1/
 paper2/
 *.csv
 *.txt
+scripts/*.ipynb
+scripts_24/*.ipynb
