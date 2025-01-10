@@ -23,7 +23,7 @@ def run_tclean(ms_file, img_filename, mosaic_name):
     # Run tclean with specified parameters
     tclean(
         vis=ms_file,
-        field="PER_FIELD_30",
+        field="30",
         timerange="",
         spw="",
         uvrange="",
