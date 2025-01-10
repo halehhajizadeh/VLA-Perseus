@@ -7,9 +7,9 @@ base_path = "../data/new/data/"
 
 # Define the common parameters for tclean
 def run_tclean(ms_file, img_filename, mosaic_name):
-    thresh = '1e-4'
+    thresh = '5e-5'
     pblim = -0.001
-    nit = 5000
+    nit = 10000
 
     # Delete all files and directories matching imagename.*
     for item in glob(img_filename + ".*"):
