@@ -26,7 +26,7 @@ def degrees_to_hms(ra_deg):
     hours = int(total_seconds // 3600)
     minutes = int((total_seconds % 3600) // 60)
     seconds = total_seconds % 60
-    return f"{hours}:{minutes:02d}:{seconds:06.3f}"
+    return f"{hours:02d}:{minutes:02d}:{seconds:06.3f}"
 
 # Function to convert Dec in degrees to degrees:arcminutes:arcseconds (J2000)
 def degrees_to_dms(dec_deg):
@@ -35,7 +35,8 @@ def degrees_to_dms(dec_deg):
     degrees = int(dec_deg)
     arcminutes = int((dec_deg - degrees) * 60)
     arcseconds = (dec_deg - degrees - arcminutes / 60) * 3600
-    return f"{sign}{degrees}:{arcminutes:02d}:{arcseconds:06.3f}"
+    return f"{sign}{degrees:02d}:{arcminutes:02d}:{arcseconds:06.3f}"
+
 
 
 # Function to convert RA in HH:MM:SS format to degrees
