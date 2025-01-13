@@ -22,17 +22,21 @@ def find_ms_folder(directory, startswith='24A-', endswith='_calibrated.ms'):
 
 # Function to convert RA in degrees to hours:minutes:seconds (J2000)
 def degrees_to_hms(ra_deg):
-    hours = int(ra_deg // 15)
-    minutes = int((ra_deg % 15) * 4)
-    seconds = (((ra_deg % 15) * 4) % 1) * 60
+    total_seconds = ra_deg * 240  # 1 degree = 240 seconds (15 degrees per hour)
+    hours = int(total_seconds // 3600)
+    minutes = int((total_seconds % 3600) // 60)
+    seconds = total_seconds % 60
     return f"{hours}:{minutes:02d}:{seconds:06.3f}"
 
 # Function to convert Dec in degrees to degrees:arcminutes:arcseconds (J2000)
 def degrees_to_dms(dec_deg):
+    sign = "-" if dec_deg < 0 else "+"
+    dec_deg = abs(dec_deg)
     degrees = int(dec_deg)
-    arcminutes = int(abs((dec_deg - degrees) * 60))
-    arcseconds = abs(((dec_deg - degrees) * 60 - arcminutes) * 60)
-    return f"{degrees:+}:{arcminutes:02d}:{arcseconds:06.3f}"
+    arcminutes = int((dec_deg - degrees) * 60)
+    arcseconds = (dec_deg - degrees - arcminutes / 60) * 3600
+    return f"{sign}{degrees}:{arcminutes:02d}:{arcseconds:06.3f}"
+
 
 # Function to convert RA in HH:MM:SS format to degrees
 def hms_to_degrees(ra_hms):
