@@ -50,19 +50,25 @@ def dms_to_degrees(dec_dms):
     sign = -1 if d < 0 else 1
     return sign * (abs(d) + m / 60 + s / 3600)
 
-# Function to extract phase centers of each "PER_FIELD_*" field in a measurement set
 def get_per_field_phase_centers(ms_file):
     msmd = msmdtool()
     phase_centers = []
     try:
         msmd.open(ms_file)
-        # Get all field IDs and names, then filter by name
         for field_id in range(msmd.nfields()):
             field_name = msmd.fieldnames()[field_id]
-            if field_name.startswith("PER_FIELD_"):  # Only include fields with "PER_FIELD_*"
-                ra_deg = msmd.phasecenter(field_id)['m0']['value']
-                dec_deg = msmd.phasecenter(field_id)['m1']['value']
-                phase_centers.append((field_id, degrees_to_hms(ra_deg), degrees_to_dms(dec_deg)))
+            if field_name.startswith("PER_FIELD_"):
+                # Fetch RA and Dec directly in degrees from the FIELD table
+                ra_deg = msmd.phasecenter(field_id)['m0']['value'] * (180.0 / math.pi)  # Convert from radians to degrees
+                dec_deg = msmd.phasecenter(field_id)['m1']['value'] * (180.0 / math.pi)  # Convert from radians to degrees
+                
+                # Convert RA degrees to HH:MM:SS format
+                ra_hms = degrees_to_hms(ra_deg)
+
+                # Convert Dec degrees to ±DD:MM:SS format
+                dec_dms = degrees_to_dms(dec_deg)
+
+                phase_centers.append((field_id, ra_hms, dec_dms))
         msmd.close()
     except Exception as e:
         print(f"Error reading phase centers from {ms_file}: {e}")
