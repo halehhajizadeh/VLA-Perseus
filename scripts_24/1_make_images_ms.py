@@ -5,8 +5,21 @@ import shutil
 # Define your base path
 base_path = "../data/new/data/"
 
+# Load phase centers from the saved file
+def load_phase_centers(phase_center_file):
+    phase_centers = {}
+    with open(phase_center_file, 'r') as file:
+        for line in file:
+            # Parse each line in the format: "ms_name: J2000 RA Dec"
+            parts = line.strip().split(":")
+            if len(parts) == 2:
+                ms_name = parts[0].strip()
+                phasecenter = parts[1].strip()  # "J2000 RA Dec"
+                phase_centers[ms_name] = phasecenter
+    return phase_centers
+
 # Define the common parameters for tclean
-def run_tclean(ms_file, img_filename, mosaic_name):
+def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
     thresh = '5e-5'
     pblim = -0.001
     nit = 10000
@@ -23,7 +36,7 @@ def run_tclean(ms_file, img_filename, mosaic_name):
     # Run tclean with specified parameters
     tclean(
         vis=ms_file,
-        field="45",
+        field="PERF_FIELD_*",
         timerange="",
         spw="",
         uvrange="",
@@ -32,36 +45,36 @@ def run_tclean(ms_file, img_filename, mosaic_name):
         intent="",
         datacolumn="corrected",
         imagename=img_filename,
-        imsize=[2048],
+        imsize=[8192],
         cell="2arcsec",
-        phasecenter="",
+        phasecenter=phasecenter,  # Pass the phasecenter dynamically
         stokes='I',
         specmode="mfs",
-        gridder="standard",
-        # mosweight=True,
-        # savemodel='modelcolumn',
-        # cfcache=f'/dev/shm/{mosaic_name}.cf',
-        # pblimit=pblim,
-        # deconvolver="mtmfs",
-        # pbcor=True,
-        # weighting="briggs",
-        # robust=0.5,
+        gridder="awproject",
+        mosweight=True,
+        savemodel='modelcolumn',
+        cfcache=f'/dev/shm/{mosaic_name}.cf',
+        pblimit=pblim,
+        deconvolver="mtmfs",
+        pbcor=True,
+        weighting="briggs",
+        robust=0.5,
         niter=nit,
-        # gain=0.1,
+        gain=0.1,
         nsigma=3,
         threshold=thresh,
-        # cycleniter=200,
-        # psfcutoff=0.5,
+        cycleniter=200,
+        psfcutoff=0.5,
         cyclefactor=1,
-        # parallel=True,
-        # psterm=True,
-        # nterms=1,
-        # rotatepastep=5.0,
+        parallel=True,
+        psterm=True,
+        nterms=2,
+        rotatepastep=5.0,
         interactive=False
     )
 
 # Function to find all directories and process the .ms files
-def process_all_ms_files(base_path):
+def process_all_ms_files(base_path, phase_centers):
     # Find all subdirectories inside base_path
     dirs = glob(os.path.join(base_path, "*/"))
     
@@ -71,12 +84,22 @@ def process_all_ms_files(base_path):
         
         if ms_files:
             ms_file = ms_files[0]  # Assuming only one .ms file in each directory
-            img_filename = os.path.join(directory, "PER_FIELD_45")  # Define a unique image name
+            img_filename = os.path.join(directory, "newtest")  # Define a unique image name
             mosaic_name = os.path.basename(directory).split('.')[0]  # Generate mosaic name from directory name
             
-            # Run tclean
-            print(f"Running tclean on {ms_file}")
-            run_tclean(ms_file, img_filename, mosaic_name)
+            # Match the phase center using the saved phase center file
+            ms_name = os.path.basename(ms_file).replace("_calibrated.ms", "")
+            phasecenter = phase_centers.get(ms_name, "")
+            if not phasecenter:
+                print(f"Warning: No phase center found for {ms_name}. Skipping...")
+                continue
+            
+            # Run tclean with the appropriate phase center
+            print(f"Running tclean on {ms_file} with phase center: {phasecenter}")
+            run_tclean(ms_file, img_filename, mosaic_name, phasecenter)
 
-# Execute the function
-process_all_ms_files(base_path)
+# Main execution
+phase_center_file = './phasecenter/measurement_sets_phase_centers.txt'  # Path to saved phase centers
+phase_centers = load_phase_centers(phase_center_file)  # Load phase centers from the file
+process_all_ms_files(base_path, phase_centers)  # Process MS files with their phase centers
+
