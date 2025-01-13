@@ -3,6 +3,8 @@ import matplotlib
 matplotlib.use('Agg')  # Use a non-interactive backend to avoid OpenGL issues
 import matplotlib.pyplot as plt
 from casatools import msmetadata as msmdtool
+import math
+
 
 # Define the directory for output files and plots
 output_dir = './phasecenter'
