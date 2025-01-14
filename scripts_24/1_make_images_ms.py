@@ -56,7 +56,7 @@ def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
     # Run tclean with specified parameters
     tclean(
         vis=ms_file,
-        field="PERF_FIELD_*",
+        field="PER_FIELD_*",
         timerange="",
         spw="",
         uvrange="",
