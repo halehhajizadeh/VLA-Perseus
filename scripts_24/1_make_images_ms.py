@@ -10,12 +10,28 @@ def load_phase_centers(phase_center_file):
     try:
         with open(phase_center_file, 'r') as file:
             for line in file:
-                print(f"Reading line: {line.strip()}")  # Debugging
-                parts = line.strip().split(":")
-                if len(parts) == 2:
-                    ms_name = parts[0].strip()
-                    phasecenter = parts[1].strip()  # "J2000 RA Dec"
-                    phase_centers[ms_name] = phasecenter
+                # Debug: Print each line being read
+                print(f"Reading line: {line.strip()}")
+
+                # Check if the line contains a colon
+                if ":" not in line:
+                    print(f"Skipping malformed line (no colon): {line.strip()}")
+                    continue
+
+                # Split line into ms_name and phasecenter
+                parts = line.strip().split(":", 1)  # Split only at the first colon
+                if len(parts) != 2:
+                    print(f"Skipping malformed line (invalid format): {line.strip()}")
+                    continue
+
+                ms_name = parts[0].strip()  # Extract and clean ms_name
+                phasecenter = parts[1].strip()  # Extract and clean phasecenter
+
+                # Debug: Print the parsed key-value pair
+                print(f"Parsed: {ms_name} -> {phasecenter}")
+
+                phase_centers[ms_name] = phasecenter
+
         print(f"Loaded phase centers: {phase_centers}")  # Debugging
     except Exception as e:
         print(f"Error reading phase centers file: {e}")
