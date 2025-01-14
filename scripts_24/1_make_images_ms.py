@@ -96,11 +96,15 @@ def process_all_ms_files(base_path, phase_centers):
             if not phasecenter:
                 print(f"Warning: No phase center found for {ms_name}. Skipping...")
                 continue
+
+            print(f"ms_name: {ms_name}")
+            print(f"Phase Center Keys: {list(phase_centers.keys())}")
+
             
             # Run tclean with the appropriate phase center
             print(f"Running tclean on {ms_file} with phase center: {phasecenter}")
             run_tclean(ms_file, img_filename, mosaic_name, phasecenter)
-            
+
 # Main execution
 phase_center_file = './phasecenter/measurement_sets_phase_centers.txt'  # Path to saved phase centers
 phase_centers = load_phase_centers(phase_center_file)  # Load phase centers from the file
