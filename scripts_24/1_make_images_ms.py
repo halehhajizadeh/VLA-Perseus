@@ -5,7 +5,6 @@ import shutil
 # Define your base path
 base_path = "../data/new/data/"
 
-# Load phase centers from the saved file
 def load_phase_centers(phase_center_file):
     phase_centers = {}
     with open(phase_center_file, 'r') as file:
@@ -13,10 +12,12 @@ def load_phase_centers(phase_center_file):
             # Parse each line in the format: "ms_name: J2000 RA Dec"
             parts = line.strip().split(":")
             if len(parts) == 2:
-                ms_name = parts[0].strip()
+                ms_name = parts[0].strip()  # Normalize the ms_name
                 phasecenter = parts[1].strip()  # "J2000 RA Dec"
                 phase_centers[ms_name] = phasecenter
+    print(f"Loaded phase centers: {list(phase_centers.keys())}")  # Debugging output
     return phase_centers
+
 
 # Define the common parameters for tclean
 def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
@@ -73,7 +74,6 @@ def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
         interactive=False
     )
 
-# Function to find all directories and process the .ms files
 def process_all_ms_files(base_path, phase_centers):
     # Find all subdirectories inside base_path
     dirs = glob(os.path.join(base_path, "*/"))
@@ -87,8 +87,11 @@ def process_all_ms_files(base_path, phase_centers):
             img_filename = os.path.join(directory, "newtest")  # Define a unique image name
             mosaic_name = os.path.basename(directory).split('.')[0]  # Generate mosaic name from directory name
             
+            # Extract and normalize the ms_name
+            ms_name = os.path.basename(ms_file).replace("_calibrated.ms", "").strip()
+            print(f"Processing ms_file: {ms_name}")
+            
             # Match the phase center using the saved phase center file
-            ms_name = os.path.basename(ms_file).replace("_calibrated.ms", "")
             phasecenter = phase_centers.get(ms_name, "")
             if not phasecenter:
                 print(f"Warning: No phase center found for {ms_name}. Skipping...")
@@ -97,7 +100,7 @@ def process_all_ms_files(base_path, phase_centers):
             # Run tclean with the appropriate phase center
             print(f"Running tclean on {ms_file} with phase center: {phasecenter}")
             run_tclean(ms_file, img_filename, mosaic_name, phasecenter)
-
+            
 # Main execution
 phase_center_file = './phasecenter/measurement_sets_phase_centers.txt'  # Path to saved phase centers
 phase_centers = load_phase_centers(phase_center_file)  # Load phase centers from the file
