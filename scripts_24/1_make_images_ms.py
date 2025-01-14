@@ -7,15 +7,18 @@ base_path = "../data/new/data/"
 
 def load_phase_centers(phase_center_file):
     phase_centers = {}
-    with open(phase_center_file, 'r') as file:
-        for line in file:
-            # Parse each line in the format: "ms_name: J2000 RA Dec"
-            parts = line.strip().split(":")
-            if len(parts) == 2:
-                ms_name = parts[0].strip()  # Normalize the ms_name
-                phasecenter = parts[1].strip()  # "J2000 RA Dec"
-                phase_centers[ms_name] = phasecenter
-    print(f"Loaded phase centers: {list(phase_centers.keys())}")  # Debugging output
+    try:
+        with open(phase_center_file, 'r') as file:
+            for line in file:
+                print(f"Reading line: {line.strip()}")  # Debugging
+                parts = line.strip().split(":")
+                if len(parts) == 2:
+                    ms_name = parts[0].strip()
+                    phasecenter = parts[1].strip()  # "J2000 RA Dec"
+                    phase_centers[ms_name] = phasecenter
+        print(f"Loaded phase centers: {phase_centers}")  # Debugging
+    except Exception as e:
+        print(f"Error reading phase centers file: {e}")
     return phase_centers
 
 
