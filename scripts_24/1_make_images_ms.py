@@ -81,14 +81,14 @@ def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
         robust=0.5,
         niter=nit,
         gain=0.1,
-        nsigma=3,
+        # nsigma=3,
         threshold=thresh,
         cycleniter=200,
-        psfcutoff=0.5,
+        # psfcutoff=0.5,
         cyclefactor=1,
         parallel=True,
-        psterm=True,
-        nterms=2,
+        # psterm=True,
+        nterms=1,
         rotatepastep=5.0,
         interactive=False
     )
