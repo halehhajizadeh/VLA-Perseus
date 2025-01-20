@@ -65,8 +65,8 @@ def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
         intent="",
         datacolumn="corrected",
         imagename=img_filename,
-        imsize=[8192],
-        cell="1.5arcsec",
+        imsize=[4096],
+        cell="2.5arcsec",
         phasecenter=phasecenter,  # Pass the phasecenter dynamically
         stokes='I',
         specmode="mfs",
@@ -103,7 +103,7 @@ def process_all_ms_files(base_path, phase_centers):
         
         if ms_files:
             ms_file = ms_files[0]  # Assuming only one .ms file in each directory
-            img_filename = os.path.join(directory, "newtest1")  # Define a unique image name
+            img_filename = os.path.join(directory, "newtest2")  # Define a unique image name
             mosaic_name = os.path.basename(directory).split('.')[0]  # Generate mosaic name from directory name
             
             # Extract and normalize the ms_name
