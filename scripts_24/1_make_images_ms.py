@@ -42,7 +42,7 @@ def load_phase_centers(phase_center_file):
 def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
     thresh = '5e-5'
     pblim = -0.001
-    nit = 10000
+    nit = 8000
 
     # Delete all files and directories matching imagename.*
     for item in glob(img_filename + ".*"):
@@ -67,10 +67,10 @@ def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
         imagename=img_filename,
         imsize=[4096],
         cell="2.5arcsec",
-        # phasecenter=phasecenter,  # Pass the phasecenter dynamically
+        phasecenter=phasecenter,  # Pass the phasecenter dynamically
         stokes='I',
         specmode="mfs",
-        gridder="awproject",
+        gridder="mosaic",
         mosweight=True,
         # savemodel='',
         cfcache=f'/dev/shm/{mosaic_name}.cf',
@@ -86,9 +86,9 @@ def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
         cycleniter=200,
         # psfcutoff=0.5,
         cyclefactor=1,
-        parallel=True,
+        # parallel=True,
         # psterm=True,
-        nterms=1,
+        # nterms=1,
         rotatepastep=5.0,
         interactive=False
     )
@@ -103,7 +103,7 @@ def process_all_ms_files(base_path, phase_centers):
         
         if ms_files:
             ms_file = ms_files[0]  # Assuming only one .ms file in each directory
-            img_filename = os.path.join(directory, "newtest3")  # Define a unique image name
+            img_filename = os.path.join(directory, "newtest4")  # Define a unique image name
             mosaic_name = os.path.basename(directory).split('.')[0]  # Generate mosaic name from directory name
             
             # Extract and normalize the ms_name
