@@ -42,7 +42,7 @@ def load_phase_centers(phase_center_file):
 def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
     thresh = '5e-5'
     pblim = -0.001
-    nit = 8000
+    nit = 10000
 
     # Delete all files and directories matching imagename.*
     for item in glob(img_filename + ".*"):
@@ -70,7 +70,7 @@ def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
         phasecenter=phasecenter,  # Pass the phasecenter dynamically
         stokes='I',
         specmode="mfs",
-        gridder="mosaic",
+        gridder="awproject",
         mosweight=True,
         # savemodel='',
         cfcache=f'/dev/shm/{mosaic_name}.cf',
@@ -86,9 +86,9 @@ def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
         cycleniter=200,
         # psfcutoff=0.5,
         cyclefactor=1,
-        # parallel=True,
+        parallel=True,
         # psterm=True,
-        # nterms=1,
+        nterms=2,
         rotatepastep=5.0,
         interactive=False
     )
@@ -116,8 +116,10 @@ def process_all_ms_files(base_path, phase_centers):
                 print(f"Warning: No phase center found for {ms_name}. Skipping...")
                 continue
 
+            print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")    
             print(f"ms_name: {ms_name}")
             print(f"Phase Center Keys: {list(phase_centers.keys())}")
+            print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
             
             # Run tclean with the appropriate phase center
