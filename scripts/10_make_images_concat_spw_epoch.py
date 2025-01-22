@@ -97,7 +97,7 @@ for ms in ms_file_list:
             imagename=img_filename,
             imsize=[4096],
             cell="2.5arcsec",
-            phasecenter=phase_center,
+            phasecenter=str(phase_center),
             stokes='I',
             specmode="mfs",
             gridder="awproject",
