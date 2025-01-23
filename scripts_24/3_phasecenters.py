@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from casatools import msmetadata as msmdtool
 import math
 
-
 # Define the directory for output files and plots
 output_dir = './phasecenter'
 if not os.path.exists(output_dir):
@@ -30,25 +29,23 @@ def degrees_to_hms(ra_deg):
     seconds = total_seconds % 60
     return f"{hours:02d}:{minutes:02d}:{seconds:06.3f}"
 
-# Function to convert Dec in degrees to degrees:arcminutes:arcseconds (J2000)
+# Function to convert Dec in degrees to degrees.arcminutes.arcseconds (J2000)
 def degrees_to_dms(dec_deg):
     sign = "-" if dec_deg < 0 else "+"
     dec_deg = abs(dec_deg)
     degrees = int(dec_deg)
     arcminutes = int((dec_deg - degrees) * 60)
     arcseconds = (dec_deg - degrees - arcminutes / 60) * 3600
-    return f"{sign}{degrees:02d}:{arcminutes:02d}:{arcseconds:06.3f}"
-
-
+    return f"{sign}{degrees:02d}.{arcminutes:02d}.{arcseconds:06.3f}"
 
 # Function to convert RA in HH:MM:SS format to degrees
 def hms_to_degrees(ra_hms):
     h, m, s = [float(x) for x in ra_hms.split(":")]
     return (h + m / 60 + s / 3600) * 15
 
-# Function to convert Dec in DD:MM:SS format to degrees
+# Function to convert Dec in DD.MM.SS format to degrees
 def dms_to_degrees(dec_dms):
-    d, m, s = [float(x) for x in dec_dms.split(":")]
+    d, m, s = [float(x) for x in dec_dms.split(".")]
     sign = -1 if d < 0 else 1
     return sign * (abs(d) + m / 60 + s / 3600)
 
@@ -63,11 +60,11 @@ def get_per_field_phase_centers(ms_file):
                 # Fetch RA and Dec directly in degrees from the FIELD table
                 ra_deg = msmd.phasecenter(field_id)['m0']['value'] * (180.0 / math.pi)  # Convert from radians to degrees
                 dec_deg = msmd.phasecenter(field_id)['m1']['value'] * (180.0 / math.pi)  # Convert from radians to degrees
-                
+
                 # Convert RA degrees to HH:MM:SS format
                 ra_hms = degrees_to_hms(ra_deg)
 
-                # Convert Dec degrees to ±DD:MM:SS format
+                # Convert Dec degrees to ±DD.MM.SS format
                 dec_dms = degrees_to_dms(dec_deg)
 
                 phase_centers.append((field_id, ra_hms, dec_dms))
@@ -91,7 +88,6 @@ all_ra_deg = []
 all_dec_deg = []
 all_IDs = []
 
-# Process each measurement set
 # Process each measurement set
 with open('./phasecenter/measurement_sets_phase_centers.txt', 'w') as summary_file:
     for ms_file in mslist:
@@ -121,7 +117,7 @@ with open('./phasecenter/measurement_sets_phase_centers.txt', 'w') as summary_fi
         plt.xlabel('RA (deg)', fontsize=15)
         plt.ylabel('DEC (deg)', fontsize=15)
         plt.title(f'Phase Centers of Fields in {ms_name}', fontsize=15)
-        
+
         # Annotate each field
         for i, field_id in enumerate([field_id for field_id, _, _ in phase_centers]):
             plt.annotate(field_id, (ra_deg_list[i], dec_deg_list[i]), fontsize=8)
@@ -143,7 +139,6 @@ with open('./phasecenter/measurement_sets_phase_centers.txt', 'w') as summary_fi
 
         # Write to summary file with modified ms_name
         summary_file.write(f"{ms_name}: J2000 {main_ra_j2000} {main_dec_j2000}\n")
-
 
 # Plot all phase centers together (combined plot)
 if all_ra_deg:
