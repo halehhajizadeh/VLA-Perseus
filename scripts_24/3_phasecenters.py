@@ -43,14 +43,20 @@ def hms_to_degrees(ra_hms):
     h, m, s = [float(x) for x in ra_hms.split(":")]
     return (h + m / 60 + s / 3600) * 15
 
-# Function to convert Dec in DD.MM.SS format to degrees
+# Function to convert Dec in DD.MM.SS.sss format to degrees
 def dms_to_degrees(dec_dms):
     try:
-        parts = dec_dms.split(".")
-        if len(parts) != 3:
+        # Split only on the first two dots for degrees and arcminutes
+        parts = dec_dms.split('.')
+        if len(parts) < 3:
             raise ValueError(f"Invalid Dec format: {dec_dms}")
-        d, m, s = [float(x) for x in parts]
-        sign = -1 if d < 0 else 1
+        
+        # Handle degrees, arcminutes, and arcseconds
+        d = float(parts[0])  # Degrees
+        m = float(parts[1])  # Arcminutes
+        s = float('.'.join(parts[2:]))  # Combine remaining parts as arcseconds
+        
+        sign = -1 if d < 0 else 1  # Determine the sign
         return sign * (abs(d) + m / 60 + s / 3600)
     except Exception as e:
         raise ValueError(f"Error converting Dec '{dec_dms}' to degrees: {e}")
