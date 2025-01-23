@@ -103,7 +103,7 @@ def process_all_ms_files(base_path, phase_centers):
         
         if ms_files:
             ms_file = ms_files[0]  # Assuming only one .ms file in each directory
-            img_filename = os.path.join(directory, "newtest5")  # Define a unique image name
+            img_filename = os.path.join(directory, "newtest6")  # Define a unique image name
             mosaic_name = os.path.basename(directory).split('.')[0]  # Generate mosaic name from directory name
             
             # Extract and normalize the ms_name
