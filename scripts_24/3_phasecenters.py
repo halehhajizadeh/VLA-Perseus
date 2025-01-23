@@ -45,9 +45,16 @@ def hms_to_degrees(ra_hms):
 
 # Function to convert Dec in DD.MM.SS format to degrees
 def dms_to_degrees(dec_dms):
-    d, m, s = [float(x) for x in dec_dms.split(".")]
-    sign = -1 if d < 0 else 1
-    return sign * (abs(d) + m / 60 + s / 3600)
+    try:
+        parts = dec_dms.split(".")
+        if len(parts) != 3:
+            raise ValueError(f"Invalid Dec format: {dec_dms}")
+        d, m, s = [float(x) for x in parts]
+        sign = -1 if d < 0 else 1
+        return sign * (abs(d) + m / 60 + s / 3600)
+    except Exception as e:
+        raise ValueError(f"Error converting Dec '{dec_dms}' to degrees: {e}")
+
 
 def get_per_field_phase_centers(ms_file):
     msmd = msmdtool()
