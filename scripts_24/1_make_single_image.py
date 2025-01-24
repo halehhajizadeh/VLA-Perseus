@@ -27,7 +27,7 @@ tclean(
     gridder="awproject",
     mosweight=True,
     savemodel='modelcolumn',
-    cfcache=f'/dev/shm/{img_filename}.cf',
+    cfcache=f'/dev/shm/1.cf',
     pblimit=pblim,
     deconvolver="mtmfs",
     pbcor=True,
