@@ -4,7 +4,7 @@ pblim = -0.001
 nit = 10
 ms_file = '../data/new/data/test/24A-376.sb45387559.eb45519359.60419.617289120375_calibrated.ms'
 img_filename = '../data/new/data/test/initialimage'
-phasecenter = 'J2000 03:26:24.057 +30.35.58.881'
+phase_center = 'J2000 03:26:24.057 +30.35.58.881'
 
 
 # Run tclean with specified parameters
@@ -21,7 +21,7 @@ tclean(
     imagename=img_filename,
     imsize=[4096],
     cell="2.5arcsec",
-    phasecenter=phasecenter,  # Pass the phasecenter dynamically
+    phasecenter=phase_center,  # Pass the phasecenter dynamically
     stokes='I',
     specmode="mfs",
     gridder="awproject",
