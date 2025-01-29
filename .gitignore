@@ -24,3 +24,4 @@ paper2/
 *.txt
 scripts/*.ipynb
 scripts_24/*.ipynb
+*tex
