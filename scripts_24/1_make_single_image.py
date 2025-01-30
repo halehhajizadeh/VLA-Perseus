@@ -1,9 +1,9 @@
 
-thresh = '9e-4'
+thresh = '8e-4'
 pblim = -0.001
-nit = 10
+nit = 500
 ms_file = '../data/new/data/test/24A-376.sb45387559.eb45519359.60419.617289120375_calibrated.ms'
-img_filename = '../data/new/data/test/initialimage'
+img_filename = '../data/new/data/test/secondimage'
 phase_center = 'J2000 03:26:24.057 +30.35.58.881'
 
 
@@ -27,7 +27,7 @@ tclean(
     gridder="awproject",
     mosweight=True,
     savemodel='modelcolumn',
-    cfcache=f'/dev/shm/1.cf',
+    cfcache=f'/dev/shm/2.cf',
     pblimit=pblim,
     deconvolver="mtmfs",
     pbcor=True,
