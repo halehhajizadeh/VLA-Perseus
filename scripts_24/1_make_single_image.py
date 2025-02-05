@@ -40,7 +40,7 @@ tclean(
     cycleniter=200,
     # psfcutoff=0.5,
     cyclefactor=1,
-    parallel=True,
+    # parallel=True,
     # psterm=True,
     nterms=2,
     # rotatepastep=5.0,
