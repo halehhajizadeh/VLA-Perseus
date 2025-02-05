@@ -1,9 +1,9 @@
 
-thresh = '4e-4'
+thresh = '9e-4'
 pblim = -0.001
-nit = 2000
-ms_file = '../data/new/data/test/24A-376.sb45387559.eb45519359.60419.617289120375_calibrated.ms'
-img_filename = '../data/new/data/test/fourthimage'
+nit = 500
+ms_file = '../data/new/data/test1/24A-376.sb45387559.eb45519359.60419.617289120375_calibrated.ms'
+img_filename = '../data/new/data/test1/initialimage'
 phase_center = 'J2000 03:26:24.057 +30.35.58.881'
 
 
@@ -24,10 +24,10 @@ tclean(
     phasecenter=phase_center,  # Pass the phasecenter dynamically
     stokes='I',
     specmode="mfs",
-    gridder="awproject",
+    gridder="mosaic",
     mosweight=True,
     savemodel='modelcolumn',
-    cfcache=f'/dev/shm/4.cf',
+    # cfcache=f'/dev/shm/4.cf',
     pblimit=pblim,
     deconvolver="mtmfs",
     pbcor=True,
@@ -43,8 +43,8 @@ tclean(
     parallel=True,
     # psterm=True,
     nterms=2,
-    rotatepastep=5.0,
-    interactive=False
+    # rotatepastep=5.0,
+    interactive=True
 )
 
 
