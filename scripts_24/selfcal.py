@@ -1,39 +1,63 @@
 msfile = ''
 
-
-
 #ALL
 
 gaincal(vis=msfile,
         caltable='pcal1',
         field='PER_FIELD_*',
         gaintype='G',
+        refant='ea25',
         calmode='p',
-        solint='int')
+        solint='2min')
 
 applycal(vis=msfile,
+         interp='linear',
          field='PER_FIELD_*',
          gaintable=['pcal1'])
 
+
+plotms(vis='pcal1',
+       xaxis='time',
+       yaxis='phase',
+       gridrows=3,
+       gridcols=3,
+       iteraxis='antenna',
+       plotrange=[0,0,-30,30],
+       coloraxis='corr',
+       titlefont=7,
+       xaxisfont=7,
+       yaxisfont=7,
+       showgui = True)
+
+flagdata(mode='tfcrop',datacolumn='CPARAM',vis='pcal1')
 
 gaincal(vis=msfile,
         caltable='pcal2',
         field='PER_FIELD_*',
         gaintype='G',
+        refant='ea25',
         calmode='p',
         solint='int')
 
 
-bandpass(vis=msfile,
-        caltable='bpcal1',
-        gaintable='pcal2',
+
+flagdata(vis=msfile, datacolumn='residual', mode='tfcrop')
+
+
+gaincal(vis=msfile,
+        caltable='amp.cal',
         field='PER_FIELD_*',
-        bandtype='B',
-        solint='int')
+        solint='inf',
+        calmode='ap',
+        refant='ea25',
+        gaintype='G',
+        gaintable=['pcal2'],
+        solnorm=True)
+
 
 applycal(vis=msfile,
          field='PER_FIELD_*',
-         gaintable=['pcal2','bpcal1'])
+         gaintable=['pcal2','ampcal1'],
+         interp='linear')
 
 
-flagdata(vis=msfile, datacolumn='residual', mode='tfcrop')

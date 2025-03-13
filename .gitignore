@@ -25,3 +25,5 @@ paper2/
 scripts/*.ipynb
 scripts_24/*.ipynb
 *tex
+mask_pybdsf/
+test_j/
