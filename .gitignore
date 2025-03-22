@@ -27,3 +27,4 @@ scripts_24/*.ipynb
 *tex
 mask_pybdsf/
 test_j/
+.ipynb_checkpoints/
