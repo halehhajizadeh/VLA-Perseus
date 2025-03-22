@@ -40,7 +40,7 @@ def load_phase_centers(phase_center_file):
 
 # Define the common parameters for tclean
 def run_tclean(ms_file, img_filename, mosaic_name, phasecenter):
-    thresh = '1e-4'
+    thresh = '9e-4'
     pblim = -0.001
     nit = 6000
 
@@ -130,4 +130,7 @@ def process_all_ms_files(base_path, phase_centers):
 phase_center_file = './phasecenter/measurement_sets_phase_centers.txt'  # Path to saved phase centers
 phase_centers = load_phase_centers(phase_center_file)  # Load phase centers from the file
 process_all_ms_files(base_path, phase_centers)  # Process MS files with their phase centers
+
+
+deconvolve
 
