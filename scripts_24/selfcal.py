@@ -31,8 +31,17 @@ plotms(vis='pcal1',
 
 flagdata(mode='tfcrop',datacolumn='CPARAM',vis='pcal1')
 
+
 gaincal(vis=msfile,
         caltable='pcal2',
+        field='PER_FIELD_*',
+        gaintype='G',
+        refant='ea25',
+        calmode='p',
+        solint='30s')
+
+gaincal(vis=msfile,
+        caltable='pcal3',
         field='PER_FIELD_*',
         gaintype='G',
         refant='ea25',
@@ -45,19 +54,19 @@ flagdata(vis=msfile, datacolumn='residual', mode='tfcrop')
 
 
 gaincal(vis=msfile,
-        caltable='amp.cal',
+        caltable='ampcal1',
         field='PER_FIELD_*',
         solint='inf',
         calmode='ap',
         refant='ea25',
         gaintype='G',
-        gaintable=['pcal2'],
+        gaintable=['pcal3'],
         solnorm=True)
 
 
 applycal(vis=msfile,
          field='PER_FIELD_*',
-         gaintable=['pcal2','ampcal1'],
+         gaintable=['pcal3','ampcal1'],
          interp='linear')
 
 

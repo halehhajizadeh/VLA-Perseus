@@ -4,7 +4,7 @@ import time
 import os
 import numpy as np
 
-thresh = '1e-4'
+thresh = '3e-4'
 pblim = 0.06
 nit = 5000
 phase_center = 'J2000 03:32:04.530001 +31.05.04.00000'
@@ -49,41 +49,40 @@ for file in ms_file_list:
 print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
 #----------------------------------------------------------------
-Stokes = ['Q', 'U']
 
 
-for s in Stokes:
 
-    img_filename =  "../data/concat/total/ALL/tclean/" + str(mosaic_name) + "_Stokes" + str(s) + "_spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + '-mosaic'
+img_filename =  "../data/concat/total/ALL/tclean/" + str(mosaic_name) + "_StokesQ"  + "_spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + '-mosaic'
 
-    tclean( vis=ms_file_list,
-            field="PER_FIELD_*",
-            timerange="",
-            uvrange="",
-            antenna="",
-            observation="",
-            intent="",
-            datacolumn="corrected",
-            imagename=img_filename,
-            imsize=[4096],
-            cell="2.5arcsec",
-            phasecenter=phase_center,
-            stokes=s,
-            specmode="mfs",
-            gridder="mosaic",
-            mosweight=True,
-            pblimit=pblim,
-            deconvolver="hogbom",
-            pbcor=True,
-            weighting="briggs",
-            robust=0.5,
-            niter=nit,
-            gain=0.1,
-            threshold=thresh,
-            nterms=1,
-            cycleniter=500,
-            interactive=False,
-            )
+tclean( vis=ms_file_list,
+        field="PER_FIELD_*",
+        timerange="",
+        uvrange="",
+        antenna="",
+        observation="",
+        intent="",
+        datacolumn="corrected",
+        imagename=img_filename,
+        imsize=[4096],
+        cell="2.5arcsec",
+        phasecenter=phase_center,
+        stokes='Q',
+        specmode="mfs",
+        gridder="mosaic",
+        mosweight=True,
+        pblimit=pblim,
+        deconvolver="hogbom",
+        pbcor=True,
+        weighting="briggs",
+        robust=0.5,
+        niter=nit,
+        gain=0.1,
+        threshold=thresh,
+        nterms=1,
+        cycleniter=500,
+        interactive=False,
+        nsigma=3
+        )
 
 ############################################################################################
 
