@@ -52,7 +52,7 @@ print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
 
 
-img_filename =  "../data/concat/total/ALL/tclean/" + str(mosaic_name) + "_StokesQ"  + "_spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + '-mosaic'
+img_filename =  "../data/concat/total/ALL/tclean/" + str(mosaic_name) + "_StokesU"  + "_spwALL" + "-2.5arcsec-nit" + str(nit) + "-" + '-mosaic'
 
 tclean( vis=ms_file_list,
         field="PER_FIELD_*",
@@ -66,7 +66,7 @@ tclean( vis=ms_file_list,
         imsize=[4096],
         cell="2.5arcsec",
         phasecenter=phase_center,
-        stokes='Q',
+        stokes='U',
         specmode="mfs",
         gridder="mosaic",
         mosweight=True,
