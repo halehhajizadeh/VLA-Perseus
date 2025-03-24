@@ -28,3 +28,6 @@ scripts_24/*.ipynb
 mask_pybdsf/
 test_j/
 .ipynb_checkpoints/
+NVSS/
+*.png
+
