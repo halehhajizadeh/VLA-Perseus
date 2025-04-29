@@ -56,7 +56,7 @@ dirs = [
     "/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/03:40:00.063_+32.23.58.799"
 ]
 
-# === Define phasecenter (from your screenshot) ===
+# === Define phasecenter ===
 phasecenter = "J2000 03:36:29.7 +32.18.26"
 
 # === Collect all *_calibrated.ms files from subdirs ===
@@ -67,7 +67,11 @@ for base_dir in dirs:
         for sub in subdirs:
             if sub.startswith(("19B", "24A")):
                 ms_path = os.path.join(root, sub)
-                ms_files = glob(os.path.join(ms_path, "*_calibrated.ms"))
+                # Look for *_calibrated.ms, adding '/products/' if 19B
+                if sub.startswith("19B"):
+                    ms_files = glob(os.path.join(ms_path, "products", "*_calibrated.ms"))
+                else:
+                    ms_files = glob(os.path.join(ms_path, "*_calibrated.ms"))
                 all_ms_files.extend(ms_files)
 
 # === Print and verify all files before running ===
