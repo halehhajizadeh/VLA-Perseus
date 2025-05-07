@@ -82,7 +82,7 @@ for ms in all_ms_files:
 # === Define output image path ===
 image_dir = "/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/03:40:00.063_+32.23.58.799/Images"
 os.makedirs(image_dir, exist_ok=True)
-image_name = os.path.join(image_dir, "perseus_mosaic_image")
+image_name = os.path.join(image_dir, "perseus_mosaic_image2")
 
 # === Run tclean on all MS files combined ===
 run_tclean(all_ms_files, image_name, "perseus_mosaic", phasecenter)

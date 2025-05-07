@@ -6,7 +6,7 @@ import tarfile
 import shutil
 
 # working_directory = sys.argv[1]
-working_directory = '../data'
+working_directory = '../data/03:42:00.057_+30.29.58.885'
 
 def find_ms_folder(directory, startswith='24A-376', endswith=''):
     """
