@@ -46,5 +46,6 @@ for i in range(55):
         niter=nit,
         gain=0.1,
         threshold=thresh,
-        interactive=False
+        interactive=False,
+        mask=''
     )
