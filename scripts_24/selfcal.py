@@ -40,6 +40,13 @@ gaincal(vis=msfile,
         calmode='p',
         solint='30s')
 
+
+applycal(vis=msfile,
+         interp='linear',
+         field='PER_FIELD_*',
+         gaintable=['pcal2'])
+
+
 gaincal(vis=msfile,
         caltable='pcal3',
         field='PER_FIELD_*',

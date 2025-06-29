@@ -4,10 +4,10 @@
 inp importfits
 
 
-imregrid(imagename='mask.image', template='your_image.fits', output='mask_regrid.image')
+imregrid(imagename='mask.image', template='maskimage.model.tt0', output='mask_regrid.image')
 
 
- makemask(mode='copy', inpimage='maskimage.model.tt0/',
-             inpmask='0972_mask_regrid.image',
-              output='0972_mask_final.image',
-              overwrite=True)
+makemask(mode='copy', inpimage='maskimage.model.tt0/',
+            inpmask='4028_mask_regrid.image',
+            output='4028_mask_final.image',
+            overwrite=True)
