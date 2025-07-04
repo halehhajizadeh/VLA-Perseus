@@ -67,7 +67,7 @@ for file in ms_file_list:
 print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
 # Output image name
-img_filename = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/{mosaic_name}/ALL/tclean/{mosaic_name}_StokesI_spwALL-2.5arcsec-nit{nit}-awproject"
+img_filename = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/ALL/tclean/{mosaic_name}_StokesI_spwALL-2.5arcsec-nit{nit}-awproject"
 
 # Run tclean
 tclean(vis=ms_file_list,
