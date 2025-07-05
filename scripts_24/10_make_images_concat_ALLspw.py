@@ -3,9 +3,9 @@ import os
 
 
 # Set parameters
-thresh = '8e-5'
+thresh = '6e-5'
 pblim = -0.001
-nit = 6000
+nit = 7000
 
 
 
@@ -88,6 +88,7 @@ tclean(vis=ms_file_list,
        weighting="briggs",
        robust=0.5,
        wbawp=True,
+       conjbeams=True,
        niter=nit,
        gain=0.1,
        threshold=thresh,
@@ -98,7 +99,5 @@ tclean(vis=ms_file_list,
        rotatepastep=5.0,
        interactive=False,
        psfcutoff=0.5,
-       calcpsf=True,
-       calcres=True,
        mask = mask_name
        )
