@@ -74,11 +74,14 @@ mask_name = base_directory + '/24A-376.sb45274301.eb45298942.60377.89050475694/5
 # mask_name = base_directory + '/24A-376.sb45388498.eb45455607.60414.75498211806/1806_mask_final.image' #J2000 03:45:12.060 +31.41.58.831
 # mask_name = base_directory + '/24A-376.sb45327762.eb45339078.60402.66413293981/9881_mask_final.image' #J2000 03:45:36.064 +32.47.58.780
 
+
+combined_directory = base_directory + mosaic_name
+
 # Find _calibrated.ms files inside 24A* subdirectories
-def find_calibrated_files (base_directory + mosaic_name):
+def find_calibrated_files (combined_directory):
     calibrated_files = []
-    for subfolder in os.listdir(base_directory + mosaic_name):
-        sub_path = os.path.join(base_directory + mosaic_name, subfolder)
+    for subfolder in os.listdir(combined_directory):
+        sub_path = os.path.join(combined_directory, subfolder)
         if os.path.isdir(sub_path) and subfolder.startswith('24A'):
             for file in os.listdir(sub_path):
                 if file.endswith('_calibrated.ms'):
@@ -86,7 +89,7 @@ def find_calibrated_files (base_directory + mosaic_name):
     return calibrated_files
 
 # Get MS file list
-ms_file_list = find_calibrated_files(base_directory + mosaic_name)
+ms_file_list = find_calibrated_files(combined_directory)
 print(ms_file_list)
 
 # Print MS file list
