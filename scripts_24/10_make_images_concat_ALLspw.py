@@ -3,9 +3,9 @@ import os
 
 
 # Set parameters
-thresh = '6e-5'
+thresh = '5e-5'
 pblim = -0.001
-nit = 7000
+nit = 15000
 
 
 
