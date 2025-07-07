@@ -67,7 +67,7 @@ for file in ms_file_list:
 print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
 # Output image name
-img_filename = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/ALL/tclean/{mosaic_name}_StokesI_spwALL-2.5arcsec-nit{nit}-awproject"
+img_filename = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/ALL/tclean/{mosaic_name}_StokesI_spwALL-2.5arcsec-nit{nit}-awproject-wproj32"
 
 # Run tclean
 tclean(vis=ms_file_list,
@@ -80,6 +80,7 @@ tclean(vis=ms_file_list,
        stokes='I',
        specmode="mfs",
        gridder="awproject",
+       wprojplanes=32,
        mosweight=True,
        cfcache=f'/dev/shm/{mosaic_name}.cf',
        pblimit=pblim,
