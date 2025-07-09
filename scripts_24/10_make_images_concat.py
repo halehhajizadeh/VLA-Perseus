@@ -4,9 +4,9 @@ import os
 
 sys.path.append('.')
 
-thresh = '6e-5'
+thresh = '9e-5'
 pblim = 0.06
-nit = 7000
+nit = 4000
 
 
 spw = [
@@ -140,10 +140,10 @@ for stok in stokes1:
                        niter=nit,
                        gain=0.1,
                        threshold=thresh,
-                       cycleniter=500,
+                    #    cycleniter=500,
                        cyclefactor=1,
                        interactive=False,
-                       mask = mask_name
+                    #    mask = mask_name
                        )
             except Exception as e:
                 print(f"Error processing SPW {spw_param}: {e}")
