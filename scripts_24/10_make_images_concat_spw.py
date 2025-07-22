@@ -9,7 +9,7 @@ thresh = '6e-5'
 pblim = -0.001
 nit = 5000
 spw = [
-    2, 
+    # 2, 
     3, 
     4, 
     5, 
@@ -77,7 +77,7 @@ for ms_path in ms_file_list:
         tic = time.time()
         print(f"\nStokes: I, {ms_name}, spw: {s} is started ...")
 
-        output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw{s}/{ms_name}/tclean"
+        output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/{ms_name}/tclean/spw{s}"
         os.makedirs(output_dir, exist_ok=True)
 
         img_filename = output_dir + '/' + f"{ms_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-awproject"
