@@ -112,7 +112,7 @@ for ms_path in ms_file_list:
                rotatepastep=5.0,
                interactive=False,
                psfcutoff=0.5,
-            #    mask=mask_name
+               mask=mask_name
               )
 
         toc = time.time()
