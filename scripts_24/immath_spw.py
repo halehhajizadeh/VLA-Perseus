@@ -1,8 +1,5 @@
-import os
-import glob
-import shutil
+import os, glob, shutil
 
-# ========= USER SETTINGS =========
 mosaic_name = '03:26:24.057_+30.35.58.881'
 # mosaic_name = '03:29:12.973_+31.48.05.579'
 # mosaic_name = '03:31:12.055_+29.47.58.916'
@@ -14,121 +11,64 @@ mosaic_name = '03:26:24.057_+30.35.58.881'
 
 
 base_concat = f'/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}'
+spw = 15
+prefer_pbcor = False   # set True if you want *.image.pbcor.tt0
 
-# SPWs you want to average (match what you imaged)
-spw_list = [3, 4, 5, 6, 8, 15, 16, 17]
-
-# Part of the imagename you used in tclean (before CASA suffixes)
-# Example from your script:
-#   imagename = f"{ms_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-awproject"
-# We'll match robustly with wildcards in case nit/threshold changes (as long as "-awproject" is present)
-imagename_contains = '_StokesI_spw{spw}-'
-imagename_trailer   = '-awproject'
-
-# Prefer pbcor if available?
-prefer_pbcor = True
-
-# Overwrite existing averaged images?
-overwrite = True
-# =================================
-
-def ensure_dir(path):
-    if not os.path.isdir(path):
-        os.makedirs(path, exist_ok=True)
-
-def find_ms_level_spw_dirs(base_concat, spw):
-    """
-    Return list of directories like:
-      .../Images/spw/{ms_name}/tclean/spw{spw}
-    """
+def find_ms_spw_dirs(base_concat, spw):
     root = os.path.join(base_concat, 'Images', 'spw')
     if not os.path.isdir(root):
         return []
-    ms_dirs = []
+    out = []
     for ms_name in sorted(os.listdir(root)):
-        ms_root = os.path.join(root, ms_name, 'tclean', f'spw{spw}')
-        if os.path.isdir(ms_root):
-            ms_dirs.append(ms_root)
-    return ms_dirs
+        d = os.path.join(root, ms_name, 'tclean', f'spw{spw}')
+        if os.path.isdir(d):
+            out.append(d)
+    return out
 
-def collect_images_in_dir(d, spw):
-    """
-    In a given tclean/spw{spw} dir, collect candidate images.
-    Prefer *.image.pbcor if available (when prefer_pbcor=True), else *.image.
-    We try both the exact pattern you used and a wildcard fallback.
-    """
-    # exact-ish pattern
-    pbcor_candidates = glob.glob(os.path.join(d, f"*{imagename_contains.format(spw=spw)}*{imagename_trailer}.image.pbcor"))
-    image_candidates = glob.glob(os.path.join(d, f"*{imagename_contains.format(spw=spw)}*{imagename_trailer}.image"))
+def list_tt0_inputs(base_concat, spw, prefer_pbcor=True):
+    inputs = []
+    for d in find_ms_spw_dirs(base_concat, spw):
+        # try the exact pattern first (matches your example naming)
+        pb = glob.glob(os.path.join(d, f'*_StokesI_spw{spw}-* -awproject.image.pbcor.tt0'.replace(' ', '')))
+        tt = glob.glob(os.path.join(d, f'*_StokesI_spw{spw}-* -awproject.image.tt0'.replace(' ', '')))
 
-    # fallback (any pbcor/image in case naming varied slightly)
-    if prefer_pbcor and not pbcor_candidates:
-        pbcor_candidates = glob.glob(os.path.join(d, "*.image.pbcor"))
-    if not image_candidates:
-        image_candidates = glob.glob(os.path.join(d, "*.image"))
+        # fallback (any tt0)
+        if prefer_pbcor and not pb:
+            pb = glob.glob(os.path.join(d, '*.image.pbcor.tt0'))
+        if not tt:
+            tt = glob.glob(os.path.join(d, '*.image.tt0'))
 
-    if prefer_pbcor and pbcor_candidates:
-        return sorted(pbcor_candidates)
-    elif image_candidates:
-        # Filter out .image.pbcor if both patterns matched
-        image_only = [p for p in image_candidates if not p.endswith(".image.pbcor")]
-        return sorted(image_only)
-    else:
-        return []
+        if prefer_pbcor and pb:
+            inputs.append(pb[0].rstrip('/'))
+        elif tt:
+            inputs.append(tt[0].rstrip('/'))
+    # de-dup + sort
+    return sorted(list(dict.fromkeys(inputs)))
 
-def build_average_expr(n):
-    if n == 1:
-        return 'IM0'
-    # (IM0 + IM1 + ... + IM{n-1})/n
-    s = " + ".join([f"IM{i}" for i in range(n)])
-    return f"({s})/{float(n)}"
+def build_expr(n):
+    return 'IM0' if n == 1 else f"({ ' + '.join([f'IM{i}' for i in range(n)]) })/{float(n)}"
 
-def average_spw(base_concat, mosaic_name, spw):
-    ms_spw_dirs = find_ms_level_spw_dirs(base_concat, spw)
-    imagenames = []
-    for d in ms_spw_dirs:
-        imgs = collect_images_in_dir(d, spw)
-        if imgs:
-            # choose the principal cube if both .image and .image.tt0 exist, prefer the multi-term full .image
-            # (If you want tt0 specifically, filter here accordingly.)
-            imagenames.append(imgs[0])
+# collect inputs (your sample fits this list)
+imgs = list_tt0_inputs(base_concat, spw, prefer_pbcor=prefer_pbcor)
 
-    # De-duplicate in case the same path was found twice
-    imagenames = sorted(list(dict.fromkeys(imagenames)))
+print('Inputs for SPW', spw)
+for p in imgs: print('  -', p)
 
-    out_dir = os.path.join(base_concat, 'Images', 'spw', 'tclean', f'spw{spw}')
-    ensure_dir(out_dir)
+if not imgs:
+    raise RuntimeError(f'No tt0 images found for SPW {spw}')
 
-    # Suffix shows whether we averaged pbcor or not
-    suffix = '_pbcor' if (prefer_pbcor and any(p.endswith('.image.pbcor') for p in imagenames)) else ''
-    outfile = os.path.join(out_dir, f"{mosaic_name}_StokesI_spw{spw}_avg{suffix}.image")
+# choose an output folder like .../Images/spw/tclean/spw15/
+out_dir = os.path.join(base_concat, 'Images', 'spw', 'tclean', f'spw{spw}')
+os.makedirs(out_dir, exist_ok=True)
+suffix = '_pbcor_tt0' if prefer_pbcor else '_tt0'
+outfile = os.path.join(out_dir, f'{mosaic_name}_StokesI_spw{spw}_avg{suffix}.image')
 
-    print(f"\n=== SPW {spw} ===")
-    if not imagenames:
-        print(f"No input images found for SPW {spw}. Skipping.")
-        return
+# overwrite safely
+if os.path.exists(outfile):
+    shutil.rmtree(outfile, ignore_errors=True)
 
-    print("Input images:")
-    for p in imagenames:
-        print("  -", p)
-    print("Output:", outfile)
+expr = build_expr(len(imgs))
+print('immath expr:', expr)
 
-    if os.path.exists(outfile):
-        if overwrite:
-            shutil.rmtree(outfile, ignore_errors=True)
-        else:
-            print("Output exists and overwrite=False. Skipping.")
-            return
-
-    expr = build_average_expr(len(imagenames))
-    print("Expression:", expr)
-
-    # Run CASA immath
-    immath(imagename=imagenames, expr=expr, outfile=outfile)
-    print(f"Averaged {len(imagenames)} image(s) into:\n  {outfile}")
-
-# ---- Run for all requested SPWs ----
-for s in spw_list:
-    average_spw(base_concat, mosaic_name, s)
-
-print("\nAll done.")
+immath(imagename=imgs, expr=expr, outfile=outfile)
+print('Wrote:', outfile)
