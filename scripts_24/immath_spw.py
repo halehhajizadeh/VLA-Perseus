@@ -1,5 +1,6 @@
 # average_spw_images.py  (run inside CASA)
 import os
+import re
 import glob
 import shutil
 import traceback
@@ -25,6 +26,9 @@ PREFER_PBCOR_TT0 = False
 
 # Overwrite existing averaged images?
 OVERWRITE = True
+
+# Limit how deep we scan under Images/spw/ for inputs
+MAX_SCAN_DEPTH = 6
 # =================================
 
 
@@ -36,96 +40,6 @@ def safe(s):
 def ensure_dir(path):
     if not os.path.isdir(path):
         os.makedirs(path, exist_ok=True)
-
-
-def find_ms_level_spw_dirs(base_concat, spw):
-    """
-    Return a list of directories that might contain per-MS SPW images.
-    Tries several common layouts:
-
-      A) {base}/Images/spw/{MS}/tclean/spw{spw}
-      B) {base}/Images/spw/{MS}/spw{spw}/tclean
-      C) {base}/Images/spw/{MS}/spw{spw}
-      D) {base}/Images/spw/tclean/spw{spw}     (mosaic-level fallback)
-
-    Only existing directories are returned.
-    """
-    out = []
-    root = os.path.join(base_concat, 'Images', 'spw')
-    if not os.path.isdir(root):
-        return out
-
-    # Per-MS patterns
-    for ms_name in sorted(os.listdir(root)):
-        ms_dir = os.path.join(root, ms_name)
-        if not os.path.isdir(ms_dir):
-            continue
-
-        cand = [
-            os.path.join(ms_dir, 'tclean', f'spw{spw}'),
-            os.path.join(ms_dir, f'spw{spw}', 'tclean'),
-            os.path.join(ms_dir, f'spw{spw}'),
-        ]
-        for d in cand:
-            if os.path.isdir(d):
-                out.append(d)
-
-    # Mosaic-level fallback
-    mosaic_cand = os.path.join(root, 'tclean', f'spw{spw}')
-    if os.path.isdir(mosaic_cand):
-        out.append(mosaic_cand)
-
-    # De-dup + sort
-    out = sorted(list(dict.fromkeys(out)))
-    return out
-
-
-def _pick_one_from_dir(d, prefer_pbcor=True):
-    """
-    Select a single best candidate image from directory d using this priority:
-      1) any *.image.pbcor.tt0 (if prefer_pbcor)
-      2) any *.image.tt0
-      3) any *.image.pbcor (if prefer_pbcor)
-      4) any *.image
-    Returns absolute path or None.
-    """
-    globs = []
-    if prefer_pbcor:
-        globs += [os.path.join(d, "*.image.pbcor.tt0")]
-    globs += [os.path.join(d, "*.image.tt0")]
-    if prefer_pbcor:
-        globs += [os.path.join(d, "*.image.pbcor")]
-    globs += [os.path.join(d, "*.image")]
-
-    for g in globs:
-        matches = [p for p in glob.glob(g) if os.path.isdir(p)]
-        if matches:
-            return sorted(matches)[0]
-    return None
-
-
-def collect_inputs_for_spw(base_concat, spw, prefer_pbcor=True):
-    """
-    For a given SPW, collect one input image per MS/SPW directory.
-    Uses several directory layouts and a relaxed filename policy.
-    Returns a sorted, de-duplicated list of absolute paths.
-    """
-    imagenames = []
-    dirs = find_ms_level_spw_dirs(base_concat, spw)
-
-    if not dirs:
-        print(f"  [scan] No candidate SPW directories found for spw{spw}.")
-        return []
-
-    for d in dirs:
-        pick = _pick_one_from_dir(d, prefer_pbcor=prefer_pbcor)
-        if pick:
-            imagenames.append(pick.rstrip('/'))
-        else:
-            print(f"  [scan] No matching images in: {d}")
-
-    imagenames = sorted(list(dict.fromkeys(imagenames)))
-    return imagenames
 
 
 def build_mean_expr(n, token="IM"):
@@ -193,21 +107,92 @@ def try_immath_with_symlinks(imgs, outfile, workdir):
             pass
 
 
+def collect_inputs_for_spw(base_concat, spw, prefer_pbcor=True, max_depth=6):
+    """
+    Recursively search under {base_concat}/Images/spw/** for CASA images that
+    look like per-MS SPW products. Accept both .tt0 and plain .image, and
+    prefer pbcor when requested.
+
+    Returns a de-duplicated list of absolute paths.
+    """
+    root = os.path.join(base_concat, "Images", "spw")
+    if not os.path.isdir(root):
+        print(f"  [scan] Missing root: {root}")
+        return []
+
+    # Accept several SPW tokens in names/paths, e.g., spw16, spw_16, spw-16 (case-insensitive)
+    spw_pat = re.compile(rf"(?i)\bspw[_\-]?{spw}\b")
+
+    start_depth = root.rstrip(os.sep).count(os.sep)
+    cands = []
+    for cur, dirs, files in os.walk(root):
+        depth = cur.rstrip(os.sep).count(os.sep) - start_depth
+        if depth > max_depth:
+            # prune deeper traversal
+            dirs[:] = []
+            continue
+
+        # Consider any CASA image directory inside 'dirs'
+        for d in list(dirs):
+            if d.endswith((".image", ".image.tt0", ".image.pbcor", ".image.pbcor.tt0")):
+                p = os.path.join(cur, d)
+                # Require the SPW token to appear somewhere in the path
+                if spw_pat.search(p):
+                    cands.append(p)
+
+    if not cands:
+        print(f"  [scan] No image dirs mentioning SPW {spw} found under {root}")
+        return []
+
+    # Rank by preference: pbcor.tt0 (if prefer), then tt0, then pbcor (if prefer), then plain .image
+    def rank(path):
+        name = os.path.basename(path)
+        r = 100
+        if name.endswith(".image.pbcor.tt0") and prefer_pbcor:
+            r = 1
+        elif name.endswith(".image.tt0"):
+            r = 2
+        elif name.endswith(".image.pbcor") and prefer_pbcor:
+            r = 3
+        elif name.endswith(".image"):
+            r = 4
+        # small bias: prefer deeper per-MS paths over mosaic-level paths
+        depth_bonus = -min(3, path.count(os.sep) - root.count(os.sep))
+        return (r, depth_bonus, name)
+
+    # One pick per parent directory (to avoid grabbing multiple versions from the same place)
+    picks = {}
+    for p in sorted(cands):
+        parent = os.path.dirname(p)
+        key = parent
+        if key not in picks or rank(p) < rank(picks[key]):
+            picks[key] = p
+
+    imagenames = sorted(set(picks.values()))
+    print(f"  [scan] SPW {spw}: picked {len(imagenames)} inputs")
+    for p in imagenames[:8]:
+        print("    -", p)
+    if len(imagenames) > 8:
+        print(f"    ... and {len(imagenames)-8} more")
+
+    return imagenames
+
+
 def average_spw(base_concat, mosaic_name, spw, prefer_pbcor=True, overwrite=True):
     print(f"\n=== SPW {spw} ===")
-    imgs = collect_inputs_for_spw(base_concat, spw, prefer_pbcor=prefer_pbcor)
 
-    if not imgs:
-        print(f"  No inputs found for SPW {spw}. Skipping.")
-        return
-
-    print("  Inputs:")
-    for p in imgs:
-        print("   -", p)
-
-    # Output directory: mosaic-level .../Images/spw/tclean/spw{spw}/
+    # Create output directory at the mosaic level *upfront* so you can see it even if no inputs
     out_dir = os.path.join(base_concat, 'Images', 'spw', 'tclean', f'spw{spw}')
     ensure_dir(out_dir)
+
+    imgs = collect_inputs_for_spw(base_concat, spw, prefer_pbcor=prefer_pbcor, max_depth=MAX_SCAN_DEPTH)
+    if not imgs:
+        print(f"  No inputs found for SPW {spw}. Created (empty) out dir: {out_dir}")
+        return
+
+    print("  Inputs to average:")
+    for p in imgs:
+        print("   -", p)
 
     has_pb = any(p.endswith(".image.pbcor.tt0") or p.endswith(".image.pbcor") for p in imgs)
     suffix = "_pbcor_tt0" if (prefer_pbcor and has_pb) else "_tt0"
@@ -257,13 +242,14 @@ def main():
     print("SPWs                 :", SPW_LIST)
     print("Prefer pbcor tt0     :", PREFER_PBCOR_TT0)
     print("Overwrite outputs    :", OVERWRITE)
+    print("Max scan depth       :", MAX_SCAN_DEPTH)
 
     for s in SPW_LIST:
         average_spw(
             base_concat=base_concat,
             mosaic_name=mosaic_name,
             spw=s,
-            prefer_pbcor=PBCOR_TT0 if 'PBCOR_TT0' in globals() else PREFER_PBCOR_TT0,  # safety
+            prefer_pbcor=PREFER_PBCOR_TT0,
             overwrite=OVERWRITE
         )
 
