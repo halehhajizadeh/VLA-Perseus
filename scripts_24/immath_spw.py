@@ -40,57 +40,90 @@ def ensure_dir(path):
 
 def find_ms_level_spw_dirs(base_concat, spw):
     """
-    Return list of directories like:
-      {base_concat}/Images/spw/{ms_name}/tclean/spw{spw}
+    Return a list of directories that might contain per-MS SPW images.
+    Tries several common layouts:
+
+      A) {base}/Images/spw/{MS}/tclean/spw{spw}
+      B) {base}/Images/spw/{MS}/spw{spw}/tclean
+      C) {base}/Images/spw/{MS}/spw{spw}
+      D) {base}/Images/spw/tclean/spw{spw}     (mosaic-level fallback)
+
+    Only existing directories are returned.
     """
+    out = []
     root = os.path.join(base_concat, 'Images', 'spw')
     if not os.path.isdir(root):
-        return []
-    out = []
+        return out
+
+    # Per-MS patterns
     for ms_name in sorted(os.listdir(root)):
-        d = os.path.join(root, ms_name, 'tclean', f'spw{spw}')
-        if os.path.isdir(d):
-            out.append(d)
+        ms_dir = os.path.join(root, ms_name)
+        if not os.path.isdir(ms_dir):
+            continue
+
+        cand = [
+            os.path.join(ms_dir, 'tclean', f'spw{spw}'),
+            os.path.join(ms_dir, f'spw{spw}', 'tclean'),
+            os.path.join(ms_dir, f'spw{spw}'),
+        ]
+        for d in cand:
+            if os.path.isdir(d):
+                out.append(d)
+
+    # Mosaic-level fallback
+    mosaic_cand = os.path.join(root, 'tclean', f'spw{spw}')
+    if os.path.isdir(mosaic_cand):
+        out.append(mosaic_cand)
+
+    # De-dup + sort
+    out = sorted(list(dict.fromkeys(out)))
     return out
+
+
+def _pick_one_from_dir(d, prefer_pbcor=True):
+    """
+    Select a single best candidate image from directory d using this priority:
+      1) any *.image.pbcor.tt0 (if prefer_pbcor)
+      2) any *.image.tt0
+      3) any *.image.pbcor (if prefer_pbcor)
+      4) any *.image
+    Returns absolute path or None.
+    """
+    globs = []
+    if prefer_pbcor:
+        globs += [os.path.join(d, "*.image.pbcor.tt0")]
+    globs += [os.path.join(d, "*.image.tt0")]
+    if prefer_pbcor:
+        globs += [os.path.join(d, "*.image.pbcor")]
+    globs += [os.path.join(d, "*.image")]
+
+    for g in globs:
+        matches = [p for p in glob.glob(g) if os.path.isdir(p)]
+        if matches:
+            return sorted(matches)[0]
+    return None
 
 
 def collect_inputs_for_spw(base_concat, spw, prefer_pbcor=True):
     """
-    For a given SPW, collect one input image per MS directory.
-    Priority:
-      1) *_*.image.pbcor.tt0 (if prefer_pbcor=True)
-      2) *_*.image.tt0
-    Fallbacks:
-      any *.image.pbcor.tt0, else any *.image.tt0
-    Returns a sorted de-duplicated list of absolute paths (no trailing slashes).
+    For a given SPW, collect one input image per MS/SPW directory.
+    Uses several directory layouts and a relaxed filename policy.
+    Returns a sorted, de-duplicated list of absolute paths.
     """
     imagenames = []
-    for d in find_ms_level_spw_dirs(base_concat, spw):
-        # First try matching your naming pattern explicitly
-        pat_pbcor = os.path.join(d, f"*_StokesI_spw{spw}-*awproject.image.pbcor.tt0")
-        pat_tt0   = os.path.join(d, f"*_StokesI_spw{spw}-*awproject.image.tt0")
+    dirs = find_ms_level_spw_dirs(base_concat, spw)
 
-        pb_list = glob.glob(pat_pbcor)
-        tt_list = glob.glob(pat_tt0)
+    if not dirs:
+        print(f"  [scan] No candidate SPW directories found for spw{spw}.")
+        return []
 
-        # Fallbacks (any tt0 in the folder)
-        if prefer_pbcor and not pb_list:
-            pb_list = glob.glob(os.path.join(d, "*.image.pbcor.tt0"))
-        if not tt_list:
-            tt_list = glob.glob(os.path.join(d, "*.image.tt0"))
-
-        pick = None
-        if prefer_pbcor and pb_list:
-            pick = sorted(pb_list)[0]
-        elif tt_list:
-            # avoid accidentally picking a pbcor file here
-            cand = [p for p in tt_list if not p.endswith(".image.pbcor.tt0")]
-            pick = sorted(cand)[0] if cand else sorted(tt_list)[0]
-
+    for d in dirs:
+        pick = _pick_one_from_dir(d, prefer_pbcor=prefer_pbcor)
         if pick:
             imagenames.append(pick.rstrip('/'))
+        else:
+            print(f"  [scan] No matching images in: {d}")
 
-    # De-dup + sort
     imagenames = sorted(list(dict.fromkeys(imagenames)))
     return imagenames
 
@@ -104,8 +137,7 @@ def build_mean_expr(n, token="IM"):
 
 def try_immath_with_varnames(imgs, outfile):
     """
-    Attempt immath using varnames so raw file paths don't appear
-    in the parsed expression.
+    Attempt immath using varnames so raw file paths don't appear in the expression.
     """
     n = len(imgs)
     varnames = [f"A{i}" for i in range(n)]
@@ -121,13 +153,19 @@ def try_immath_with_symlinks(imgs, outfile, workdir):
     ensure_dir(workdir)
     links = []
     try:
-        # Make deterministic colon-free link names
         for i, src in enumerate(imgs):
             # choose suffix by original type
-            suffix = ".image.pbcor.tt0" if src.endswith(".image.pbcor.tt0") else ".image.tt0"
+            if src.endswith(".image.pbcor.tt0"):
+                suffix = ".image.pbcor.tt0"
+            elif src.endswith(".image.tt0"):
+                suffix = ".image.tt0"
+            elif src.endswith(".image.pbcor"):
+                suffix = ".image.pbcor"
+            else:
+                suffix = ".image"
+
             dst = os.path.join(workdir, f"im{i}{suffix}")
             if os.path.islink(dst) or os.path.exists(dst):
-                # remove any stale link/dir
                 try:
                     if os.path.islink(dst):
                         os.unlink(dst)
@@ -144,7 +182,6 @@ def try_immath_with_symlinks(imgs, outfile, workdir):
         immath(imagename=links, expr=expr, outfile=outfile)
 
     finally:
-        # Best-effort cleanup of symlinks
         for p in links:
             try:
                 os.unlink(p)
@@ -168,11 +205,12 @@ def average_spw(base_concat, mosaic_name, spw, prefer_pbcor=True, overwrite=True
     for p in imgs:
         print("   -", p)
 
-    # Output directory: .../Images/spw/tclean/spw{spw}/
+    # Output directory: mosaic-level .../Images/spw/tclean/spw{spw}/
     out_dir = os.path.join(base_concat, 'Images', 'spw', 'tclean', f'spw{spw}')
     ensure_dir(out_dir)
 
-    suffix = "_pbcor_tt0" if prefer_pbcor and any(p.endswith(".image.pbcor.tt0") for p in imgs) else "_tt0"
+    has_pb = any(p.endswith(".image.pbcor.tt0") or p.endswith(".image.pbcor") for p in imgs)
+    suffix = "_pbcor_tt0" if (prefer_pbcor and has_pb) else "_tt0"
     out_name = f"{safe(mosaic_name)}_StokesI_spw{spw}_avg{suffix}.image"
     outfile = os.path.join(out_dir, out_name)
 
@@ -187,18 +225,22 @@ def average_spw(base_concat, mosaic_name, spw, prefer_pbcor=True, overwrite=True
     # --- Attempt 1: varnames ---
     try:
         try_immath_with_varnames(imgs, outfile)
-        print("  Wrote:", outfile)
+        if os.path.isdir(outfile):
+            print("  Wrote:", outfile)
+        else:
+            print("  immath reported success but outfile not found:", outfile)
         return
     except Exception as e:
-        msg = f"{e}"
-        print("  [immath-varnames] failed:", msg)
-        # Fall through to symlink method
+        print("  [immath-varnames] failed:", e)
 
     # --- Attempt 2: symlinks (colon-free) ---
     workdir = os.path.join(out_dir, f"_tmp_symlinks_spw{spw}")
     try:
         try_immath_with_symlinks(imgs, outfile, workdir)
-        print("  Wrote:", outfile)
+        if os.path.isdir(outfile):
+            print("  Wrote:", outfile)
+        else:
+            print("  immath reported success but outfile not found:", outfile)
     except Exception as e2:
         print("  [immath-symlinks] failed:", e2)
         traceback.print_exc()
@@ -221,11 +263,12 @@ def main():
             base_concat=base_concat,
             mosaic_name=mosaic_name,
             spw=s,
-            prefer_pbcor=PREFER_PBCOR_TT0,
+            prefer_pbcor=PBCOR_TT0 if 'PBCOR_TT0' in globals() else PREFER_PBCOR_TT0,  # safety
             overwrite=OVERWRITE
         )
 
     print("\nAll done.")
+
 
 # Run
 if __name__ == "__main__":
