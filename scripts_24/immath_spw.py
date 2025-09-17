@@ -15,6 +15,9 @@ mosaic_name = '03:29:12.973_+31.48.05.579'
 # mosaic_name = '03:45:12.060_+31.41.58.831'
 # mosaic_name = '03:45:36.064_+32.47.58.780'
 
+# average_spw_images.py  (run inside CASA)
+
+
 # Root that contains the "concat/{mosaic_name}" tree
 BASE_CONCAT_ROOT = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat'
 
@@ -26,74 +29,41 @@ PREFER_PBCOR_TT0 = False
 
 # Overwrite existing averaged images?
 OVERWRITE = True
+
+# Regrid all inputs to a common grid (recommended to avoid immath shape/coords errors)
+USE_IMREGRID = True
+
+# Smooth to a common beam (disabled by default; enable only if beams differ and you know the target beam)
+SMOOTH_TO_COMMON = False
+# COMMON_BEAM = dict(major='45arcsec', minor='45arcsec', pa='0deg')  # example
 # =================================
 
 
-def safe(s):
+def safe(s: str) -> str:
+    """Return a filename-safe token (remove colons for file basenames)."""
     return s.replace(':', '_')
 
 
-def ensure_dir(path):
+def ensure_dir(path: str):
     if not os.path.isdir(path):
         os.makedirs(path, exist_ok=True)
 
 
-def build_mean_expr(n, token="IM"):
+def build_mean_expr(n: int, token: str = "IM") -> str:
+    """Return '(IM0+IM1+...)/n' or 'IM0' for n==1."""
     if n == 1:
         return f"{token}0"
     return f"({ ' + '.join([f'{token}{i}' for i in range(n)]) })/{float(n)}"
 
 
-def try_immath_with_varnames(imgs, outfile):
-    n = len(imgs)
-    varnames = [f"A{i}" for i in range(n)]
-    expr = build_mean_expr(n, token="A")
-    print("  [immath-varnames] expr:", expr)
-    immath(imagename=imgs, varnames=varnames, expr=expr, outfile=outfile)
-
-
-def try_immath_with_symlinks(imgs, outfile, workdir):
-    ensure_dir(workdir)
-    links = []
-    try:
-        for i, src in enumerate(imgs):
-            if src.endswith(".image.pbcor.tt0"):
-                suffix = ".image.pbcor.tt0"
-            elif src.endswith(".image.tt0"):
-                suffix = ".image.tt0"
-            elif src.endswith(".image.pbcor"):
-                suffix = ".image.pbcor"
-            else:
-                suffix = ".image"
-            dst = os.path.join(workdir, f"im{i}{suffix}")
-            if os.path.islink(dst) or os.path.exists(dst):
-                try:
-                    if os.path.islink(dst):
-                        os.unlink(dst)
-                    else:
-                        shutil.rmtree(dst)
-                except Exception:
-                    pass
-            os.symlink(src, dst)
-            links.append(dst)
-
-        expr = build_mean_expr(len(links))  # IM0 + IM1 + ...
-        print("  [immath-symlinks] expr:", expr)
-        immath(imagename=links, expr=expr, outfile=outfile)
-    finally:
-        for p in links:
-            try: os.unlink(p)
-            except Exception: pass
-        try: os.rmdir(workdir)
-        except Exception: pass
-
-
-def find_casa_images_in_dir(d):
+def find_casa_images_in_dir(d: str):
     """
     Return CASA image *directories* inside d with endings we accept.
     """
     endings = [".image.pbcor.tt0", ".image.tt0", ".image.pbcor", ".image"]
     results = []
+    if not os.path.isdir(d):
+        return results
     try:
         for name in os.listdir(d):
             if any(name.endswith(suf) for suf in endings):
@@ -105,14 +75,15 @@ def find_casa_images_in_dir(d):
     return results
 
 
-def collect_inputs_for_spw(base_concat, spw, prefer_pbcor=True):
+def collect_inputs_for_spw(base_concat: str, spw: int, prefer_pbcor: bool = True):
     """
-    Expected layout (your spec):
+    Expected layout:
       {base_concat}/Images/spw/
         ├─ <MSNAME>_calibrated/
         │    └─ tclean/
         │        └─ spw{spw}/
         │             ├─ <...>.image.tt0 / .image.pbcor.tt0 / .image.pbcor / .image
+        │             └─ (optional subfolders like run*/ containing images)
         └─ (repeat for each MS)
     """
     root = os.path.join(base_concat, "Images", "spw")
@@ -126,16 +97,18 @@ def collect_inputs_for_spw(base_concat, spw, prefer_pbcor=True):
         print(f"  [scan] No '*_calibrated' MS folders found under {root}")
         return []
 
-    # gather images from each MS’s tclean/spw{spw} directory
     spw_dirname = f"spw{spw}"
     cands = []
     for msd in ms_dirs:
         tclean_spw_dir = os.path.join(msd, "tclean", spw_dirname)
         imgs = find_casa_images_in_dir(tclean_spw_dir)
+
         # also accept nested per-run subdirs like .../tclean/spw{spw}/runX/<images>
-        for run_dir in glob.glob(os.path.join(tclean_spw_dir, "*")):
-            if os.path.isdir(run_dir):
-                imgs += find_casa_images_in_dir(run_dir)
+        if os.path.isdir(tclean_spw_dir):
+            for run_dir in glob.glob(os.path.join(tclean_spw_dir, "*")):
+                if os.path.isdir(run_dir):
+                    imgs += find_casa_images_in_dir(run_dir)
+
         if imgs:
             cands.extend(imgs)
 
@@ -159,32 +132,29 @@ def collect_inputs_for_spw(base_concat, spw, prefer_pbcor=True):
     # one pick per MS to avoid duplicates from multiple runs of the same MS
     picks_by_ms = {}
     for p in sorted(cands):
-        # ms key is the *_calibrated folder name
+        # ms_key is the *_calibrated folder name
         parts = p.split(os.sep)
-        try:
-            ms_idx = parts.index("spw") + 1  # "spw" then "<MSNAME>_calibrated"
-        except ValueError:
-            # fall back: find the *_calibrated segment
-            ms_idx = next((i for i, s in enumerate(parts) if s.endswith("_calibrated")), None)
-        if ms_idx is None or ms_idx >= len(parts):
-            ms_key = os.path.dirname(os.path.dirname(p))  # coarse fallback
-        else:
-            ms_key = parts[ms_idx]
-
+        ms_key = None
+        for seg in parts:
+            if seg.endswith("_calibrated") or "_calibrated" in seg:
+                ms_key = seg
+                break
+        if ms_key is None:
+            ms_key = os.path.basename(os.path.dirname(os.path.dirname(p)))  # fallback to parent of 'spw{N}'
         if (ms_key not in picks_by_ms) or (rank(p) < rank(picks_by_ms[ms_key])):
             picks_by_ms[ms_key] = p
 
     imagenames = sorted(set(picks_by_ms.values()))
     print(f"  [scan] SPW {spw}: picked {len(imagenames)} inputs from {len(picks_by_ms)} MS folders")
-    for p in imagenames[:10]:
+    for p in imagenames[:12]:
         print("    -", p)
-    if len(imagenames) > 10:
-        print(f"    ... and {len(imagenames)-10} more")
+    if len(imagenames) > 12:
+        print(f"    ... and {len(imagenames)-12} more")
 
     return imagenames
 
 
-def average_spw(base_concat, mosaic_name, spw, prefer_pbcor=True, overwrite=True):
+def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pbcor: bool = True, overwrite: bool = True):
     print(f"\n=== SPW {spw} ===")
 
     # Output: concat/{mosaic}/Images/spw/tclean/spw{spw}/<mosaic_safe>_StokesI_spw{spw}_avg_*.image
@@ -196,46 +166,100 @@ def average_spw(base_concat, mosaic_name, spw, prefer_pbcor=True, overwrite=True
         print(f"  No inputs found for SPW {spw}. Created (empty) out dir: {out_dir}")
         return
 
-    has_pb = any(p.endswith(".image.pbcor.tt0") or p.endswith(".image.pbcor") for p in imgs)
-    suffix = "_pbcor_tt0" if (prefer_pbcor and has_pb) else "_tt0"
-    out_name = f"{safe(mosaic_name)}_StokesI_spw{spw}_avg{suffix}.image"
-    outfile = os.path.join(out_dir, out_name)
-
-    if os.path.exists(outfile):
-        if overwrite:
-            print("  Removing existing:", outfile)
-            shutil.rmtree(outfile, ignore_errors=True)
-        else:
-            print("  Output exists and OVERWRITE=False. Skipping.")
-            return
-
     print("  Inputs to average ({}):".format(len(imgs)))
     for p in imgs:
         print("   -", p)
 
-    # Attempt 1: varnames
+    # optionally regrid all to the first image
+    workdir_rg = os.path.join(out_dir, f"_tmp_rg_spw{spw}")
+    rg_imgs = []
     try:
-        try_immath_with_varnames(imgs, outfile)
-        if os.path.isdir(outfile):
-            print("  Wrote:", outfile)
-            return
+        if USE_IMREGRID:
+            ensure_dir(workdir_rg)
+            template = imgs[0]
+            for i, src in enumerate(imgs):
+                dst = os.path.join(workdir_rg, f"rg{i}.image")
+                if os.path.exists(dst):
+                    shutil.rmtree(dst, ignore_errors=True)
+                if i == 0:
+                    # link/copy first image as-is to avoid tiny resample drift
+                    try:
+                        os.symlink(src, dst)
+                    except Exception:
+                        # if symlink across filesystems not allowed, copy tree
+                        shutil.copytree(src, dst, symlinks=True)
+                else:
+                    imregrid(imagename=src, template=template, output=dst, overwrite=True)
+                rg_imgs.append(dst)
         else:
-            print("  immath reported success but outfile not found:", outfile)
-    except Exception as e:
-        print("  [immath-varnames] failed:", e)
+            rg_imgs = imgs[:]
 
-    # Attempt 2: symlinks
-    workdir = os.path.join(out_dir, f"_tmp_symlinks_spw{spw}")
-    try:
-        try_immath_with_symlinks(imgs, outfile, workdir)
+        # (optional) smooth to a common beam here if needed
+        if SMOOTH_TO_COMMON:
+            sm_dir = os.path.join(out_dir, f"_tmp_sm_spw{spw}")
+            ensure_dir(sm_dir)
+            sm_imgs = []
+            for i, src in enumerate(rg_imgs):
+                dst = os.path.join(sm_dir, f"sm{i}.image")
+                if os.path.exists(dst):
+                    shutil.rmtree(dst, ignore_errors=True)
+                imsmooth(imagename=src, outfile=dst, targetres=True,
+                         major=COMMON_BEAM['major'], minor=COMMON_BEAM['minor'], pa=COMMON_BEAM['pa'])
+                sm_imgs.append(dst)
+            rg_imgs = sm_imgs
+
+        has_pb = any(p.endswith(".image.pbcor.tt0") or p.endswith(".image.pbcor") for p in imgs)
+        suffix = "_pbcor_tt0" if (prefer_pbcor and has_pb) else "_tt0"
+        out_name = f"{safe(mosaic_name)}_StokesI_spw{spw}_avg{suffix}.image"
+        outfile = os.path.join(out_dir, out_name)
+
+        if os.path.exists(outfile):
+            if overwrite:
+                print("  Removing existing:", outfile)
+                shutil.rmtree(outfile, ignore_errors=True)
+            else:
+                print("  Output exists and OVERWRITE=False. Skipping.")
+                return
+
+        # Use immath with positional list (IM0, IM1, ...)
+        expr = build_mean_expr(len(rg_imgs))
+        print("  [immath] expr:", expr)
+        immath(imagename=rg_imgs, expr=expr, outfile=outfile)
+
         if os.path.isdir(outfile):
-            print("  Wrote:", outfile)
+            print("\n✅ Wrote:", outfile, "\n")
         else:
             print("  immath reported success but outfile not found:", outfile)
-    except Exception as e2:
-        print("  [immath-symlinks] failed:", e2)
+
+    except Exception as e:
+        print("  ERROR while averaging SPW", spw, ":", e)
         traceback.print_exc()
-        print("  ERROR: Could not average SPW", spw)
+    finally:
+        # clean tmp regrids/smoothed
+        if os.path.isdir(workdir_rg):
+            for p in os.listdir(workdir_rg):
+                q = os.path.join(workdir_rg, p)
+                try:
+                    shutil.rmtree(q, ignore_errors=True)
+                except Exception:
+                    pass
+            try:
+                os.rmdir(workdir_rg)
+            except Exception:
+                pass
+        if SMOOTH_TO_COMMON:
+            sm_dir = os.path.join(out_dir, f"_tmp_sm_spw{spw}")
+            if os.path.isdir(sm_dir):
+                for p in os.listdir(sm_dir):
+                    q = os.path.join(sm_dir, p)
+                    try:
+                        shutil.rmtree(q, ignore_errors=True)
+                    except Exception:
+                        pass
+                try:
+                    os.rmdir(sm_dir)
+                except Exception:
+                    pass
 
 
 def main():
@@ -248,6 +272,8 @@ def main():
     print("SPWs                 :", SPW_LIST)
     print("Prefer pbcor tt0     :", PREFER_PBCOR_TT0)
     print("Overwrite outputs    :", OVERWRITE)
+    print("Use imregrid         :", USE_IMREGRID)
+    print("Smooth to common     :", SMOOTH_TO_COMMON)
 
     for s in SPW_LIST:
         average_spw(
@@ -261,5 +287,6 @@ def main():
     print("\nAll done.")
 
 
+# Run
 if __name__ == "__main__":
     main()
