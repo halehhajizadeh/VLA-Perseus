@@ -15,24 +15,24 @@ mosaic_name = '03:29:12.973_+31.48.05.579'
 # mosaic_name = '03:45:12.060_+31.41.58.831'
 # mosaic_name = '03:45:36.064_+32.47.58.780'
 
-
 BASE_CONCAT_ROOT = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat'
 
 SPW_LIST = [3, 4, 5, 6, 8, 15, 16, 17]
 
-PREFER_PBCOR_TT0 = False
+# Preference: if True, prefer .pb.tt0 when both are available for an MS; if False, prefer .image.tt0
+PREFER_PB_TT0 = False
+
 OVERWRITE = True
 USE_IMREGRID = True
 SMOOTH_TO_COMMON = False
 # COMMON_BEAM = dict(major='45arcsec', minor='45arcsec', pa='0deg')
 
-# Debug toggles (safe to leave as-is)
+# Debug toggles
 VERBOSE = True
-PRINT_IMAGE_INFO = True     # print imhead summary for each chosen input
-LIMIT_INPUTS = None         # e.g., 3 to limit during debugging
-DRYRUN = False              # True -> don't write outputs, only log
+PRINT_IMAGE_INFO = True
+LIMIT_INPUTS = None
+DRYRUN = False
 # =========================================================
-
 
 # --------------------- LOGGING ---------------------------
 try:
@@ -57,23 +57,19 @@ def banner(msg):
     log("="*80 + "\n")
 # --------------------------------------------------------
 
-
 def safe(s: str) -> str:
     """Make a filename-safe token (remove colons)."""
     return s.replace(':', '_')
 
-
 def ensure_dir(path: str):
     if not os.path.isdir(path):
         os.makedirs(path, exist_ok=True)
-
 
 def build_mean_expr(n: int, token: str = "IM") -> str:
     """Return '(IM0+IM1+...)/n' or 'IM0' for n==1."""
     if n == 1:
         return f"{token}0"
     return f"({ ' + '.join([f'{token}{i}' for i in range(n)]) })/{float(n)}"
-
 
 def list_dir(path, limit=40):
     try:
@@ -86,10 +82,14 @@ def list_dir(path, limit=40):
     except Exception as e:
         log(f"  [ls] {path} -> ERROR: {e}", "WARN")
 
-
 def find_casa_images_in_dir(d: str):
-    """Return CASA image *directories* inside d with endings we accept."""
-    endings = [".image.pbcor.tt0", ".image.tt0", ".image.pbcor", ".image"]
+    """
+    Return CASA image *directories* inside d with endings we accept.
+    Accepted endings (ONLY):
+       - .image.tt0  (Stokes-I)
+       - .pb.tt0     (primary beam)
+    """
+    endings = [".image.tt0", ".pb.tt0"]
     out = []
     if not os.path.isdir(d):
         if VERBOSE:
@@ -105,7 +105,6 @@ def find_casa_images_in_dir(d: str):
         log(f"  [scan] error listing {d}: {e}", "WARN")
     return out
 
-
 def imhead_summary(img):
     """Return compact imhead info."""
     try:
@@ -116,7 +115,6 @@ def imhead_summary(img):
     except Exception as e:
         log(f"  [imhead] failed for {img}: {e}", "WARN")
         return {}
-
 
 def print_image_info(img):
     if not PRINT_IMAGE_INFO:
@@ -141,15 +139,14 @@ def print_image_info(img):
     log(f"         cell : {cell}")
     log(f"         beam : major={beam_major}  minor={beam_minor}  pa={beam_pa}")
 
-
-def collect_inputs_for_spw(base_concat: str, spw: int, prefer_pbcor: bool = True):
+def collect_inputs_for_spw(base_concat: str, spw: int, prefer_pb: bool = False):
     """
     Expected layout:
       {base_concat}/Images/spw/
         ├─ <MSNAME>_calibrated/
         │    └─ tclean/
         │        └─ spw{spw}/
-        │             ├─ *.image.tt0 / *.image.pbcor.tt0 / *.image.pbcor / *.image
+        │             ├─ *.image.tt0 / *.pb.tt0   (CASA image directories)
         │             └─ (optional subfolders like run*/ containing images)
         └─ (repeat for each MS)
     """
@@ -196,17 +193,18 @@ def collect_inputs_for_spw(base_concat: str, spw: int, prefer_pbcor: bool = True
     # ranking preference
     def rank(path):
         name = os.path.basename(path)
-        if name.endswith(".image.pbcor.tt0") and prefer_pbcor:
+        if name.endswith(".pb.tt0") and prefer_pb:
             return (1, name)
+        if name.endswith(".image.tt0") and not prefer_pb:
+            return (1, name)
+        # secondary choices
         if name.endswith(".image.tt0"):
             return (2, name)
-        if name.endswith(".image.pbcor") and prefer_pbcor:
-            return (3, name)
-        if name.endswith(".image"):
-            return (4, name)
+        if name.endswith(".pb.tt0"):
+            return (2, name)
         return (9, name)
 
-    # one pick per MS (avoid duplicates from multiple runs of the same MS)
+    # one pick per MS
     picks_by_ms = {}
     for p in sorted(cands):
         parts = p.split(os.sep)
@@ -216,7 +214,6 @@ def collect_inputs_for_spw(base_concat: str, spw: int, prefer_pbcor: bool = True
                 ms_key = seg
                 break
         if ms_key is None:
-            # fallback: parent-of-parent of the image dir
             ms_key = os.path.basename(os.path.dirname(os.path.dirname(p)))
         if (ms_key not in picks_by_ms) or (rank(p) < rank(picks_by_ms[ms_key])):
             picks_by_ms[ms_key] = p
@@ -235,8 +232,7 @@ def collect_inputs_for_spw(base_concat: str, spw: int, prefer_pbcor: bool = True
 
     return imagenames
 
-
-def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pbcor: bool = True, overwrite: bool = True):
+def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pb: bool = False, overwrite: bool = True):
     log(f"\n--- SPW {spw} ---")
 
     out_dir = os.path.join(base_concat, 'Images', 'spw', 'tclean', f'spw{spw}')
@@ -253,7 +249,7 @@ def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pbcor: bool
     except Exception as e:
         log(f"  [out] write test: FAILED -> {e}", "SEVERE")
 
-    imgs = collect_inputs_for_spw(base_concat, spw, prefer_pbcor=prefer_pbcor)
+    imgs = collect_inputs_for_spw(base_concat, spw, prefer_pb=prefer_pb)
     log(f"  [avg] inputs found: {len(imgs)}")
     for p in imgs:
         log(f"   - {p}")
@@ -311,8 +307,8 @@ def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pbcor: bool
                 sm_imgs.append(dst)
             rg_imgs = sm_imgs
 
-        has_pb = any(p.endswith(".image.pbcor.tt0") or p.endswith(".image.pbcor") for p in imgs)
-        suffix = "_pbcor_tt0" if (prefer_pbcor and has_pb) else "_tt0"
+        has_pb = any(p.endswith(".pb.tt0") for p in imgs)
+        suffix = "_pb_tt0" if (prefer_pb and has_pb) else "_tt0"
         out_name = f"{safe(mosaic_name)}_StokesI_spw{spw}_avg{suffix}.image"
         outfile = os.path.join(out_dir, out_name)
         log(f"  [out] outfile = {outfile}")
@@ -368,20 +364,19 @@ def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pbcor: bool
                 except Exception as e:
                     log(f"  [cleanup] could not remove {sm_dir} -> {e}", "WARN")
 
-
 def main():
     base_concat = os.path.join(BASE_CONCAT_ROOT, mosaic_name)
     banner("START average_spw_images")
-    log(f"mosaic_name         : {mosaic_name}")
-    log(f"base_concat         : {base_concat}")
-    log(f"SPWs                : {SPW_LIST}")
-    log(f"PREFER_PBCOR_TT0    : {PREFER_PBCOR_TT0}")
-    log(f"OVERWRITE           : {OVERWRITE}")
-    log(f"USE_IMREGRID        : {USE_IMREGRID}")
-    log(f"SMOOTH_TO_COMMON    : {SMOOTH_TO_COMMON}")
-    log(f"PRINT_IMAGE_INFO    : {PRINT_IMAGE_INFO}")
-    log(f"LIMIT_INPUTS        : {LIMIT_INPUTS}")
-    log(f"DRYRUN              : {DRYRUN}")
+    log(f"mosaic_name       : {mosaic_name}")
+    log(f"base_concat       : {base_concat}")
+    log(f"SPWs              : {SPW_LIST}")
+    log(f"PREFER_PB_TT0     : {PREFER_PB_TT0}")
+    log(f"OVERWRITE         : {OVERWRITE}")
+    log(f"USE_IMREGRID      : {USE_IMREGRID}")
+    log(f"SMOOTH_TO_COMMON  : {SMOOTH_TO_COMMON}")
+    log(f"PRINT_IMAGE_INFO  : {PRINT_IMAGE_INFO}")
+    log(f"LIMIT_INPUTS      : {LIMIT_INPUTS}")
+    log(f"DRYRUN            : {DRYRUN}")
 
     if not os.path.isdir(base_concat):
         log(f"[FATAL] Base concat path not found: {base_concat}", "SEVERE")
@@ -397,12 +392,11 @@ def main():
             base_concat=base_concat,
             mosaic_name=mosaic_name,
             spw=s,
-            prefer_pbcor=PREFER_PBCOR_TT0,
+            prefer_pb=PREFER_PB_TT0,
             overwrite=OVERWRITE
         )
 
     banner("DONE average_spw_images")
-
 
 # Ensure it actually runs when you %run the file.
 if __name__ == "__main__":
