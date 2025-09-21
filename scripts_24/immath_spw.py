@@ -235,7 +235,9 @@ def collect_inputs_for_spw(base_concat: str, spw: int, prefer_pb: bool = False):
 def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pb: bool = False, overwrite: bool = True):
     log(f"\n--- SPW {spw} ---")
 
-    out_dir = os.path.join(base_concat, 'Images', 'spw', 'tclean', f'spw{spw}')
+    # ======= OUTPUT DIRECTORY (per your request) =======
+    # /concat/{mosaic_name}/Images/tclean/spw{SPW}/
+    out_dir = os.path.join(base_concat, 'Images', 'tclean', f'spw{spw}')
     log(f"  [out] out_dir = {out_dir}")
     ensure_dir(out_dir)
 
@@ -308,8 +310,8 @@ def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pb: bool = 
             rg_imgs = sm_imgs
 
         has_pb = any(p.endswith(".pb.tt0") for p in imgs)
-        suffix = "_pb_tt0" if (prefer_pb and has_pb) else "_tt0"
-        out_name = f"{safe(mosaic_name)}_StokesI_spw{spw}_avg{suffix}.image"
+        suffix = "pb_tt0" if (prefer_pb and has_pb) else "tt0"
+        out_name = f"{safe(mosaic_name)}_StokesI_spw{spw}_avg_{suffix}.image"
         outfile = os.path.join(out_dir, out_name)
         log(f"  [out] outfile = {outfile}")
 
@@ -386,6 +388,8 @@ def main():
         list_dir(base_concat)
         list_dir(os.path.join(base_concat, "Images"))
         list_dir(os.path.join(base_concat, "Images", "spw"))
+        # also ensure the top-level Images/tclean exists
+        ensure_dir(os.path.join(base_concat, "Images", "tclean"))
 
     for s in SPW_LIST:
         average_spw(
