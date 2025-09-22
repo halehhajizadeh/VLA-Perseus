@@ -19,20 +19,29 @@ BASE_CONCAT_ROOT = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/con
 
 SPW_LIST = [3, 4, 5, 6, 8, 15, 16, 17]
 
-# Preference: if True, prefer .pb.tt0 when both are available for an MS; if False, prefer .image.tt0
+# Preference: pick .pb.tt0 over .image.tt0 when both exist for an MS
 PREFER_PB_TT0 = False
 
+# Behavior toggles
 OVERWRITE = True
 USE_IMREGRID = True
 SMOOTH_TO_COMMON = False
 # COMMON_BEAM = dict(major='45arcsec', minor='45arcsec', pa='0deg')
 
-# Debug toggles
+# Debug toggles (added extra visibility)
 VERBOSE = True
 PRINT_IMAGE_INFO = True
 LIMIT_INPUTS = None
 DRYRUN = False
+
+# NEW debug helpers
+DEBUG_ENV_CHECK = True          # print CASA task availability
+DEBUG_DEEP_SCAN = True          # try recursive scan if main scan finds nothing
+DEBUG_DUMP_TREE = False         # dump a small tree for quick visual
+TREE_MAX_DEPTH = 3
+TREE_MAX_ENTRIES_PER_DIR = 30
 # =========================================================
+
 
 # --------------------- LOGGING ---------------------------
 try:
@@ -56,6 +65,26 @@ def banner(msg):
     log(msg)
     log("="*80 + "\n")
 # --------------------------------------------------------
+
+# Try to import CASA tasks at module import time (for fast feedback)
+_IMTASKS = {}
+def _try_import_tasks():
+    global _IMTASKS
+    names = ["imhead", "imregrid", "immath", "imsmooth"]
+    for n in names:
+        try:
+            from casatasks import __dict__ as _ct
+            _IMTASKS[n] = _ct.get(n, None)
+        except Exception:
+            _IMTASKS[n] = None
+
+_try_import_tasks()
+
+# Safe aliases (bound at runtime so we get clear NameErrors if missing)
+def _bind_task(name):
+    if _IMTASKS.get(name) is None:
+        raise RuntimeError(f"CASA task '{name}' is not available in this environment.")
+    return _IMTASKS[name]
 
 def safe(s: str) -> str:
     """Make a filename-safe token (remove colons)."""
@@ -82,31 +111,87 @@ def list_dir(path, limit=40):
     except Exception as e:
         log(f"  [ls] {path} -> ERROR: {e}", "WARN")
 
+def dump_tree(root, max_depth=2, limit=TREE_MAX_ENTRIES_PER_DIR, _depth=0):
+    if _depth > max_depth:
+        return
+    try:
+        ents = sorted(os.listdir(root))
+    except Exception as e:
+        log(f"  [tree] {root} -> ERROR: {e}")
+        return
+    prefix = "  " * _depth
+    log(f"{prefix}[tree] {root} ({len(ents)} entries)")
+    for e in ents[:limit]:
+        p = os.path.join(root, e)
+        if os.path.isdir(p):
+            log(f"{prefix}  [D] {e}")
+        else:
+            log(f"{prefix}  [f] {e}")
+    if len(ents) > limit:
+        log(f"{prefix}  ... and {len(ents)-limit} more")
+    for e in ents[:limit]:
+        p = os.path.join(root, e)
+        if os.path.isdir(p):
+            dump_tree(p, max_depth, limit, _depth+1)
+
+# Suffix acceptance (STRICT)
+ACCEPTED_SUFFIXES = [".image.tt0", ".pb.tt0"]
+
+# For helpful warnings when “near-miss” files exist
+NEAR_MISS_SUFFIXES = [
+    ".image.pbcor.tt0", ".image.pbcor", ".image", ".pb", ".tt0"
+]
+
 def find_casa_images_in_dir(d: str):
     """
-    Return CASA image *directories* inside d with endings we accept.
-    Accepted endings (ONLY):
+    Return CASA image *directories* inside d with endings we accept:
        - .image.tt0  (Stokes-I)
        - .pb.tt0     (primary beam)
     """
-    endings = [".image.tt0", ".pb.tt0"]
     out = []
+    near = []  # near-miss candidates recorded for debugging
     if not os.path.isdir(d):
         if VERBOSE:
             log(f"  [scan] (missing dir) {d}")
-        return out
+        return out, near
     try:
         for name in os.listdir(d):
-            if any(name.endswith(suf) for suf in endings):
-                p = os.path.join(d, name)
-                if os.path.isdir(p):
-                    out.append(p)
+            p = os.path.join(d, name)
+            if not os.path.isdir(p):
+                continue
+            if any(name.endswith(suf) for suf in ACCEPTED_SUFFIXES):
+                out.append(p)
+            elif any(name.endswith(suf) for suf in NEAR_MISS_SUFFIXES):
+                near.append(p)
     except Exception as e:
         log(f"  [scan] error listing {d}: {e}", "WARN")
-    return out
+    return out, near
+
+def find_casa_images_recursive(d: str, max_depth=3):
+    """
+    Recursive scan (debug fallback). Returns (accepted, near_misses).
+    """
+    ok, near = [], []
+    if not os.path.isdir(d):
+        return ok, near
+    try:
+        for root, dirs, files in os.walk(d):
+            depth = root[len(d):].count(os.sep)
+            if depth > max_depth:
+                del dirs[:]  # prune
+                continue
+            for name in dirs:
+                p = os.path.join(root, name)
+                if any(name.endswith(suf) for suf in ACCEPTED_SUFFIXES):
+                    ok.append(p)
+                elif any(name.endswith(suf) for suf in NEAR_MISS_SUFFIXES):
+                    near.append(p)
+    except Exception as e:
+        log(f"  [rscan] error walking {d}: {e}", "WARN")
+    return sorted(set(ok)), sorted(set(near))
 
 def imhead_summary(img):
-    """Return compact imhead info."""
+    imhead = _bind_task("imhead")
     try:
         out = imhead(imagename=img, mode='summary')
         if not out:
@@ -139,13 +224,24 @@ def print_image_info(img):
     log(f"         cell : {cell}")
     log(f"         beam : major={beam_major}  minor={beam_minor}  pa={beam_pa}")
 
+def resolve_spw_dir(msd: str, spw: int):
+    """
+    Try common variants: 'spw{spw}' then 'spw{spw:02d}'
+    """
+    a = os.path.join(msd, "tclean", f"spw{spw}")
+    b = os.path.join(msd, "tclean", f"spw{spw:02d}")
+    for cand in (a, b):
+        if os.path.isdir(cand):
+            return cand
+    return a  # default (even if missing; caller will log)
+
 def collect_inputs_for_spw(base_concat: str, spw: int, prefer_pb: bool = False):
     """
-    Expected layout:
+    Expected layout (inputs):
       {base_concat}/Images/spw/
         ├─ <MSNAME>_calibrated/
         │    └─ tclean/
-        │        └─ spw{spw}/
+        │        └─ spw{spw}/  (or spw{spw:02d})
         │             ├─ *.image.tt0 / *.pb.tt0   (CASA image directories)
         │             └─ (optional subfolders like run*/ containing images)
         └─ (repeat for each MS)
@@ -164,30 +260,58 @@ def collect_inputs_for_spw(base_concat: str, spw: int, prefer_pb: bool = False):
     for d in ms_dirs[:20]:
         log(f"    - {os.path.basename(d)}")
     if not ms_dirs:
+        # Fallback: list what's actually there to help debug
+        try:
+            all_dirs = [e for e in sorted(os.listdir(root)) if os.path.isdir(os.path.join(root, e))]
+            log(f"  [scan] NOTE: No '*_calibrated*' dirs. Found these instead: {all_dirs[:15]}")
+        except Exception:
+            pass
         return []
 
     spw_dirname = f"spw{spw}"
     cands = []
+    near_all = []
     for msd in ms_dirs:
-        tclean_spw_dir = os.path.join(msd, "tclean", spw_dirname)
-        log(f"  [scan] check: {tclean_spw_dir}")
-        imgs = find_casa_images_in_dir(tclean_spw_dir)
+        tclean_spw_dir = resolve_spw_dir(msd, spw)
+        log(f"  [scan] check: {tclean_spw_dir}  (exists={os.path.isdir(tclean_spw_dir)})")
+
+        imgs, near = find_casa_images_in_dir(tclean_spw_dir)
 
         # also check one level deeper (e.g., run*/ or date-stamped subdirs)
         if os.path.isdir(tclean_spw_dir):
-            for run_dir in glob.glob(os.path.join(tclean_spw_dir, "*")):
-                if os.path.isdir(run_dir):
-                    log(f"  [scan] nested: {run_dir}")
-                    imgs += find_casa_images_in_dir(run_dir)
+            subdirs = sorted([p for p in glob.glob(os.path.join(tclean_spw_dir, "*")) if os.path.isdir(p)])
+            for run_dir in subdirs:
+                log(f"  [scan] nested: {run_dir}")
+                i2, n2 = find_casa_images_in_dir(run_dir)
+                imgs += i2
+                near += n2
+
+        # If still nothing, try recursive fallback for this MS (debug)
+        if not imgs and DEBUG_DEEP_SCAN and os.path.isdir(msd):
+            log("  [scan] No accepted suffixes found; trying recursive fallback within MS dir...")
+            i3, n3 = find_casa_images_recursive(msd, max_depth=3)
+            if i3:
+                log(f"  [scan] recursive ACCEPTED hits: {len(i3)}")
+            if n3:
+                log(f"  [scan] recursive NEAR-MISS hits: {len(n3)}")
+            imgs += i3
+            near += n3
 
         for p in imgs:
             log(f"      [hit] {p}")
+        for p in near:
+            log(f"      [near-miss] {p}")
 
         if imgs:
             cands.extend(imgs)
+        if near:
+            near_all.extend(near)
 
     if not cands:
-        log(f"  [scan] No images found for SPW {spw} under any '*_calibrated/tclean/{spw_dirname}'")
+        log(f"  [scan] No accepted images found for SPW {spw}.", "WARN")
+        if near_all:
+            log(f"  [hint] Found {len(near_all)} NEAR-MISS images (excluded by suffix policy).", "WARN")
+            log(f"         Acceptable suffixes: {ACCEPTED_SUFFIXES}", "WARN")
         return []
 
     # ranking preference
@@ -204,7 +328,7 @@ def collect_inputs_for_spw(base_concat: str, spw: int, prefer_pb: bool = False):
             return (2, name)
         return (9, name)
 
-    # one pick per MS
+    # one pick per MS (best per MS)
     picks_by_ms = {}
     for p in sorted(cands):
         parts = p.split(os.sep)
@@ -235,7 +359,7 @@ def collect_inputs_for_spw(base_concat: str, spw: int, prefer_pb: bool = False):
 def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pb: bool = False, overwrite: bool = True):
     log(f"\n--- SPW {spw} ---")
 
-    # ======= OUTPUT DIRECTORY (per your request) =======
+    # ======= OUTPUT DIRECTORY (as requested) =======
     # /concat/{mosaic_name}/Images/tclean/spw{SPW}/
     out_dir = os.path.join(base_concat, 'Images', 'tclean', f'spw{spw}')
     log(f"  [out] out_dir = {out_dir}")
@@ -259,6 +383,10 @@ def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pb: bool = 
         log(f"  [stop] No inputs for SPW {spw}")
         return
 
+    imregrid = _bind_task("imregrid")
+    immath   = _bind_task("immath")
+    imsmooth = _IMTASKS.get("imsmooth", None)  # optional
+
     # Regrid all to first image (recommended)
     workdir_rg = os.path.join(out_dir, f"_tmp_rg_spw{spw}")
     rg_imgs = []
@@ -272,7 +400,7 @@ def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pb: bool = 
                 if os.path.exists(dst):
                     shutil.rmtree(dst, ignore_errors=True)
                 if i == 0:
-                    log(f"  [rg] link first image -> {dst}")
+                    log(f"  [rg] link/copy first image -> {dst}")
                     try:
                         os.symlink(src, dst)
                     except Exception:
@@ -294,6 +422,8 @@ def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pb: bool = 
 
         # Optional: smooth to common beam
         if SMOOTH_TO_COMMON:
+            if imsmooth is None:
+                raise RuntimeError("SMOOTH_TO_COMMON=True but 'imsmooth' is unavailable.")
             log(f"  [sm] Smoothing to common beam: {COMMON_BEAM}")
             sm_dir = os.path.join(out_dir, f"_tmp_sm_spw{spw}")
             ensure_dir(sm_dir)
@@ -366,6 +496,15 @@ def average_spw(base_concat: str, mosaic_name: str, spw: int, prefer_pb: bool = 
                 except Exception as e:
                     log(f"  [cleanup] could not remove {sm_dir} -> {e}", "WARN")
 
+def env_check():
+    if not DEBUG_ENV_CHECK:
+        return
+    banner("ENVIRONMENT CHECK")
+    for n in ["imhead", "imregrid", "immath", "imsmooth"]:
+        status = "OK" if _IMTASKS.get(n) else "MISSING"
+        log(f"  [env] {n:8s}: {status}")
+    log("")
+
 def main():
     base_concat = os.path.join(BASE_CONCAT_ROOT, mosaic_name)
     banner("START average_spw_images")
@@ -380,16 +519,27 @@ def main():
     log(f"LIMIT_INPUTS      : {LIMIT_INPUTS}")
     log(f"DRYRUN            : {DRYRUN}")
 
+    env_check()
+
+    # Basic path checks with strong prints
+    log(f"  [path] Exists base_concat? {os.path.isdir(base_concat)}  -> {base_concat}")
+    log(f"  [path] Exists Images?      {os.path.isdir(os.path.join(base_concat, 'Images'))}")
+    log(f"  [path] Exists Images/spw?  {os.path.isdir(os.path.join(base_concat, 'Images', 'spw'))}")
+    ensure_dir(os.path.join(base_concat, "Images", "tclean"))  # ensure the top-level output branch
+
     if not os.path.isdir(base_concat):
         log(f"[FATAL] Base concat path not found: {base_concat}", "SEVERE")
         raise RuntimeError(f"Base concat path not found: {base_concat}")
 
     if VERBOSE:
         list_dir(base_concat)
-        list_dir(os.path.join(base_concat, "Images"))
-        list_dir(os.path.join(base_concat, "Images", "spw"))
-        # also ensure the top-level Images/tclean exists
-        ensure_dir(os.path.join(base_concat, "Images", "tclean"))
+        if os.path.isdir(os.path.join(base_concat, "Images")):
+            list_dir(os.path.join(base_concat, "Images"))
+        if os.path.isdir(os.path.join(base_concat, "Images", "spw")):
+            list_dir(os.path.join(base_concat, "Images", "spw"))
+
+    if DEBUG_DUMP_TREE and os.path.isdir(base_concat):
+        dump_tree(base_concat, max_depth=TREE_MAX_DEPTH)
 
     for s in SPW_LIST:
         average_spw(
