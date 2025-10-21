@@ -1,7 +1,7 @@
 import os
 import shutil
 from glob import glob
-from casatasks import tclean
+
 
 def run_tclean(ms_list, img_filename, mosaic_name, phasecenter):
     thresh = '9e-5'
