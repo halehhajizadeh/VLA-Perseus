@@ -22,8 +22,14 @@ paper1/
 paper2/
 *.csv
 *.txt
-scripts/*.ipynb
-scripts_24/*.ipynb
+# Large notebooks (>10MB) - too big for GitHub
+scripts/Total Image.ipynb
+scripts/CompareNVSS.ipynb
+scripts/5-RMsynth-RMclean.ipynb
+scripts/Preshanth.ipynb
+scripts/RM-Synthesis_prep.ipynb
+scripts/Source_detecting-spw-Catalog.ipynb
+scripts/StokesI-total.ipynb
 *tex
 mask_pybdsf/
 test_j/
