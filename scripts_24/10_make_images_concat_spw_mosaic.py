@@ -6,8 +6,7 @@ import numpy as np
 
 # === Parameters ===
 thresh = '6e-5'
-# pblim = -0.001 #defulat
-pblim = -0.009
+pblim = -0.001
 nit = 5000
 spw = [
     # 2, 
