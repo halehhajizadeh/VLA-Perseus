@@ -71,7 +71,7 @@ print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
 # === Run tclean for each MS and SPW ===
 for ms_path in ms_file_list:
-    ms_name = os.path.basename(ms_path).replace('.ms', '')
+    ms_name = os.path.basename(ms_path).replace('_calibrated.ms', '')
 
     for s in spw:
         tic = time.time()

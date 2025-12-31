@@ -61,10 +61,10 @@ for spw in SPW_LIST:
         print("[WARN] Missing input root:", inputs_root, " -> skipping")
         continue
 
-    ms_dirs = sorted([d for d in glob.glob(os.path.join(inputs_root, "*_calibrated*")) if os.path.isdir(d)])
+    ms_dirs = sorted([d for d in glob.glob(os.path.join(inputs_root, "*")) if os.path.isdir(d)])
     print("MS candidate dirs:", len(ms_dirs))
     if not ms_dirs:
-        print("[stop] No *_calibrated* dirs -> skipping SPW", spw)
+        print("[stop] No MS dirs found -> skipping SPW", spw)
         continue
 
     chosen = []  # one picked image per MS
