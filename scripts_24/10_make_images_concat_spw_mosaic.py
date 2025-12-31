@@ -6,7 +6,8 @@ import numpy as np
 
 # === Parameters ===
 thresh = '6e-5'
-pblim = -0.001
+# pblim = -0.001 #defulat
+pblim = -0.009
 nit = 5000
 spw = [
     # 2, 
@@ -77,10 +78,10 @@ for ms_path in ms_file_list:
         tic = time.time()
         print(f"\nStokes: I, {ms_name}, spw: {s} is started ...")
 
-        output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/{ms_name}/tclean/spw{s}"
+        output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw_mosaic/{ms_name}/tclean/spw{s}"
         os.makedirs(output_dir, exist_ok=True)
 
-        img_filename = output_dir + '/' + f"{ms_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-awproject"
+        img_filename = output_dir + '/' + f"{ms_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-mosaic"
 
         tclean(vis=ms_path,
                field="PER_FIELD_*",
@@ -92,26 +93,18 @@ for ms_path in ms_file_list:
                phasecenter=phase_center,
                stokes='I',
                specmode="mfs",
-               gridder="awproject",
+               gridder="mosaic",
                mosweight=True,
-               cfcache=f"/dev/shm/{ms_name}_spw{s}.cf",
                pblimit=pblim,
-               deconvolver="mtmfs",
+               deconvolver="hogbom",
                pbcor=True,
                weighting="briggs",
                robust=0.5,
-               wbawp=True,
-               conjbeams=True,
                niter=nit,
                gain=0.1,
                threshold=thresh,
                cyclefactor=1,
-               parallel=True,
-               nterms=2,
-               nsigma=3,
-               rotatepastep=5.0,
                interactive=False,
-               psfcutoff=0.5,
             #    mask=mask_name
               )
 
