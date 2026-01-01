@@ -1,13 +1,15 @@
 import os
 import time
 import sys
+import shutil
+import glob
 sys.path.append('.')
 import numpy as np
 
 # === Parameters ===
 thresh = '6e-5'
 # pblim = -0.001 #defulat
-pblim = -0.009
+pblim = 0.06
 nit = 5000
 spw = [
     # 2, 
@@ -82,6 +84,16 @@ for ms_path in ms_file_list:
         os.makedirs(output_dir, exist_ok=True)
 
         img_filename = output_dir + '/' + f"{ms_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-mosaic"
+
+        # Delete existing output if it exists
+        existing_outputs = glob.glob(img_filename + '*')
+        for item in existing_outputs:
+            if os.path.isdir(item):
+                shutil.rmtree(item)
+                print(f"Deleted existing directory: {item}")
+            elif os.path.isfile(item):
+                os.remove(item)
+                print(f"Deleted existing file: {item}")
 
         tclean(vis=ms_path,
                field="PER_FIELD_*",
