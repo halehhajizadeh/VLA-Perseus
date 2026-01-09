@@ -81,8 +81,8 @@ for ms_path in ms_file_list:
 
             imsmooth(imagename=image_name,
                      targetres=True,
-                     major='15arcsec',
-                     minor='15arcsec',
+                     major='20arcsec',
+                     minor='20arcsec',
                      pa='0.0deg',
                      outfile=smo_image_name,
                      overwrite=True
