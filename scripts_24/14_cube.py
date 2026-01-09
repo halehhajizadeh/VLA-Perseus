@@ -9,8 +9,8 @@ nit = 4000
 stokes_list = ['I', 'Q', 'U']
 
 # === Choose ONE mosaic name to activate ===
-# mosaic_name = '03:26:24.057_+30.35.58.881'
-mosaic_name = '03:29:12.973_+31.48.05.579'
+mosaic_name = '03:26:24.057_+30.35.58.881'
+# mosaic_name = '03:29:12.973_+31.48.05.579'
 # mosaic_name = '03:31:12.055_+29.47.58.916'
 # mosaic_name = '03:39:12.060_+31.23.58.844'
 # mosaic_name = '03:40:00.063_+32.23.58.799'
