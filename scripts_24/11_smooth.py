@@ -4,10 +4,10 @@ import sys
 sys.path.append('.')
 
 # === Parameters ===
-thresh = '6e-5'
-nit = 5000
+thresh = '9e-5'
+nit = 4000
 spw = [
-    # 2,
+    2,
     3,
     4,
     5,
@@ -20,8 +20,19 @@ spw = [
 
 stokes = [
     'I',
-    # 'Q',
-    # 'U'
+    'Q',
+    'U'
+]
+
+channels = [
+    '00~07',
+    '08~15',
+    '16~23',
+    '24~31',
+    '32~39',
+    '40~47',
+    '48~55',
+    '56~63'
 ]
 
 # === Choose ONE mosaic name to activate ===
@@ -34,43 +45,22 @@ mosaic_name = '03:26:24.057_+30.35.58.881'
 # mosaic_name = '03:45:12.060_+31.41.58.831'
 # mosaic_name = '03:45:36.064_+32.47.58.780'
 
-base_directory = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/' + mosaic_name
+concat_base = f'/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}'
 
-# === Find calibrated MS files to get MS names ===
-def find_calibrated_files(base_directory):
-    calibrated_files = []
-    for subfolder in os.listdir(base_directory):
-        sub_path = os.path.join(base_directory, subfolder)
-        if os.path.isdir(sub_path) and subfolder.startswith('24A'):
-            for file in os.listdir(sub_path):
-                if file.endswith('_calibrated.ms'):
-                    calibrated_files.append(os.path.join(sub_path, file))
-    return calibrated_files
-
-ms_file_list = find_calibrated_files(base_directory)
-
-# === Print MS file list ===
-print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-for file in ms_file_list:
-    print(file)
-print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-
-# === Run imsmooth for each MS, SPW, and Stokes ===
+# === Run imsmooth for each SPW, channel, and Stokes ===
 tic = time.time()
 
-for ms_path in ms_file_list:
-    ms_name = os.path.basename(ms_path).replace('_calibrated.ms', '')
+for stok in stokes:
+    for s in spw:
+        for channel in channels:
+            print(f"\nSmoothing: Stokes {stok}, spw: {s}, channel: {channel} ...")
 
-    for stok in stokes:
-        for s in spw:
-            print(f"\nSmoothing: Stokes {stok}, {ms_name}, spw: {s} ...")
-
-            input_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/{ms_name}/tclean/spw{s}"
-            output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/{ms_name}/smo/spw{s}"
+            input_dir = f"{concat_base}/Images/img/tclean"
+            output_dir = f"{concat_base}/Images/img/smo"
             os.makedirs(output_dir, exist_ok=True)
 
-            image_name = input_dir + '/' + f"{ms_name}_Stokes{stok}_spw{s}-2.5arcsec-nit{nit}-awproject.image.tt0"
-            smo_image_name = output_dir + '/' + f"{ms_name}_Stokes{stok}_spw{s}-2.5arcsec-nit{nit}-awproject.image.tt0.smo"
+            image_name = f"{input_dir}/spw{s}-{channel}-2.5arcsec-nit{nit}-{thresh}-{stok}.image"
+            smo_image_name = f"{output_dir}/spw{s}-{channel}-2.5arcsec-nit{nit}-{thresh}-{stok}.image.smo"
 
             print(f"Input:  {image_name}")
             print(f"Output: {smo_image_name}")
@@ -81,8 +71,8 @@ for ms_path in ms_file_list:
 
             imsmooth(imagename=image_name,
                      targetres=True,
-                     major='28arcsec',
-                     minor='28arcsec',
+                     major='20arcsec',
+                     minor='20arcsec',
                      pa='0.0deg',
                      outfile=smo_image_name,
                      overwrite=True
