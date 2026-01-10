@@ -1,6 +1,8 @@
 import os
 import time
 import sys
+import shutil
+import glob
 sys.path.append('.')
 import numpy as np
 
@@ -82,6 +84,15 @@ for ms_path in ms_file_list:
         os.makedirs(output_dir, exist_ok=True)
 
         img_filename = output_dir + '/' + f"{ms_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-awproject"
+
+        # Delete existing output files if they exist
+        for old_file in glob.glob(img_filename + '*'):
+            if os.path.isdir(old_file):
+                shutil.rmtree(old_file)
+                print(f"Deleted existing directory: {old_file}")
+            elif os.path.isfile(old_file):
+                os.remove(old_file)
+                print(f"Deleted existing file: {old_file}")
 
         tclean(vis=ms_path,
                field="PER_FIELD_*",
