@@ -53,16 +53,18 @@ mask_name = base_directory + '/24A-376.sb45258229.eb45320541.60392.6957443287/32
 # mask_name = base_directory + '/24A-376.sb45388498.eb45455607.60414.75498211806/1806_mask_final.image' #45:12
 # mask_name = base_directory + '/24A-376.sb45327762.eb45339078.60402.66413293981/3981_mask_final.image' #45:36
 
-# === Find MS files (not _calibrated.ms) ===
+# === Find MS files ===
 def find_ms_files(base_directory):
     ms_files = []
-    # Walk the directory tree and collect measurement sets whose filenames
-    # start with '24A' and end with '.ms' (exclude '_calibrated.ms').
-    for root, dirs, files in os.walk(base_directory):
-        for file in files:
-            # Exclude calibrated copies and calibrated.ms variants
-            if file.startswith('24A') and file.endswith('.ms') and not file.endswith('_calibrated.ms') and 'calibrated_copy.ms' not in file:
-                ms_files.append(os.path.join(root, file))
+    # Walk the directory tree and collect measurement sets that start with '24A' and end with '.ms'
+    # Exclude calibrated variants
+    for root, dirs, _ in os.walk(base_directory):
+        for dir_name in dirs:
+            if (dir_name.startswith('24A') and
+                dir_name.endswith('.ms') and
+                not dir_name.endswith('_calibrated.ms') and
+                'calibrated_copy.ms' not in dir_name):
+                ms_files.append(os.path.join(root, dir_name))
     return ms_files
 
 ms_file_list = find_ms_files(base_directory)
