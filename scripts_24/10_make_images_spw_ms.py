@@ -80,7 +80,7 @@ for ms_path in ms_file_list:
         tic = time.time()
         print(f"\nStokes: I, {ms_name}, spw: {s} is started ...")
 
-        output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/{ms_name}_ms/tclean/spw{s}"
+        output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/ms/{ms_name}/tclean/spw{s}"
         os.makedirs(output_dir, exist_ok=True)
 
         img_filename = output_dir + '/' + f"{ms_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-awproject"
