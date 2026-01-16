@@ -2,7 +2,6 @@ import os
 import time
 import sys
 import shutil
-import glob
 sys.path.append('.')
 import numpy as np
 
@@ -56,15 +55,19 @@ mask_name = base_directory + '/24A-376.sb45258229.eb45320541.60392.6957443287/32
 # === Find MS files ===
 def find_ms_files(base_directory):
     ms_files = []
-    # Walk the directory tree and collect measurement sets that start with '24A' and end with '.ms'
-    # Exclude calibrated variants
-    for root, dirs, _ in os.walk(base_directory):
-        for dir_name in dirs:
-            if (dir_name.startswith('24A') and
-                dir_name.endswith('.ms') and
-                not dir_name.endswith('_calibrated.ms') and
-                'calibrated_copy.ms' not in dir_name):
-                ms_files.append(os.path.join(root, dir_name))
+    # Find measurement sets inside 24A-* subdirectories
+    # First, find all 24A-* directories
+    for subfolder in os.listdir(base_directory):
+        sub_path = os.path.join(base_directory, subfolder)
+        # Check if it's a directory starting with '24A'
+        if os.path.isdir(sub_path) and subfolder.startswith('24A'):
+            # Look inside this 24A directory for .ms files/directories
+            for item in os.listdir(sub_path):
+                if (item.startswith('24A') and
+                    item.endswith('.ms') and
+                    not item.endswith('_calibrated.ms') and
+                    'calibrated_copy.ms' not in item):
+                    ms_files.append(os.path.join(sub_path, item))
     return ms_files
 
 ms_file_list = find_ms_files(base_directory)
@@ -84,18 +87,15 @@ for ms_path in ms_file_list:
         print(f"\nStokes: I, {ms_name}, spw: {s} is started ...")
 
         output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/ms/{ms_name}/tclean/spw{s}"
+
+        # Delete existing output directory if it exists
+        if os.path.exists(output_dir):
+            shutil.rmtree(output_dir)
+            print(f"Deleted existing output directory: {output_dir}")
+
         os.makedirs(output_dir, exist_ok=True)
 
         img_filename = output_dir + '/' + f"{ms_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-awproject"
-
-        # Delete existing output files if they exist
-        for old_file in glob.glob(img_filename + '*'):
-            if os.path.isdir(old_file):
-                shutil.rmtree(old_file)
-                print(f"Deleted existing directory: {old_file}")
-            elif os.path.isfile(old_file):
-                os.remove(old_file)
-                print(f"Deleted existing file: {old_file}")
 
         tclean(vis=ms_path,
                field="PER_FIELD_*",
