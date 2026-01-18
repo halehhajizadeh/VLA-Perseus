@@ -2,13 +2,10 @@ import os
 import time
 import sys
 import shutil
-import glob
 sys.path.append('.')
-import numpy as np
 
 # === Parameters ===
 thresh = '6e-5'
-# pblim = -0.001 #defulat
 pblim = -0.001
 nit = 5000
 
@@ -19,8 +16,8 @@ base_path = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/'
 # ============================================================================
 
 # === Select ONE mosaic (comment out the others) ===
-# selected_mosaic = '03:26:24.057_+30.35.58.881'
-selected_mosaic = '03:29:12.973_+31.48.05.579'
+selected_mosaic = '03:26:24.057_+30.35.58.881'
+# selected_mosaic = '03:29:12.973_+31.48.05.579'
 # selected_mosaic = '03:31:12.055_+29.47.58.916'
 # selected_mosaic = '03:39:12.060_+31.23.58.844'
 # selected_mosaic = '03:40:00.063_+32.23.58.799'
@@ -31,17 +28,17 @@ selected_mosaic = '03:29:12.973_+31.48.05.579'
 # === Select MS directories (comment out the ones you DON'T want) ===
 
 # For mosaic: 03:26:24.057_+30.35.58.881
-# selected_ms_dirs = [
+selected_ms_dirs = [
 #     '24A-376.sb45387559.eb45519359.60419.617289120375',
 #     '24A-376.sb45326471.eb45364730.60407.79050123843',
 #     '24A-376.sb45274301.eb45298942.60377.89050475694',
-#     '24A-376.sb45274301.eb45320543.60392.77890695602'
-# ]
+    '24A-376.sb45274301.eb45320543.60392.77890695602'
+]
 
 # For mosaic: 03:29:12.973_+31.48.05.579
-selected_ms_dirs = [
+# selected_ms_dirs = [
     # '24A-376.sb45326158.eb45364719.60407.70739606481',
-    '24A-376.sb45258229.eb45320541.60392.6957443287',
+    # '24A-376.sb45258229.eb45320541.60392.6957443287',
     # '24A-376.sb45258229.eb45299201.60381.83744690972'
 ]
 
@@ -94,15 +91,25 @@ selected_ms_dirs = [
 # === Select SPWs (comment out the ones you DON'T want) ===
 selected_spw = [
     # 2,
-    3,
-    4,
-    5,
-    6,
-    8,
+    # 3,
+    # 4,
+    # 5,
+    # 6,
+    # 8,
     15,
-    16,
-    17
+    # 16,
+    # 17
 ]
+
+# === Choose ONE mask to activate (optional) ===
+mask_name = base_path + '03:26:24.057_+30.35.58.881' + '/24A-376.sb45274301.eb45298942.60377.89050475694/5694_mask_final.image' #26
+# mask_name = base_path + '03:29:12.973_+31.48.05.579' + '/24A-376.sb45258229.eb45320541.60392.6957443287/3287_mask_final.image' #29
+# mask_name = base_path + '03:31:12.055_+29.47.58.916' + '/24A-376.sb45326823.eb45330487.60398.69350814815/4815_mask_final.image' #31
+# mask_name = base_path + '03:39:12.060_+31.23.58.844' + '/24A-376.sb45387872.eb45480125.60416.76979049768/9768_mask_final.image' #39
+# mask_name = base_path + '03:40:00.063_+32.23.58.799' + '/24A-376.sb45388185.eb45417364.60412.697942569444/???_mask_final.image' #40
+# mask_name = base_path + '03:42:00.057_+30.29.58.885' + '/24A-376.sb45328466.eb45330489.60398.77661226851/6851_mask_final.image' #42
+# mask_name = base_path + '03:45:12.060_+31.41.58.831' + '/24A-376.sb45388498.eb45455607.60414.75498211806/1806_mask_final.image' #45:12
+# mask_name = base_path + '03:45:36.064_+32.47.58.780' + '/24A-376.sb45327762.eb45339078.60402.66413293981/3981_mask_final.image' #45:36
 
 # ============================================================================
 # AUTO-SETUP - No need to modify below
@@ -111,26 +118,17 @@ selected_spw = [
 # Phase centers for each mosaic
 phase_centers = {
     '03:26:24.057_+30.35.58.881': 'J2000 03:26:24.057 +30.35.58.881',
-    '03:29:12.973_+31.48.05.579': 'J2000 03:29:12.973 +31.48.05.579',
-    '03:31:12.055_+29.47.58.916': 'J2000 03:31:12.055 +29.47.58.916',
-    '03:39:12.060_+31.23.58.844': 'J2000 03:39:12.060 +31.23.58.844',
-    '03:40:00.063_+32.23.58.799': 'J2000 03:40:00.063 +32.23.58.799',
-    '03:42:00.057_+30.29.58.885': 'J2000 03:42:00.057 +30.29.58.885',
-    '03:45:12.060_+31.41.58.831': 'J2000 03:45:12.060 +31.41.58.831',
-    '03:45:36.064_+32.47.58.780': 'J2000 03:45:36.064 +32.47.58.780'
+    # '03:29:12.973_+31.48.05.579': 'J2000 03:29:12.973 +31.48.05.579',
+    # '03:31:12.055_+29.47.58.916': 'J2000 03:31:12.055 +29.47.58.916',
+    # '03:39:12.060_+31.23.58.844': 'J2000 03:39:12.060 +31.23.58.844',
+    # '03:40:00.063_+32.23.58.799': 'J2000 03:40:00.063 +32.23.58.799',
+    # '03:42:00.057_+30.29.58.885': 'J2000 03:42:00.057 +30.29.58.885',
+    # '03:45:12.060_+31.41.58.831': 'J2000 03:45:12.060 +31.41.58.831',
+    # '03:45:36.064_+32.47.58.780': 'J2000 03:45:36.064 +32.47.58.780'
 }
 
 phase_center = phase_centers[selected_mosaic]
 base_directory = base_path + selected_mosaic
-
-# === Choose ONE mask to activate ===
-# mask_name = base_directory + '/24A-376.sb45274301.eb45298942.60377.89050475694/5694_mask_final.image' #26
-mask_name = base_directory + '/24A-376.sb45258229.eb45320541.60392.6957443287/3287_mask_final.image' #29
-# mask_name = base_directory + '/24A-376.sb45326823.eb45330487.60398.69350814815/4815_mask_final.image' #31
-# mask_name = base_directory + '/24A-376.sb45387872.eb45480125.60416.76979049768/9768_mask_final.image' #39
-# mask_name = base_directory + '/24A-376.sb45328466.eb45330489.60398.77661226851/6851_mask_final.image' #42
-# mask_name = base_directory + '/24A-376.sb45388498.eb45455607.60414.75498211806/1806_mask_final.image' #45:12
-# mask_name = base_directory + '/24A-376.sb45327762.eb45339078.60402.66413293981/3981_mask_final.image' #45:36
 
 # === Print configuration ===
 print('='*80)
@@ -138,13 +136,28 @@ print('CONFIGURATION:')
 print('='*80)
 print(f"Mosaic: {selected_mosaic}")
 print(f"Phase center: {phase_center}")
-print(f"Mask: {mask_name}")
 print(f"\nMS directories ({len(selected_ms_dirs)}):")
 for ms_dir in selected_ms_dirs:
     print(f"  - {ms_dir}")
 print(f"\nSPWs ({len(selected_spw)}): {selected_spw}")
 print(f"\nTotal jobs: {len(selected_ms_dirs) * len(selected_spw)}")
 print('='*80)
+
+# === Find mask for this mosaic ===
+mask_name = None
+for ms_dir in selected_ms_dirs:
+    ms_path = os.path.join(base_directory, ms_dir)
+    if os.path.exists(ms_path):
+        for item in os.listdir(ms_path):
+            if 'mask' in item.lower() and item.endswith('.image'):
+                mask_name = os.path.join(ms_path, item)
+                print(f"\nFound mask: {mask_name}")
+                break
+        if mask_name:
+            break
+
+if not mask_name:
+    print("\nWarning: No mask file found. Proceeding without mask.")
 
 # === Confirmation ===
 confirm = input("\nProceed with imaging? (yes/no): ").strip().lower()
