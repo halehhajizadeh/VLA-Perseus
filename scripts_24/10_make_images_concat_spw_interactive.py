@@ -2,6 +2,7 @@ import os
 import time
 import sys
 import shutil
+import glob
 sys.path.append('.')
 
 # === Parameters ===
@@ -159,34 +160,37 @@ for ms_dir in selected_ms_dirs:
     ms_dir_path = os.path.join(base_directory, ms_dir)
 
     # Look for _calibrated.ms file
-    calibrated_ms = None
+    ms_path = None
     for item in os.listdir(ms_dir_path):
         if item.endswith('_calibrated.ms'):
-            calibrated_ms = os.path.join(ms_dir_path, item)
+            ms_path = os.path.join(ms_dir_path, item)
             break
 
-    if not calibrated_ms:
+    if not ms_path:
         print(f"\nWarning: No _calibrated.ms found in {ms_dir}, skipping...")
         continue
 
-    ms_name = os.path.basename(calibrated_ms).replace('_calibrated.ms', '')
+    ms_name = os.path.basename(ms_path).replace('_calibrated.ms', '')
 
     for s in selected_spw:
         tic = time.time()
         print(f"\nStokes: I, {ms_name}, spw: {s} is started ...")
 
         output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{selected_mosaic}/Images/spw/{ms_name}/tclean/spw{s}"
-
-        # Delete existing output directory if it exists
-        if os.path.exists(output_dir):
-            shutil.rmtree(output_dir)
-            print(f"Deleted existing output directory: {output_dir}")
-
         os.makedirs(output_dir, exist_ok=True)
 
         img_filename = output_dir + '/' + f"{ms_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-awproject"
 
-        tclean(vis=calibrated_ms,
+        # Delete existing output files if they exist
+        for old_file in glob.glob(img_filename + '*'):
+            if os.path.isdir(old_file):
+                shutil.rmtree(old_file)
+                print(f"Deleted existing directory: {old_file}")
+            elif os.path.isfile(old_file):
+                os.remove(old_file)
+                print(f"Deleted existing file: {old_file}")
+
+        tclean(vis=ms_path,
                field="PER_FIELD_*",
                spw=str(s),
                datacolumn="corrected",
