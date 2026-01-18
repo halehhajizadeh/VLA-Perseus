@@ -186,43 +186,38 @@ for ms_dir in selected_ms_dirs:
 
         img_filename = output_dir + '/' + f"{ms_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-awproject"
 
-        tclean_params = {
-            'vis': calibrated_ms,
-            'field': "PER_FIELD_*",
-            'spw': str(s),
-            'datacolumn': "corrected",
-            'imagename': img_filename,
-            'imsize': [4096],
-            'cell': "2.5arcsec",
-            'phasecenter': phase_center,
-            'stokes': 'I',
-            'specmode': "mfs",
-            'gridder': "awproject",
-            'mosweight': True,
-            'cfcache': f"/dev/shm/{ms_name}_spw{s}.cf",
-            'pblimit': pblim,
-            'deconvolver': "mtmfs",
-            'pbcor': True,
-            'weighting': "briggs",
-            'robust': 0.5,
-            'wbawp': True,
-            'conjbeams': True,
-            'niter': nit,
-            'gain': 0.1,
-            'threshold': thresh,
-            'cyclefactor': 1,
-            'parallel': True,
-            'nterms': 2,
-            'nsigma': 3,
-            'rotatepastep': 5.0,
-            'interactive': False,
-            'psfcutoff': 0.5
-        }
-
-        if mask_name:
-            tclean_params['mask'] = mask_name
-
-        tclean(**tclean_params)
+        tclean(vis=calibrated_ms,
+               field="PER_FIELD_*",
+               spw=str(s),
+               datacolumn="corrected",
+               imagename=img_filename,
+               imsize=[4096],
+               cell="2.5arcsec",
+               phasecenter=phase_center,
+               stokes='I',
+               specmode="mfs",
+               gridder="awproject",
+               mosweight=True,
+               cfcache=f"/dev/shm/{ms_name}_spw{s}.cf",
+               pblimit=pblim,
+               deconvolver="mtmfs",
+               pbcor=True,
+               weighting="briggs",
+               robust=0.5,
+               wbawp=True,
+               conjbeams=True,
+               niter=nit,
+               gain=0.1,
+               threshold=thresh,
+               cyclefactor=1,
+               parallel=True,
+               nterms=2,
+               nsigma=3,
+               rotatepastep=5.0,
+               interactive=False,
+               psfcutoff=0.5,
+               mask=mask_name
+              )
 
         toc = time.time()
         print(f"Stokes: I, {ms_name}, spw: {s} is finished in {round((toc - tic)/60, 2)} minutes")
