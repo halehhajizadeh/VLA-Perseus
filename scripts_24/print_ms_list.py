@@ -16,18 +16,18 @@ mosaic_names = [
 
 base_path = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/'
 
-# === Find calibrated MS files ===
-def find_calibrated_files(base_directory):
-    calibrated_files = []
+# === Find MS files ===
+def find_ms_files(base_directory):
+    ms_files = []
     if not os.path.exists(base_directory):
-        return calibrated_files
+        return ms_files
     for subfolder in os.listdir(base_directory):
         sub_path = os.path.join(base_directory, subfolder)
         if os.path.isdir(sub_path) and subfolder.startswith('24A'):
             for file in os.listdir(sub_path):
-                if file.endswith('_calibrated.ms'):
-                    calibrated_files.append(os.path.join(sub_path, file))
-    return calibrated_files
+                if file.startswith('24A') and file.endswith('.ms'):
+                    ms_files.append(os.path.join(sub_path, file))
+    return ms_files
 
 # === Print MS files for all mosaics ===
 print('='*80)
@@ -36,7 +36,7 @@ print('='*80)
 
 for mosaic_name in mosaic_names:
     base_directory = base_path + mosaic_name
-    ms_file_list = find_calibrated_files(base_directory)
+    ms_file_list = find_ms_files(base_directory)
 
     print(f"\n[MOSAIC: {mosaic_name}]")
     if ms_file_list:
