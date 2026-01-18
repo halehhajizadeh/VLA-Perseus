@@ -16,33 +16,30 @@ mosaic_names = [
 
 base_path = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/'
 
-# === Find MS files ===
-def find_ms_files(base_directory):
-    ms_files = []
+# === Find 24A directories ===
+def find_24a_directories(base_directory):
+    directories = []
     if not os.path.exists(base_directory):
-        return ms_files
+        return directories
     for subfolder in os.listdir(base_directory):
-        sub_path = os.path.join(base_directory, subfolder)
-        if os.path.isdir(sub_path) and subfolder.startswith('24A'):
-            for file in os.listdir(sub_path):
-                if file.startswith('24A') and file.endswith('.ms'):
-                    ms_files.append(os.path.join(sub_path, file))
-    return ms_files
+        if subfolder.startswith('24A'):
+            directories.append(subfolder)
+    return directories
 
-# === Print MS files for all mosaics ===
+# === Print 24A directories for all mosaics ===
 print('='*80)
-print('MS FILES FOR ALL MOSAICS:')
+print('24A DIRECTORIES FOR ALL MOSAICS:')
 print('='*80)
 
 for mosaic_name in mosaic_names:
     base_directory = base_path + mosaic_name
-    ms_file_list = find_ms_files(base_directory)
+    dir_list = find_24a_directories(base_directory)
 
     print(f"\n[MOSAIC: {mosaic_name}]")
-    if ms_file_list:
-        for i, file in enumerate(ms_file_list):
-            print(f"  [{i}] {file}")
+    if dir_list:
+        for i, directory in enumerate(dir_list):
+            print(f"  [{i}] {directory}")
     else:
-        print(f"  No MS files found in {base_directory}")
+        print(f"  No 24A directories found")
 
 print('\n' + '='*80)
