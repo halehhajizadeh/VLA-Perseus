@@ -144,21 +144,8 @@ print(f"\nSPWs ({len(selected_spw)}): {selected_spw}")
 print(f"\nTotal jobs: {len(selected_ms_dirs) * len(selected_spw)}")
 print('='*80)
 
-# === Find mask for this mosaic ===
-mask_name = None
-for ms_dir in selected_ms_dirs:
-    ms_path = os.path.join(base_directory, ms_dir)
-    if os.path.exists(ms_path):
-        for item in os.listdir(ms_path):
-            if 'mask' in item.lower() and item.endswith('.image'):
-                mask_name = os.path.join(ms_path, item)
-                print(f"\nFound mask: {mask_name}")
-                break
-        if mask_name:
-            break
-
-if not mask_name:
-    print("\nWarning: No mask file found. Proceeding without mask.")
+# === Print mask being used ===
+print(f"\nUsing mask: {mask_name}")
 
 # === Run tclean ===
 print('\n' + '='*80)
