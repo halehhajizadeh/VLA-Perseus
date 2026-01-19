@@ -160,12 +160,6 @@ for ms_dir in selected_ms_dirs:
 if not mask_name:
     print("\nWarning: No mask file found. Proceeding without mask.")
 
-# === Confirmation ===
-confirm = input("\nProceed with imaging? (yes/no): ").strip().lower()
-if confirm not in ['yes', 'y']:
-    print("Imaging cancelled by user.")
-    sys.exit(0)
-
 # === Run tclean ===
 print('\n' + '='*80)
 print('STARTING IMAGING')
