@@ -6,9 +6,9 @@ import glob
 sys.path.append('.')
 
 # === Parameters ===
-thresh = '1e-5'
+thresh = '5e-5'
 pblim = -0.001
-nit = 15000
+nit = 10000
 
 base_path = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/'
 
@@ -216,7 +216,7 @@ for ms_dir in selected_ms_dirs:
                rotatepastep=5.0,
                interactive=False,
                psfcutoff=0.5,
-            #    mask=mask_name
+               mask=mask_name
               )
 
         toc = time.time()
