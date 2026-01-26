@@ -216,7 +216,7 @@ for ms_dir in selected_ms_dirs:
                rotatepastep=5.0,
                interactive=False,
                psfcutoff=0.5,
-               mask=mask_name
+            #    mask=mask_name
               )
 
         toc = time.time()
