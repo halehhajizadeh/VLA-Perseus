@@ -23,7 +23,7 @@ base_path = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/'
 # selected_mosaic = '03:39:12.060_+31.23.58.844'
 # selected_mosaic = '03:40:00.063_+32.23.58.799'
 # selected_mosaic = '03:42:00.057_+30.29.58.885'
-# selected_mosaic = '03:45:12.060_+31.41.58.831'
+selected_mosaic = '03:45:12.060_+31.41.58.831'
 # selected_mosaic = '03:45:36.064_+32.47.58.780'
 
 # === Select MS directories (comment out the ones you DON'T want) ===
