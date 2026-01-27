@@ -22,8 +22,8 @@ spw = [
 ]
 
 # === Choose ONE phase center to activate ===
-phase_center = 'J2000 03:26:24.057 +30.35.58.881'
-# phase_center = 'J2000 03:29:12.973 +31.48.05.579'
+# phase_center = 'J2000 03:26:24.057 +30.35.58.881'
+phase_center = 'J2000 03:29:12.973 +31.48.05.579'
 # phase_center = 'J2000 03:31:12.055 +29.47.58.916'
 # phase_center = 'J2000 03:39:12.060 +31.23.58.844'
 # phase_center = 'J2000 03:40:00.063 +32.23.58.799'
@@ -31,8 +31,8 @@ phase_center = 'J2000 03:26:24.057 +30.35.58.881'
 # phase_center = 'J2000 03:45:12.060 +31.41.58.831'
 # phase_center = 'J2000 03:45:36.064 +32.47.58.780'
 
-mosaic_name = '03:26:24.057_+30.35.58.881'
-# mosaic_name = '03:29:12.973_+31.48.05.579'
+# mosaic_name = '03:26:24.057_+30.35.58.881'
+mosaic_name = '03:29:12.973_+31.48.05.579'
 # mosaic_name = '03:31:12.055_+29.47.58.916'
 # mosaic_name = '03:39:12.060_+31.23.58.844'
 # mosaic_name = '03:40:00.063_+32.23.58.799'
@@ -43,8 +43,8 @@ mosaic_name = '03:26:24.057_+30.35.58.881'
 base_directory = '/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/' + mosaic_name
 
 # === Choose ONE mask to activate ===
-mask_name = base_directory + '/24A-376.sb45274301.eb45298942.60377.89050475694/5694_mask_final.image' #26
-# mask_name = base_directory + '/24A-376.sb45258229.eb45320541.60392.6957443287/3287_mask_final.image' #29
+# mask_name = base_directory + '/24A-376.sb45274301.eb45298942.60377.89050475694/5694_mask_final.image' #26
+mask_name = base_directory + '/24A-376.sb45258229.eb45320541.60392.6957443287/3287_mask_final.image' #29
 # mask_name = base_directory + '/24A-376.sb45326823.eb45330487.60398.69350814815/4815_mask_final.image' #31
 # mask_name = base_directory + '/24A-376.sb45387872.eb45480125.60416.76979049768/9768_mask_final.image' #39
 # mask_name = base_directory + '/24A-376.sb45328466.eb45330489.60398.77661226851/6851_mask_final.image' #42
