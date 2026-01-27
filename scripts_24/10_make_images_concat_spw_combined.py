@@ -51,10 +51,13 @@ mask_name = base_directory + '/24A-376.sb45274301.eb45298942.60377.89050475694/5
 # mask_name = base_directory + '/24A-376.sb45388498.eb45455607.60414.75498211806/1806_mask_final.image' #45:12
 # mask_name = base_directory + '/24A-376.sb45327762.eb45339078.60402.66413293981/3981_mask_final.image' #45:36
 
-# === Find calibrated MS files ===
+# === Find calibrated MS files (skips 'ignore' directory) ===
 def find_calibrated_files(base_directory):
     calibrated_files = []
     for subfolder in os.listdir(base_directory):
+        # Skip the 'ignore' directory
+        if subfolder.lower() == 'ignore':
+            continue
         sub_path = os.path.join(base_directory, subfolder)
         if os.path.isdir(sub_path) and subfolder.startswith('24A'):
             for file in os.listdir(sub_path):
