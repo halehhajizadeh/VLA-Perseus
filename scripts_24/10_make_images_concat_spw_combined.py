@@ -135,7 +135,8 @@ for s in spw:
            rotatepastep=5.0,
            interactive=False,
            psfcutoff=0.35,
-           mask=mask_name
+           usemask="auto-multithresh"
+        #    mask=mask_name
           )
 
     toc = time.time()
