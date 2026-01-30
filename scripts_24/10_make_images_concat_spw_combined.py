@@ -8,7 +8,7 @@ sys.path.append('.')
 # === Parameters ===
 thresh = '1e-5'
 pblim = -0.001
-nit = 20000
+nit = 0
 spw = [
     2,
     3,
@@ -90,7 +90,7 @@ for s in spw:
     print(f"\nStokes: I, COMBINED, spw: {s} is started ...")
     print(f"Combining {len(ms_file_list)} measurement sets")
 
-    output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/combined/tclean/spw{s}"
+    output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/test/tclean/spw{s}"
     os.makedirs(output_dir, exist_ok=True)
 
     img_filename = output_dir + '/' + f"{mosaic_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-awproject-combined"
