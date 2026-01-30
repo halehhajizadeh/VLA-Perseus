@@ -8,7 +8,7 @@ sys.path.append('.')
 # === Parameters ===
 thresh = '1e-5'
 pblim = -0.001
-nit = 0
+nit = 20000
 spw = [
     2,
     3,
@@ -90,7 +90,7 @@ for s in spw:
     print(f"\nStokes: I, COMBINED, spw: {s} is started ...")
     print(f"Combining {len(ms_file_list)} measurement sets")
 
-    output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/test/tclean/spw{s}"
+    output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/test2/tclean/spw{s}"
     os.makedirs(output_dir, exist_ok=True)
 
     img_filename = output_dir + '/' + f"{mosaic_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-awproject-combined"
@@ -119,21 +119,22 @@ for s in spw:
            cfcache=f"/dev/shm/combined_spw{s}.cf",
            pblimit=pblim,
            deconvolver="mtmfs",
+           scales=[0, 6, 18, 54],
            pbcor=True,
            weighting="briggs",
-           robust=0.5,
+           robust=1,
            wbawp=True,
            conjbeams=True,
            niter=nit,
            gain=0.1,
-           threshold=thresh,
-           cyclefactor=1,
+        #    threshold=thresh,
+           cyclefactor=2,
            parallel=True,
            nterms=2,
-        #    nsigma=3,
+           nsigma=3,
            rotatepastep=5.0,
            interactive=False,
-           psfcutoff=0.5,
+           psfcutoff=0.35,
            mask=mask_name
           )
 
