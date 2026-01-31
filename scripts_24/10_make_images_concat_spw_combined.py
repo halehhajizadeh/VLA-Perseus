@@ -90,7 +90,7 @@ for s in spw:
     print(f"\nStokes: I, COMBINED, spw: {s} is started ...")
     print(f"Combining {len(ms_file_list)} measurement sets")
 
-    output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/test_nomask/tclean/spw{s}"
+    output_dir = f"/lustre/aoc/observers/nm-12934/VLA-Perseus/data/new/data/concat/{mosaic_name}/Images/spw/test_maskmulti/tclean/spw{s}"
     os.makedirs(output_dir, exist_ok=True)
 
     img_filename = output_dir + '/' + f"{mosaic_name}_StokesI_spw{s}-2.5arcsec-nit{nit}-awproject-combined"
@@ -135,8 +135,8 @@ for s in spw:
            rotatepastep=5.0,
            interactive=False,
            psfcutoff=0.35,
-           usemask="auto-multithresh"
-        #    mask=mask_name
+           usemask="auto-multithresh",
+           mask=mask_name
           )
 
     toc = time.time()
