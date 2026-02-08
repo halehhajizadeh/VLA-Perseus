@@ -7,12 +7,12 @@ sys.path.append('.')
 import numpy as np
 
 # === Parameters ===
-thresh = '6e-5'
+thresh = '1e-5'
 # pblim = -0.001 #defulat
 pblim = -0.001
-nit = 5000
+nit = 20000
 spw = [
-    # 2, 
+    2, 
     3, 
     4, 
     5, 

@@ -119,7 +119,6 @@ for s in spw:
            cfcache=f"/dev/shm/combined_spw{s}.cf",
            pblimit=pblim,
            deconvolver="mtmfs",
-           scales=[0, 6, 18, 54],
            pbcor=True,
            weighting="briggs",
            robust=1,
@@ -135,7 +134,6 @@ for s in spw:
            rotatepastep=5.0,
            interactive=False,
            psfcutoff=0.35,
-           usemask="auto-multithresh",
            mask=mask_name
           )
 
