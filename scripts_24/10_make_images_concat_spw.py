@@ -10,7 +10,7 @@ import numpy as np
 thresh = '1e-5'
 # pblim = -0.001 #defulat
 pblim = -0.001
-nit = 20000
+nit = 15000
 spw = [
     2, 
     3, 
